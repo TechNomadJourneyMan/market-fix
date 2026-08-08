@@ -379,10 +379,12 @@ def _explain(venue: dict[str, Any], params: dict[str, Any], scenario_fit: float)
 def filter_venues(
     venues: list[dict[str, Any]],
     *,
-    category: str | None = None,
+    categories: str | list[str] | None = None,
+    category: str | list[str] | None = None,
     price_segments: list[str] | None = None,
     cuisines: list[str] | None = None,
-    district: str | None = None,
+    districts: str | list[str] | None = None,
+    district: str | list[str] | None = None,
     min_ai_score: int | None = None,
     amenities: dict[str, bool] | None = None,
     scenario: str | None = None,
@@ -390,9 +392,17 @@ def filter_venues(
     booking_only: bool = False,
 ) -> list[dict[str, Any]]:
     """Применить набор фильтров к списку заведений (для каталога)."""
+    cat_filter = categories or category
+    dist_filter = districts or district
+
+    if isinstance(cat_filter, str):
+        cat_filter = [cat_filter]
+    if isinstance(dist_filter, str):
+        dist_filter = [dist_filter]
+
     out: list[dict[str, Any]] = []
     for v in venues:
-        if category and v.get("category") != category:
+        if cat_filter and v.get("category") not in cat_filter:
             continue
         if price_segments and v.get("price_segment") not in price_segments:
             continue
@@ -400,7 +410,7 @@ def filter_venues(
             vcuisines = [c.lower() for c in (v.get("cuisines") or [])]
             if not any(c.lower() in vcuisines for c in cuisines):
                 continue
-        if district and v.get("district") != district:
+        if dist_filter and v.get("district") not in dist_filter:
             continue
         if min_ai_score is not None and (v.get("ai_score") or 0) < min_ai_score:
             continue

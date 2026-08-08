@@ -23,13 +23,20 @@ from venues_data import get_venues
 # Конфигурация Supabase (значения передаются через Streamlit secrets или env).
 # --------------------------------------------------------------------------- #
 
+def _get_streamlit_secret(section: str, key: str) -> str:
+    try:
+        return st.secrets.get(section, {}).get(key, "")
+    except Exception:
+        return ""
+
+
 SUPABASE_URL = os.environ.get(
     "NEXT_PUBLIC_SUPABASE_URL",
-    st.secrets.get("supabase", {}).get("url", "") if hasattr(st, "secrets") else "",
+    _get_streamlit_secret("supabase", "url"),
 )
 SUPABASE_KEY = os.environ.get(
     "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
-    st.secrets.get("supabase", {}).get("key", "") if hasattr(st, "secrets") else "",
+    _get_streamlit_secret("supabase", "key"),
 )
 
 

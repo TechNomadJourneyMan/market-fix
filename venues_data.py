@@ -929,9 +929,12 @@ VENUES: list[dict[str, Any]] = [
 ]
 
 
+import copy
+
+
 def get_venues() -> list[dict[str, Any]]:
-    """Вернуть список всех заведений (копия)."""
-    return [dict(v) for v in VENUES]
+    """Вернуть список всех заведений (глубокая копия)."""
+    return copy.deepcopy(VENUES)
 
 
 def get_venue_by_id(venue_id: str) -> dict[str, Any] | None:

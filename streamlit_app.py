@@ -331,7 +331,14 @@ def render_ai_page() -> None:
             if parsed["price"]:
                 chips.append(price_segment_label(parsed["price"]))
             if parsed["amenities"]:
-                chips += parsed["amenities"]
+                am_map = {
+                    "terrace": "терраса", "parking": "парковка", "wifi": "Wi-Fi",
+                    "kids_room": "детская комната", "vip_room": "VIP-зал",
+                    "live_music": "живая музыка", "breakfast": "завтраки",
+                    "brunch": "бранч", "delivery": "доставка",
+                    "business_lunch": "бизнес-ланч",
+                }
+                chips += [am_map.get(a, a) for a in parsed["amenities"]]
             if chips:
                 st.caption("Распознанные параметры: " + " · ".join(chips))
 
@@ -445,10 +452,10 @@ def render_catalog_page() -> None:
     amenities_filter = {k: v for k, v in am_checks.items() if v}
     filtered = filter_venues(
         venues,
-        category=sel_category[0] if sel_category else None,
+        categories=sel_category or None,
         price_segments=sel_prices or None,
         cuisines=sel_cuisines or None,
-        district=sel_district[0] if sel_district else None,
+        districts=sel_district or None,
         min_ai_score=min_ai if min_ai > 0 else None,
         amenities=amenities_filter or None,
         scenario=sel_scenario or None,
@@ -675,13 +682,15 @@ def render_analytics_page() -> None:
 
     # AI score топ-15.
     st.markdown("### Топ-15 по AI score")
-    top_df = df.sort_values("ai_score", ascending=False).head(15)
+    df_copy = df.copy()
+    df_copy["price_segment_label"] = df_copy["price_segment"].map(price_segment_label)
+    top_df = df_copy.sort_values("ai_score", ascending=False).head(15)
     st.dataframe(
-        top_df[["name", "category", "price_segment", "district", "ai_score", "confidence"]],
+        top_df[["name", "category", "price_segment_label", "district", "ai_score", "confidence"]],
         column_config={
             "name": st.column_config.TextColumn("Заведение"),
             "category": st.column_config.TextColumn("Категория"),
-            "price_segment": st.column_config.TextColumn("Цена"),
+            "price_segment_label": st.column_config.TextColumn("Цена"),
             "district": st.column_config.TextColumn("Район"),
             "ai_score": st.column_config.ProgressColumn("AI score", min_value=0, max_value=100),
             "confidence": st.column_config.TextColumn("Уверенность"),
