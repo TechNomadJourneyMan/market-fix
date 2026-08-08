@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, BadgePercent, Compass, PartyPopper, Search, Star, Zap } from 'lucide-react';
+import { ArrowRight, BadgePercent, Bike, KeyRound, PartyPopper, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { formatNumber } from '@/lib/format';
 import { SearchBar } from '@/components/search/search-bar';
@@ -14,10 +14,12 @@ interface HeroProps {
   categoryCount: number;
 }
 
+/** Один primary job: поиск. Остальное — лёгкие сценарии, не конкурирующие XL-кнопки. */
 const QUICK_LINKS = [
   { label: 'Свободно сейчас', href: '/catalog?availableNow=1', icon: Zap },
-  { label: 'Ужин на двоих', href: '/catalog?q=свидание', icon: Star },
   { label: 'Банкет и той', href: '/catalog?banquet=1', icon: PartyPopper },
+  { label: 'Доставка', href: '/services?vertical=delivery', icon: Bike },
+  { label: 'Аренда', href: '/services?vertical=rental', icon: KeyRound },
   { label: 'Со скидкой', href: '/catalog?promo=1', icon: BadgePercent },
 ];
 
@@ -31,45 +33,47 @@ export function Hero({ venueCount, reviewCount, categoryCount }: HeroProps) {
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-background" />
       </div>
 
-      <div className="container pb-14 pt-14 sm:pb-20 sm:pt-24">
+      <div className="container pb-12 pt-14 sm:pb-16 sm:pt-20">
         <div className="mx-auto max-w-3xl text-center">
           <FadeUp>
-            <Link
-              href="/ai"
-              className="group inline-flex items-center gap-2 rounded-full border border-primary/15 bg-card/80 px-3.5 py-1.5 text-xs font-medium shadow-soft backdrop-blur transition-all hover:border-primary/30 hover:shadow-card"
-            >
-              <Compass className="size-3.5 text-primary" />
-              Умный подбор места под ваш повод
-              <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+              Market Fix · Алматы
+            </p>
           </FadeUp>
 
           <FadeUp delay={0.05}>
-            <h1 className="mt-6 text-balance text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
-              Найдите место, куда{' '}
-              <span className="text-primary">захочется вернуться</span>
+            <h1 className="mt-4 text-balance text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+              Бронь, аренда и доставка —{' '}
+              <span className="text-primary">в одном месте</span>
             </h1>
           </FadeUp>
 
           <FadeUp delay={0.1}>
             <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Рестораны, кафе, бары и банкетные залы Алматы — с живыми отзывами, честными
-              ценами и бронированием за 30 секунд. Без звонков и ожидания на линии.
+              Найдите заведение, закажите доставку или арендуйте зал. Живые отзывы, честные цены,
+              без звонков.
             </p>
           </FadeUp>
 
           <FadeUp delay={0.15} className="mx-auto mt-8 max-w-2xl">
-            <SearchBar placeholder="Итальянская кухня, банкет на 50, кофейня рядом…" />
+            <SearchBar placeholder="Ресторан, доставка, аренда зала, подарок…" />
+            <p className="mt-2.5 text-xs text-muted-foreground">
+              Начните с поиска — или откройте{' '}
+              <Link href="#city-map" className="font-medium text-foreground underline-offset-2 hover:underline">
+                карту города
+              </Link>
+              .
+            </p>
           </FadeUp>
 
           <FadeUp delay={0.2}>
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
               {QUICK_LINKS.map((link, index) => (
                 <motion.div
                   key={link.href}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25 + index * 0.05, duration: 0.35 }}
+                  transition={{ delay: 0.25 + index * 0.04, duration: 0.35 }}
                 >
                   <Link
                     href={link.href}
@@ -84,24 +88,31 @@ export function Hero({ venueCount, reviewCount, categoryCount }: HeroProps) {
           </FadeUp>
 
           <FadeUp delay={0.25}>
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-8 flex justify-center">
               <Button asChild size="xl" className="w-full sm:w-auto">
                 <Link href="/catalog">
-                  Смотреть все заведения
+                  Смотреть каталог
                   <ArrowRight />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="xl" className="w-full sm:w-auto">
-                <Link href="/ai">
-                  <Search className="text-primary" />
-                  Подобрать место
-                </Link>
-              </Button>
             </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Нужен сценарий?{' '}
+              <Link href="/ai" className="font-medium text-foreground underline-offset-2 hover:underline">
+                AI-подбор
+              </Link>
+              {' · '}
+              <Link
+                href="/services"
+                className="font-medium text-foreground underline-offset-2 hover:underline"
+              >
+                Все сервисы
+              </Link>
+            </p>
           </FadeUp>
 
           <FadeUp delay={0.3}>
-            <dl className="mx-auto mt-12 grid max-w-lg grid-cols-3 gap-4">
+            <dl className="mx-auto mt-10 grid max-w-lg grid-cols-3 gap-3">
               <Stat value={formatNumber(venueCount)} label="проверенных мест" />
               <Stat value={formatNumber(reviewCount)} label="живых отзывов" />
               <Stat value={String(categoryCount)} label="категорий" />
@@ -115,7 +126,7 @@ export function Hero({ venueCount, reviewCount, categoryCount }: HeroProps) {
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-2xl border bg-card/60 px-3 py-4 text-center backdrop-blur transition-colors hover:bg-card">
+    <div className="rounded-2xl border bg-card/60 px-3 py-3.5 text-center backdrop-blur transition-colors hover:bg-card">
       <dt className="text-2xl font-semibold tracking-tight sm:text-3xl">{value}</dt>
       <dd className="mt-0.5 text-xs text-muted-foreground sm:text-sm">{label}</dd>
     </div>

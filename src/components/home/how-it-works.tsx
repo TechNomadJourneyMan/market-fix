@@ -38,8 +38,8 @@ export function HowItWorks() {
             человек в пятницу. Мы уже знаем.
           </p>
           <Button asChild size="lg">
-            <Link href="/catalog">
-              Начать подбор
+            <Link href="/ai">
+              Описать повод в AI
               <ArrowRight />
             </Link>
           </Button>

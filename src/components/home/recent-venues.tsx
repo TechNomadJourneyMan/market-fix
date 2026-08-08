@@ -18,8 +18,8 @@ export function RecentVenues() {
       <SectionHeader
         eyebrow="Продолжить"
         title="Недавно смотрели"
-        description="Вернитесь к местам, которые уже приметили — или позовите друзей в Merge Menu."
-        action={{ label: 'Merge Menu', href: '/merge' }}
+        description="Вернитесь к местам, которые уже приметили."
+        action={{ label: 'В каталог', href: '/catalog' }}
       />
       <ScrollRow>
         {items.map((item) => (

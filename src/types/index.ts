@@ -17,3 +17,4 @@ export * from './search';
 export * from './favorite';
 export * from './ai';
 export * from './merge';
+export * from './marketplace';

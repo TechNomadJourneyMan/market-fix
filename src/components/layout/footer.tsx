@@ -8,8 +8,9 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
     title: 'Гостям',
     links: [
       { label: 'Каталог заведений', href: '/catalog' },
+      { label: 'Сервисы: доставка и аренда', href: '/services' },
       { label: 'AI-подбор места', href: '/ai' },
-      { label: 'Акции и спецпредложения', href: '/catalog?promo=1' },
+      { label: 'Merge Menu с друзьями', href: '/merge' },
       { label: 'Свободно сейчас', href: '/catalog?availableNow=1' },
       { label: 'Мои бронирования', href: '/account/bookings' },
     ],

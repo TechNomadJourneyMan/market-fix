@@ -7,7 +7,10 @@ export type ServiceGroup =
   | 'events'
   | 'delivery'
   | 'entertainment'
-  | 'comfort';
+  | 'comfort'
+  | 'rental'
+  | 'gifts'
+  | 'services';
 
 export interface Service extends Entity {
   venueId: ID;

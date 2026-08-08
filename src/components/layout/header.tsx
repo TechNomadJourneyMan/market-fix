@@ -10,6 +10,7 @@ import {
   Heart,
   LayoutGrid,
   Menu,
+  Package,
   Search,
   Settings,
   ShoppingBag,
@@ -46,6 +47,7 @@ import { Logo } from './logo';
 
 const NAV_LINKS = [
   { href: '/catalog', label: 'Каталог', icon: LayoutGrid },
+  { href: '/services', label: 'Сервисы', icon: Package },
   { href: '/ai', label: 'AI-подбор', icon: Sparkles, highlight: true },
   { href: '/merge', label: 'Merge Menu', icon: Users },
   { href: '/business', label: 'Для бизнеса', icon: Building2 },
@@ -257,6 +259,7 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
               </SheetHeader>
               <SheetBody className="space-y-1">
                 <MobileLink href="/catalog" icon={LayoutGrid} label="Каталог" onNavigate={() => setMobileOpen(false)} />
+                <MobileLink href="/services" icon={Package} label="Сервисы" onNavigate={() => setMobileOpen(false)} />
                 <MobileLink href="/ai" icon={Sparkles} label="AI-подбор" onNavigate={() => setMobileOpen(false)} highlight />
                 <MobileLink href="/merge" icon={Users} label="Merge Menu" onNavigate={() => setMobileOpen(false)} />
                 <MobileLink

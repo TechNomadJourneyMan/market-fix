@@ -11,6 +11,8 @@ import { AiTeaser } from '@/components/home/ai-teaser';
 import { Testimonials } from '@/components/home/testimonials';
 import { BusinessCta } from '@/components/home/business-cta';
 import { RecentVenues } from '@/components/home/recent-venues';
+import { ServicesShowcase } from '@/components/home/services-showcase';
+import { CityMapExplorer } from '@/components/map/city-map-explorer';
 
 import { getCategories } from '@/server/repositories/taxonomy';
 import {
@@ -19,8 +21,13 @@ import {
   getTopRatedVenues,
   getVenueCount,
   getVenuesWithPromotions,
+  searchVenues,
 } from '@/server/repositories/venues';
 import { getShowcaseReviews, getTotalReviewCount } from '@/server/repositories/reviews';
+import {
+  getMarketplaceCategories,
+  getPopularMarketplaceListings,
+} from '@/server/repositories/marketplace';
 
 export default function HomePage() {
   const categories = getCategories();
@@ -29,6 +36,9 @@ export default function HomePage() {
   const promotions = getVenuesWithPromotions(6);
   const fresh = getNewVenues(8);
   const reviews = getShowcaseReviews(3);
+  const mapVenues = searchVenues({ sort: 'popularity', perPage: 40 }).allMatches;
+  const marketplaceCategories = getMarketplaceCategories();
+  const marketplaceListings = getPopularMarketplaceListings(8);
 
   return (
     <>
@@ -38,8 +48,19 @@ export default function HomePage() {
         categoryCount={categories.length}
       />
 
+      {/* ——— Интерактивная карта ——— */}
+      <Section id="city-map" className="scroll-mt-24 pt-4 sm:pt-6">
+        <SectionHeader
+          eyebrow="Карта Алматы"
+          title="Ищите на карте — как в 2GIS"
+          description="Фильтры по местам и сервисам, геолокация, масштаб колесом и поиск. Клик по пину — карточка и маршрут."
+          action={{ label: 'Каталог списком', href: '/catalog' }}
+        />
+        <CityMapExplorer venues={mapVenues} services={marketplaceListings} />
+      </Section>
+
       {/* ——— Категории ——— */}
-      <Section className="pt-4 sm:pt-6">
+      <Section className="pt-0">
         <SectionHeader
           eyebrow="Куда пойдём"
           title="Выберите формат вечера"
@@ -48,6 +69,11 @@ export default function HomePage() {
         />
         <CategoryGrid categories={categories} />
       </Section>
+
+      <ServicesShowcase
+        categories={marketplaceCategories}
+        listings={marketplaceListings}
+      />
 
       <RecentVenues />
 

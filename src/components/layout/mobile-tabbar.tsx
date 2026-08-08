@@ -2,15 +2,16 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Search, ShoppingBag, Sparkles, Users } from 'lucide-react';
+import { Home, LayoutGrid, Package, ShoppingBag, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { selectCartCount, useCartStore } from '@/store/use-cart-store';
 
+/** Ярлыки совпадают с desktop: Каталог / Сервисы — без путаницы «Поиск ≠ Каталог». */
 const TABS = [
   { href: '/', label: 'Главная', icon: Home },
-  { href: '/catalog', label: 'Поиск', icon: Search },
+  { href: '/catalog', label: 'Каталог', icon: LayoutGrid },
+  { href: '/services', label: 'Сервисы', icon: Package },
   { href: '/ai', label: 'AI', icon: Sparkles },
-  { href: '/merge', label: 'Merge', icon: Users },
   { href: '/cart', label: 'Корзина', icon: ShoppingBag },
 ];
 

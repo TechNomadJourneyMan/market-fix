@@ -19,10 +19,17 @@ interface VenueMapProps {
   /** Подсвеченное заведение (например, при наведении на карточку в списке). */
   activeVenueId?: string;
   onActiveChange?: (venueId: string | null) => void;
+  /** Масштаб колесом мыши / трекпадом — как в 2GIS. */
+  enableWheelZoom?: boolean;
+  /** Кнопка «к моему местоположению» (внешний контроль может заменить). */
+  showLocateControl?: boolean;
+  mapLabel?: string;
+  resolveHref?: (venue: VenueListItem) => string;
+  onLocateRequest?: () => void;
 }
 
 const MIN_ZOOM = 1;
-const MAX_ZOOM = 4;
+const MAX_ZOOM = 4.5;
 
 /**
  * Демо-рендерер карты.
@@ -38,11 +45,22 @@ export function VenueMap({
   className,
   activeVenueId,
   onActiveChange,
+  enableWheelZoom = false,
+  showLocateControl = true,
+  mapLabel,
+  resolveHref,
+  onLocateRequest,
 }: VenueMapProps) {
   const [zoom, setZoom] = React.useState(1);
   const [offset, setOffset] = React.useState({ x: 0, y: 0 });
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const dragState = React.useRef<{ x: number; y: number; ox: number; oy: number } | null>(null);
+  const surfaceRef = React.useRef<HTMLDivElement>(null);
+
+  const hrefFor = (venue: VenueListItem) =>
+    resolveHref?.(venue) ??
+    (venue.id.startsWith('svc-') ? `/services/${venue.slug}` : `/venue/${venue.slug}`);
+  const isServicePin = (venue: VenueListItem) => venue.id.startsWith('svc-');
 
   const points = React.useMemo(
     () => [
@@ -58,6 +76,23 @@ export function VenueMap({
   React.useEffect(() => {
     if (activeVenueId !== undefined) setSelectedId(activeVenueId ?? null);
   }, [activeVenueId]);
+
+  React.useEffect(() => {
+    if (!enableWheelZoom) return;
+    const node = surfaceRef.current;
+    if (!node) return;
+
+    const onWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      const delta = event.deltaY > 0 ? -0.25 : 0.25;
+      setZoom((value) =>
+        Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Number((value + delta).toFixed(2)))),
+      );
+    };
+
+    node.addEventListener('wheel', onWheel, { passive: false });
+    return () => node.removeEventListener('wheel', onWheel);
+  }, [enableWheelZoom]);
 
   const select = (venueId: string | null) => {
     setSelectedId(venueId);
@@ -94,6 +129,7 @@ export function VenueMap({
     >
       {/* Подложка: сетка «кварталов» и условные магистрали. */}
       <div
+        ref={surfaceRef}
         className="absolute inset-0 cursor-grab touch-none active:cursor-grabbing"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -179,11 +215,16 @@ export function VenueMap({
         <MapControl label="Показать всё" onClick={reset}>
           <Locate className="size-4" />
         </MapControl>
+        {showLocateControl && onLocateRequest ? (
+          <MapControl label="Моё местоположение" onClick={onLocateRequest}>
+            <Navigation className="size-4" />
+          </MapControl>
+        ) : null}
       </div>
 
       <div className="pointer-events-none absolute bottom-3 left-3 flex items-center gap-1.5 rounded-lg border bg-background/85 px-2.5 py-1.5 text-[11px] text-muted-foreground backdrop-blur">
         <Layers className="size-3.5" />
-        Демо-карта · {venues.length} мест
+        {mapLabel ?? `Карта · ${venues.length} точек`}
       </div>
 
       {/* Карточка выбранного заведения */}
@@ -199,7 +240,7 @@ export function VenueMap({
               <X className="size-3.5" />
             </button>
 
-            <Link href={`/venue/${selected.slug}`} className="shrink-0">
+            <Link href={hrefFor(selected)} className="shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={selected.coverImage}
@@ -209,7 +250,7 @@ export function VenueMap({
             </Link>
 
             <div className="min-w-0 flex-1 pr-5">
-              <Link href={`/venue/${selected.slug}`}>
+              <Link href={hrefFor(selected)}>
                 <p className="truncate text-sm font-semibold hover:text-primary">
                   {selected.name}
                 </p>
@@ -228,7 +269,13 @@ export function VenueMap({
               </p>
 
               <div className="mt-2 flex items-center gap-1.5">
-                <MapBookButton venue={selected} />
+                {isServicePin(selected) ? (
+                  <Button asChild size="sm" className="h-8 flex-1">
+                    <Link href={hrefFor(selected)}>Открыть</Link>
+                  </Button>
+                ) : (
+                  <MapBookButton venue={selected} />
+                )}
                 <a
                   href={getDirectionsUrl(selected.location.coordinates, selected.name)}
                   target="_blank"
@@ -238,12 +285,14 @@ export function VenueMap({
                 >
                   <Navigation className="size-3.5" />
                 </a>
-                <FavoriteButton
-                  venueId={selected.id}
-                  venueName={selected.name}
-                  variant="outline"
-                  size="sm"
-                />
+                {!isServicePin(selected) ? (
+                  <FavoriteButton
+                    venueId={selected.id}
+                    venueName={selected.name}
+                    variant="outline"
+                    size="sm"
+                  />
+                ) : null}
               </div>
             </div>
           </div>

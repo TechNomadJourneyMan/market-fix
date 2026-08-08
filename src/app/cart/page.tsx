@@ -67,8 +67,9 @@ export default function CartPage() {
         <EmptyState
           icon={<ShoppingBag />}
           title="Корзина пуста"
-          description="Добавьте бронь в корзину из карточки заведения — можно собрать несколько мест на вечер и оплатить вместе."
+          description="Сюда попадают брони столов и заказы сервисов (доставка, аренда, подарки). Соберите несколько позиций и оплатите вместе."
           action={{ label: 'В каталог', href: '/catalog' }}
+          secondaryAction={{ label: 'Сервисы', href: '/services' }}
         />
       </div>
     );
@@ -78,9 +79,9 @@ export default function CartPage() {
     <div className="container py-8 sm:py-12">
       <header className="mb-8 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Корзина броней</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Корзина</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {count} позиций · ориентировочно {formatPrice(total)}
+            Брони и сервисы · {count} позиций · ориентировочно {formatPrice(total)}
           </p>
         </div>
         <Button variant="ghost" size="sm" onClick={clear}>
@@ -105,7 +106,11 @@ export default function CartPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <Link
-                      href={`/venue/${item.venueSlug}`}
+                      href={
+                        item.comment?.startsWith('[')
+                          ? `/services/${item.venueSlug}`
+                          : `/venue/${item.venueSlug}`
+                      }
                       className="font-semibold hover:text-primary"
                     >
                       {item.venueName}
