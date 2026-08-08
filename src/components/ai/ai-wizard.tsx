@@ -8,7 +8,9 @@ import {
   ArrowRight,
   Check,
   Loader2,
+  MapPin,
   RotateCcw,
+  Search,
   Sparkles,
   Wand2,
 } from 'lucide-react';
@@ -27,16 +29,22 @@ import { cn } from '@/lib/utils';
 import { formatPrice, formatGuests } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Icon } from '@/components/ui/icon';
 import { Progress } from '@/components/ui/primitives';
 import { AiResults } from './ai-results';
 
-const OCCASIONS: { value: Occasion; label: string; emoji: string; hint: string }[] = [
-  { value: 'date', label: 'Свидание', emoji: '💛', hint: 'Тихо, красиво, на двоих' },
-  { value: 'friends', label: 'С друзьями', emoji: '🍻', hint: 'Живо и без формальностей' },
-  { value: 'family', label: 'С семьёй', emoji: '👨‍👩‍👧', hint: 'Детская зона и удобный вход' },
-  { value: 'business', label: 'Деловая встреча', emoji: '💼', hint: 'Спокойно, есть Wi-Fi' },
-  { value: 'celebration', label: 'Праздник', emoji: '🎉', hint: 'Банкет, зал, ведущий' },
-  { value: 'solo', label: 'Один', emoji: '📖', hint: 'Поработать или отдохнуть' },
+const OCCASIONS: {
+  value: Occasion;
+  label: string;
+  icon: string;
+  hint: string;
+}[] = [
+  { value: 'date', label: 'Свидание', icon: 'Heart', hint: 'Тихо, красиво, на двоих' },
+  { value: 'friends', label: 'С друзьями', icon: 'Users', hint: 'Живо и без формальностей' },
+  { value: 'family', label: 'С семьёй', icon: 'UsersRound', hint: 'Детская зона и удобный вход' },
+  { value: 'business', label: 'Деловая встреча', icon: 'Briefcase', hint: 'Спокойно, есть Wi-Fi' },
+  { value: 'celebration', label: 'Праздник', icon: 'PartyPopper', hint: 'Банкет, зал, ведущий' },
+  { value: 'solo', label: 'Один', icon: 'BookOpen', hint: 'Поработать или отдохнуть' },
 ];
 
 const DAY_PARTS: { value: DayPart; label: string; hint: string }[] = [
@@ -124,9 +132,9 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
   return (
     <div className="space-y-8">
       {/* ——— Свободный ввод ——— */}
-      <div className="rounded-3xl border bg-gradient-to-br from-primary/[0.06] via-card to-accent/[0.06] p-5 sm:p-7">
+      <div className="rounded-3xl border bg-card p-5 shadow-soft sm:p-7">
         <div className="flex items-center gap-2 text-sm font-medium">
-          <Sparkles className="size-4 text-primary" />
+          <Search className="size-4 text-primary" />
           Опишите вечер своими словами
         </div>
         <div className="mt-3 flex flex-col gap-2.5 sm:flex-row">
@@ -199,7 +207,8 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
                             request.occasion === occasion.value ? undefined : occasion.value,
                         })
                       }
-                      title={`${occasion.emoji} ${occasion.label}`}
+                      icon={occasion.icon}
+                      title={occasion.label}
                       hint={occasion.hint}
                     />
                   ))}
@@ -219,7 +228,8 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
                       isActive={request.cuisineIds?.includes(cuisine.id) ?? false}
                       onClick={() => toggleInList('cuisineIds', cuisine.id)}
                     >
-                      <span aria-hidden>{cuisine.emoji}</span> {cuisine.name}
+                      <Icon name={cuisine.icon} className="size-3.5 shrink-0 opacity-80" aria-hidden />
+                      {cuisine.name}
                     </Chip>
                   ))}
                 </div>
@@ -314,7 +324,8 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
                       })
                     }
                   >
-                    📍 Только центр
+                    <MapPin className="size-3.5 shrink-0" aria-hidden />
+                    Только центр
                   </Chip>
                   {districts.map((district) => (
                     <Chip
@@ -424,11 +435,13 @@ function StepBlock({
 function OptionCard({
   isActive,
   onClick,
+  icon,
   title,
   hint,
 }: {
   isActive: boolean;
   onClick: () => void;
+  icon?: string;
   title: string;
   hint: string;
 }) {
@@ -437,17 +450,31 @@ function OptionCard({
       type="button"
       onClick={onClick}
       className={cn(
-        'relative rounded-2xl border p-4 text-left transition-all',
+        'relative rounded-2xl border p-4 text-left transition-all duration-200',
         isActive
-          ? 'border-primary bg-primary/[0.05] shadow-glow'
-          : 'hover:border-foreground/20 hover:bg-secondary/50',
+          ? 'border-primary/40 bg-primary/[0.04] shadow-soft ring-1 ring-primary/15'
+          : 'hover:border-foreground/15 hover:bg-secondary/40 hover:shadow-soft',
       )}
     >
       {isActive ? (
         <Check className="absolute right-3 top-3 size-4 text-primary" strokeWidth={3} />
       ) : null}
-      <p className="text-sm font-medium">{title}</p>
-      <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>
+      <div className="flex items-start gap-3">
+        {icon ? (
+          <span
+            className={cn(
+              'flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors',
+              isActive ? 'bg-primary/12 text-primary' : 'bg-secondary text-muted-foreground',
+            )}
+          >
+            <Icon name={icon} className="size-4" />
+          </span>
+        ) : null}
+        <div>
+          <p className="text-sm font-medium">{title}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>
+        </div>
+      </div>
     </button>
   );
 }

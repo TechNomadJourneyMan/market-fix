@@ -147,18 +147,20 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const CUISINES: Cuisine[] = [
-  { id: 'cui-italian', slug: 'italyanskaya', name: 'Итальянская', emoji: '🍝', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-japanese', slug: 'yaponskaya', name: 'Японская', emoji: '🍣', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-georgian', slug: 'gruzinskaya', name: 'Грузинская', emoji: '🥟', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-kazakh', slug: 'kazahskaya', name: 'Казахская', emoji: '🐎', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-asian', slug: 'panaziatskaya', name: 'Паназиатская', emoji: '🍜', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-european', slug: 'evropeyskaya', name: 'Европейская', emoji: '🥩', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-uzbek', slug: 'uzbekskaya', name: 'Узбекская', emoji: '🍚', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-eastern', slug: 'vostochnaya', name: 'Ближневосточная', emoji: '🥙', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-american', slug: 'amerikanskaya', name: 'Американская', emoji: '🍔', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-author', slug: 'avtorskaya', name: 'Авторская', emoji: '✨', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-korean', slug: 'koreyskaya', name: 'Корейская', emoji: '🥢', createdAt: NOW, updatedAt: NOW },
-  { id: 'cui-french', slug: 'francuzskaya', name: 'Французская', emoji: '🥐', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-italian', slug: 'italyanskaya', name: 'Итальянская', icon: 'UtensilsCrossed', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-japanese', slug: 'yaponskaya', name: 'Японская', icon: 'Fish', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-georgian', slug: 'gruzinskaya', name: 'Грузинская', icon: 'Flame', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-kazakh', slug: 'kazahskaya', name: 'Казахская', icon: 'Mountain', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-asian', slug: 'panaziatskaya', name: 'Паназиатская', icon: 'Soup', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-european', slug: 'evropeyskaya', name: 'Европейская', icon: 'Beef', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-uzbek', slug: 'uzbekskaya', name: 'Узбекская', icon: 'Wheat', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-eastern', slug: 'vostochnaya', name: 'Ближневосточная', icon: 'Leaf', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-american', slug: 'amerikanskaya', name: 'Американская', icon: 'Sandwich', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-author', slug: 'avtorskaya', name: 'Авторская', icon: 'Sparkles', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-korean', slug: 'koreyskaya', name: 'Корейская', icon: 'Bowl', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-french', slug: 'francuzskaya', name: 'Французская', icon: 'Croissant', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-indian', slug: 'indiyskaya', name: 'Индийская', icon: 'LeafyGreen', createdAt: NOW, updatedAt: NOW },
+  { id: 'cui-turkish', slug: 'turetskaya', name: 'Турецкая', icon: 'Moon', createdAt: NOW, updatedAt: NOW },
 ];
 
 export const CATEGORY_BY_ID = new Map(CATEGORIES.map((c) => [c.id, c]));

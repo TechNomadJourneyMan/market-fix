@@ -151,7 +151,7 @@ export function FiltersPanel({
                     : 'hover:border-foreground/20 hover:bg-secondary',
                 )}
               >
-                <span aria-hidden>{cuisine.emoji}</span>
+                <Icon name={cuisine.icon} className="size-3.5 shrink-0 opacity-80" aria-hidden />
                 {cuisine.name}
               </button>
             );

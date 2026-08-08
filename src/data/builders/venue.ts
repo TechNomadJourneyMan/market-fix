@@ -166,10 +166,10 @@ export function buildVenue(seed: VenueSeed, businessId: string): Venue {
     tables: buildTables(seed),
     amenities: seed.amenities,
     workingHours: buildWorkingHours(seed.hoursProfile),
-    phone: buildPhone(seed.slug),
+    phone: seed.phone ?? buildPhone(seed.slug),
     email: `hello@${seed.slug.replace(/-/g, '')}.kz`,
-    website: `https://${seed.slug.replace(/-/g, '')}.kz`,
-    instagram: `@${seed.slug.replace(/-/g, '_')}`,
+    website: seed.website ?? `https://${seed.slug.replace(/-/g, '')}.kz`,
+    instagram: seed.instagram ?? `@${seed.slug.replace(/-/g, '_')}`,
     promotion: seed.promotion
       ? {
           id: `promo-${seed.slug}`,

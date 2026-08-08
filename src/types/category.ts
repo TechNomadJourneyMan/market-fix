@@ -21,5 +21,6 @@ export interface Category extends Entity {
 export interface Cuisine extends Entity {
   slug: string;
   name: string;
-  emoji: string;
+  /** Имя иконки из lucide-react — резолвится через components/ui/icon.tsx */
+  icon: IconName;
 }

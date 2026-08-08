@@ -85,6 +85,14 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'translateY(12px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        'scale-in': {
+          '0%': { opacity: '0', transform: 'scale(0.96)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        'slide-up': {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-8px)' },
@@ -95,6 +103,8 @@ const config: Config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
         shimmer: 'shimmer 1.8s infinite',
         'fade-up': 'fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'scale-in': 'scale-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'slide-up': 'slide-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both',
         float: 'float 6s ease-in-out infinite',
       },
     },

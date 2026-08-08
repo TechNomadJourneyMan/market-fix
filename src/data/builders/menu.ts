@@ -199,6 +199,37 @@ const DISHES_BY_CUISINE: Record<string, Partial<Record<SectionKey, DishTemplate[
       { name: 'Тарт с лимонным курдом', description: 'Хрустящая основа, меренга', factor: 0.2, weight: '150 г', vegetarian: true, allergens: ['глютен', 'молоко', 'яйцо'] },
     ],
   },
+  'cui-indian': {
+    starters: [
+      { name: 'Самоса с картофелем', description: 'Хрустящая выпечка, мята-чатни', factor: 0.16, weight: '180 г', vegetarian: true, allergens: ['глютен'] },
+      { name: 'Пакора овощная', description: 'Баклажан, лук, нутовая мука, соус', factor: 0.2, weight: '200 г', vegetarian: true },
+      { name: 'Tandoori-креветки', description: 'Йогуртовый маринад, специи', factor: 0.32, weight: '180 г', allergens: ['молоко', 'морепродукты'] },
+    ],
+    mains: [
+      { name: 'Butter chicken', description: 'Курица в томатно-сливочном соусе, рис басмати', factor: 0.44, weight: '380 г', allergens: ['молоко'] },
+      { name: 'Palak paneer', description: 'Шпинат, домашний сыр, специи', factor: 0.38, weight: '320 г', vegetarian: true, allergens: ['молоко'] },
+      { name: 'Бирьяни с бараниной', description: 'Ароматный рис, специи, мясо', factor: 0.52, weight: '420 г' },
+      { name: 'Dal makhani', description: 'Чёрная чечевица, сливки, масло гхи', factor: 0.34, weight: '300 г', vegetarian: true, allergens: ['молоко'] },
+    ],
+    desserts: [
+      { name: 'Gulab jamun', description: 'Молочные шарики в сиропе, 3 шт.', factor: 0.16, weight: '120 г', vegetarian: true, allergens: ['молоко'] },
+    ],
+  },
+  'cui-turkish': {
+    starters: [
+      { name: 'Мезе-сет', description: 'Хумус, бабагануш, лабне, лаваш', factor: 0.32, weight: '350 г', vegetarian: true, allergens: ['молоко', 'глютен'] },
+      { name: 'Сигара börek', description: 'Трубочки с сыром и шpinatом, 4 шт.', factor: 0.22, weight: '200 г', vegetarian: true, allergens: ['глютен', 'молоко'] },
+    ],
+    mains: [
+      { name: 'Adana kebab', description: 'Баранина на углях, булгур, лук', factor: 0.48, weight: '380 г' },
+      { name: 'Doner-платтер', description: 'Мясо, овощи, соусы, лаваш', factor: 0.36, weight: '420 г', allergens: ['глютен'] },
+      { name: 'Lahmacun', description: 'Тонкая лепёшка с мясом и зеленью', factor: 0.28, weight: '250 г', allergens: ['глютен'] },
+      { name: 'Pide с сыром', description: 'Лодочка с сыром и яйцом', factor: 0.34, weight: '380 г', vegetarian: true, allergens: ['глютен', 'молоко', 'яйцо'] },
+    ],
+    desserts: [
+      { name: 'Baklava', description: 'Фисташка, мёд, 3 кусочка', factor: 0.18, weight: '150 г', vegetarian: true, allergens: ['орехи', 'глютен'] },
+    ],
+  },
 };
 
 const DRINKS: DishTemplate[] = [

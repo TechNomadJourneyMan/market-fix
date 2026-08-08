@@ -11,7 +11,7 @@ const buttonVariants = cva(
       variant: {
         // Основной CTA — градиент и мягкое свечение делают его самым заметным на экране.
         default:
-          'brand-gradient text-primary-foreground shadow-glow hover:brightness-110 hover:shadow-lift',
+          'bg-primary text-primary-foreground shadow-soft hover:bg-primary/92 hover:shadow-card',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         outline:
           'border bg-background hover:bg-secondary hover:border-foreground/20 shadow-soft',

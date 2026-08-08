@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, BadgePercent, Sparkles, Zap } from 'lucide-react';
+import { ArrowRight, BadgePercent, Calendar, Search, Zap } from 'lucide-react';
 
 import { Section, SectionHeader, ScrollRow } from '@/components/ui/section';
 import { Button } from '@/components/ui/button';
@@ -155,8 +155,9 @@ export default function HomePage() {
 
       {/* ——— Финальный CTA ——— */}
       <Section className="pt-0">
-        <div className="relative overflow-hidden rounded-3xl brand-gradient px-6 py-14 text-center text-white sm:px-10 sm:py-20">
-          <div className="pointer-events-none absolute inset-0 grid-noise opacity-20" />
+        <div className="relative overflow-hidden rounded-3xl border bg-[hsl(18_72%_46%)] px-6 py-14 text-center text-white sm:px-10 sm:py-20">
+          <div className="pointer-events-none absolute inset-0 grid-noise opacity-15" />
+          <div className="pointer-events-none absolute -right-20 top-0 size-64 rounded-full bg-white/10 blur-3xl" />
           <div className="relative mx-auto max-w-2xl space-y-5">
             <h2 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
               Ужин в пятницу не забронирует себя сам
@@ -168,6 +169,7 @@ export default function HomePage() {
             <div className="flex flex-col items-center justify-center gap-3 pt-2 sm:flex-row">
               <Button asChild size="xl" variant="glass" className="w-full sm:w-auto">
                 <Link href="/catalog">
+                  <Calendar />
                   Выбрать заведение
                   <ArrowRight />
                 </Link>
@@ -179,8 +181,8 @@ export default function HomePage() {
                 className="w-full text-white hover:bg-white/15 hover:text-white sm:w-auto"
               >
                 <Link href="/ai">
-                  <Sparkles />
-                  Пусть выберет AI
+                  <Search />
+                  Подобрать по сценарию
                 </Link>
               </Button>
             </div>

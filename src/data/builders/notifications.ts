@@ -58,7 +58,7 @@ export function buildNotifications(
     });
   }
 
-  const promoVenue = venues.find((venue) => venue.promotion && venue.slug === 'basilico');
+  const promoVenue = venues.find((venue) => venue.promotion && venue.slug === 'daredzhani-kunayeva');
   if (promoVenue?.promotion) {
     notifications.push({
       id: 'notif-3',
@@ -74,7 +74,7 @@ export function buildNotifications(
     });
   }
 
-  const recommended = bySlug.get('rooftop-21');
+  const recommended = bySlug.get('sandyq');
   if (recommended) {
     notifications.push({
       id: 'notif-4',

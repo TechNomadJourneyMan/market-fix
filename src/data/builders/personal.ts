@@ -3,13 +3,13 @@ import { DEMO_NOW } from '../now';
 
 /** Избранное демо-пользователя — подобрано под его предпочтения в профиле. */
 const FAVORITE_SLUGS: { slug: string; note?: string; daysAgo: number }[] = [
-  { slug: 'terra-alta', note: 'Сюда на годовщину', daysAgo: 4 },
-  { slug: 'almaty-speak', note: 'Проверить коктейльный сет', daysAgo: 9 },
-  { slug: 'basilico', daysAgo: 15 },
-  { slug: 'sweet-ridge', note: 'Заказать торт на ДР мамы', daysAgo: 21 },
-  { slug: 'bean-theory', daysAgo: 33 },
-  { slug: 'loft-kok-tobe', note: 'Вариант для корпоратива', daysAgo: 47 },
-  { slug: 'sakura-hills', daysAgo: 62 },
+  { slug: 'nuala', note: 'Сюда на годовщину', daysAgo: 4 },
+  { slug: 'yellow-door', note: 'Проверить коктейльный сет', daysAgo: 9 },
+  { slug: 'beefeater-dostyk', daysAgo: 15 },
+  { slug: 'french-42', note: 'Вечер с друзьями', daysAgo: 21 },
+  { slug: 'aroma', daysAgo: 33 },
+  { slug: 'avenue-lounge', note: 'Вариант для корпоратива', daysAgo: 47 },
+  { slug: 'manga-sushi', daysAgo: 62 },
 ];
 
 const BASE_DATE = DEMO_NOW;

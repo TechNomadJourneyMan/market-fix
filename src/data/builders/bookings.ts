@@ -144,14 +144,14 @@ export function buildDemoUserBookings(venues: Venue[]): Booking[] {
     subtotal: number;
     hasReview: boolean;
   }[] = [
-    { slug: 'terra-alta', dayOffset: 6, time: '19:30', guests: 2, status: 'confirmed', comment: 'Годовщина — хотим стол у окна', subtotal: 24000, hasReview: false },
-    { slug: 'basilico', dayOffset: 2, time: '13:00', guests: 4, status: 'confirmed', comment: 'Будем с ребёнком', subtotal: 0, hasReview: false },
-    { slug: 'almaty-speak', dayOffset: 12, time: '21:00', guests: 3, status: 'awaiting_payment', subtotal: 18000, hasReview: false },
-    { slug: 'sweet-ridge', dayOffset: -4, time: '11:00', guests: 2, status: 'completed', subtotal: 0, hasReview: true },
-    { slug: 'bean-theory', dayOffset: -11, time: '10:00', guests: 1, status: 'completed', subtotal: 0, hasReview: false },
-    { slug: 'sakura-hills', dayOffset: -23, time: '20:00', guests: 2, status: 'completed', comment: 'Место у суши-бара', subtotal: 32000, hasReview: true },
-    { slug: 'hopfield-craft-bar', dayOffset: -38, time: '20:30', guests: 6, status: 'completed', subtotal: 0, hasReview: false },
-    { slug: 'rooftop-21', dayOffset: -52, time: '19:00', guests: 4, status: 'cancelled', subtotal: 0, hasReview: false },
+    { slug: 'nuala', dayOffset: 6, time: '19:30', guests: 2, status: 'confirmed', comment: 'Годовщина — хотим стол у окна', subtotal: 24000, hasReview: false },
+    { slug: 'daredzhani-kunayeva', dayOffset: 2, time: '13:00', guests: 4, status: 'confirmed', comment: 'Будем с ребёнком', subtotal: 0, hasReview: false },
+    { slug: 'yellow-door', dayOffset: 12, time: '21:00', guests: 3, status: 'awaiting_payment', subtotal: 18000, hasReview: false },
+    { slug: 'breakfast-martini', dayOffset: -4, time: '11:00', guests: 2, status: 'completed', subtotal: 0, hasReview: true },
+    { slug: 'aroma', dayOffset: -11, time: '10:00', guests: 1, status: 'completed', subtotal: 0, hasReview: false },
+    { slug: 'manga-sushi', dayOffset: -23, time: '20:00', guests: 2, status: 'completed', comment: 'Место у суши-бара', subtotal: 32000, hasReview: true },
+    { slug: 'chechil-rozybakieva', dayOffset: -38, time: '20:30', guests: 6, status: 'completed', subtotal: 0, hasReview: false },
+    { slug: 'sandyq', dayOffset: -52, time: '19:00', guests: 4, status: 'cancelled', subtotal: 0, hasReview: false },
   ];
 
   return plan
