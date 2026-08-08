@@ -2,20 +2,22 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { CalendarCheck, Heart, Home, Search, Sparkles } from 'lucide-react';
+import { Home, Search, ShoppingBag, Sparkles, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { selectCartCount, useCartStore } from '@/store/use-cart-store';
 
 const TABS = [
   { href: '/', label: 'Главная', icon: Home },
   { href: '/catalog', label: 'Поиск', icon: Search },
-  { href: '/ai', label: 'AI-подбор', icon: Sparkles },
-  { href: '/account/favorites', label: 'Избранное', icon: Heart },
-  { href: '/account/bookings', label: 'Брони', icon: CalendarCheck },
+  { href: '/ai', label: 'AI', icon: Sparkles },
+  { href: '/merge', label: 'Merge', icon: Users },
+  { href: '/cart', label: 'Корзина', icon: ShoppingBag },
 ];
 
 /** Нижняя навигация — основной способ перемещения на мобильных. */
 export function MobileTabBar() {
   const pathname = usePathname();
+  const cartCount = useCartStore(selectCartCount);
 
   // В кабинете бизнеса и на экранах auth своя навигация.
   if (pathname.startsWith('/business') || pathname.startsWith('/auth')) return null;
@@ -31,12 +33,17 @@ export function MobileTabBar() {
               <Link
                 href={tab.href}
                 className={cn(
-                  'flex flex-col items-center gap-1 px-1 py-2.5 text-[10px] font-medium transition-colors',
+                  'relative flex flex-col items-center gap-1 px-1 py-2.5 text-[10px] font-medium transition-colors',
                   isActive ? 'text-primary' : 'text-muted-foreground',
                 )}
               >
                 <tab.icon className={cn('size-5', isActive && 'fill-primary/15')} />
                 {tab.label}
+                {tab.href === '/cart' && cartCount > 0 ? (
+                  <span className="absolute right-2 top-1 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-semibold text-primary-foreground">
+                    {cartCount}
+                  </span>
+                ) : null}
               </Link>
             </li>
           );

@@ -2,14 +2,35 @@ import type {
   Business,
   BusinessAnalytics,
   BusinessDashboardMetrics,
+  PriceLevel,
   TimeSeriesPoint,
   Venue,
+  VenueAmenity,
 } from '@/types';
 import { db, DEMO_BUSINESS_ID } from '@/data/db';
 import { DEMO_TODAY } from '@/data/builders/bookings';
-import { createRandom, hashString } from '@/lib/utils';
+import { createRandom, hashString, slugify } from '@/lib/utils';
 import { toDateKey } from '@/lib/format';
+import { DISTRICT_BY_ID, DEFAULT_CITY_ID, CITIES } from '@/data/seed/geo';
+import { buildWorkingHours, type HoursProfile } from '@/data/seed/hours';
+import { pickVenuePhotoUrl } from '@/data/seed/venue-photos';
 import { getBusinessBookings } from './bookings';
+
+export interface CreateVenueInput {
+  name: string;
+  tagline: string;
+  description: string;
+  categoryId: string;
+  cuisineIds: string[];
+  districtId: string;
+  address: string;
+  phone: string;
+  email: string;
+  averagePrice: number;
+  capacity: number;
+  amenities?: VenueAmenity[];
+  tags?: string[];
+}
 
 /** Текущий бизнес демо-кабинета. Заменится на выбор из сессии владельца. */
 export function getCurrentBusiness(): Business {
@@ -34,6 +55,131 @@ export function updateVenue(venueId: string, patch: Partial<Venue>): Venue | nul
   const venue = db.venues.find((item) => item.id === venueId);
   if (!venue) return null;
   Object.assign(venue, patch, { updatedAt: new Date().toISOString() });
+  return venue;
+}
+
+function priceLevelFromAverage(averagePrice: number): PriceLevel {
+  if (averagePrice < 5000) return 1;
+  if (averagePrice < 12000) return 2;
+  if (averagePrice < 20000) return 3;
+  return 4;
+}
+
+function hoursProfileForCategory(categoryId: string): HoursProfile {
+  if (categoryId === 'cat-bar' || categoryId === 'cat-lounge') return 'bar';
+  if (categoryId === 'cat-cafe' || categoryId === 'cat-coffee' || categoryId === 'cat-bakery') {
+    return 'daytime';
+  }
+  if (categoryId === 'cat-banquet') return 'banquet';
+  if (categoryId === 'cat-karaoke') return 'karaoke';
+  if (categoryId === 'cat-club') return 'club';
+  if (categoryId === 'cat-loft') return 'loft';
+  return 'restaurant';
+}
+
+/** Добавить новое заведение в кабинет бизнеса (in-memory MVP). */
+export function createVenue(businessId: string, input: CreateVenueInput): Venue {
+  const baseSlug = slugify(input.name) || `venue-${Date.now()}`;
+  let slug = baseSlug;
+  let n = 2;
+  while (db.venues.some((venue) => venue.slug === slug)) {
+    slug = `${baseSlug}-${n}`;
+    n += 1;
+  }
+
+  const district = DISTRICT_BY_ID.get(input.districtId);
+  const center = district?.center ?? CITIES[0].center;
+  const jitter = createRandom(hashString(slug));
+  const nowIso = new Date().toISOString();
+  const tags: Array<'interior' | 'food' | 'exterior' | 'event'> = [
+    'interior',
+    'food',
+    'exterior',
+    'event',
+  ];
+  const photos = tags.map((tag, index) => ({
+    id: `${slug}-photo-${index + 1}`,
+    url: pickVenuePhotoUrl(slug, tag, index, input.categoryId),
+    alt: `${input.name} — ${tag}`,
+    tag,
+    width: 1200,
+    height: 800,
+  }));
+
+  const venue: Venue = {
+    id: `venue-${slug}`,
+    slug,
+    name: input.name.trim(),
+    tagline: input.tagline.trim(),
+    description: input.description.trim(),
+    businessId,
+    categoryId: input.categoryId,
+    cuisineIds: input.cuisineIds,
+    location: {
+      coordinates: {
+        lat: center.lat + (jitter() - 0.5) * 0.02,
+        lng: center.lng + (jitter() - 0.5) * 0.02,
+      },
+      address: input.address.trim(),
+      cityId: DEFAULT_CITY_ID,
+      cityName: CITIES[0].name,
+      districtId: input.districtId,
+      districtName: district?.name ?? 'Алматы',
+    },
+    photos,
+    coverImage: photos[0].url,
+    rating: {
+      score: 5,
+      count: 0,
+      breakdown: { food: 5, service: 5, atmosphere: 5, price: 5 },
+      distribution: { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 },
+    },
+    priceLevel: priceLevelFromAverage(input.averagePrice),
+    averagePrice: input.averagePrice,
+    capacity: input.capacity,
+    tables: [
+      { id: `${slug}-table-1`, name: 'Стол 1', seats: 2, zone: 'main' },
+      { id: `${slug}-table-2`, name: 'Стол 2', seats: 4, zone: 'main' },
+      { id: `${slug}-table-3`, name: 'VIP 1', seats: 8, zone: 'vip' },
+    ],
+    amenities: input.amenities?.length
+      ? input.amenities
+      : ['wifi', 'card_payment', 'parking'],
+    workingHours: buildWorkingHours(hoursProfileForCategory(input.categoryId)),
+    phone: input.phone.trim(),
+    email: input.email.trim(),
+    isVerified: false,
+    isFeatured: false,
+    status: 'published',
+    popularityScore: 40,
+    stats: {
+      views30d: 0,
+      bookings30d: 0,
+      favorites: 0,
+      conversionRate: 0,
+      averageCheck: input.averagePrice * 2,
+      revenue30d: 0,
+    },
+    tags: input.tags?.length ? input.tags : ['новое', 'на платформе'],
+    createdAt: nowIso,
+    updatedAt: nowIso,
+  };
+
+  db.venues.unshift(venue);
+
+  const business = db.businesses.find((item) => item.id === businessId);
+  if (business && !business.venueIds.includes(venue.id)) {
+    business.venueIds = [venue.id, ...business.venueIds];
+    business.updatedAt = nowIso;
+  }
+
+  const category = db.categories.find((item) => item.id === input.categoryId);
+  if (category) {
+    category.venueCount = db.venues.filter(
+      (item) => item.categoryId === category.id && item.status === 'published',
+    ).length;
+  }
+
   return venue;
 }
 

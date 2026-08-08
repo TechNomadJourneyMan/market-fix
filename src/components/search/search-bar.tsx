@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { useDebounce, useDismiss } from '@/hooks/use-debounce';
 import { Icon } from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
+import { VoiceInputButton } from '@/components/ui/voice-input';
 
 interface SearchBarProps {
   /** hero — крупная строка на главной, compact — в шапке. */
@@ -131,6 +132,15 @@ export function SearchBar({
             <X className="size-4" />
           </button>
         ) : null}
+
+        <VoiceInputButton
+          size={isHero ? 'icon' : 'icon-sm'}
+          className="shrink-0 rounded-xl"
+          onTranscript={(text) => {
+            setValue(text);
+            setIsOpen(true);
+          }}
+        />
 
         <Button
           onClick={submit}

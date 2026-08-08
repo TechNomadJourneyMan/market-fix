@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { BadgeCheck, ChevronRight, MapPin, Share2, Star, Users } from 'lucide-react';
+import { BadgeCheck, ChevronRight, MapPin, Star, Users } from 'lucide-react';
+import { ShareButton } from '@/components/venue/share-button';
+import { TrackRecent } from '@/components/venue/track-recent';
 
 import {
   getAllVenueSlugs,
@@ -161,11 +163,19 @@ export default async function VenuePage({ params }: { params: Promise<{ slug: st
             </div>
           </div>
 
-          <Button variant="outline" size="sm" className="hidden shrink-0 sm:inline-flex">
-            <Share2 />
-            Поделиться
-          </Button>
+          <ShareButton
+            title={venue.name}
+            slug={venue.slug}
+            className="hidden shrink-0 sm:inline-flex"
+          />
         </header>
+        <TrackRecent
+          id={venue.id}
+          slug={venue.slug}
+          name={venue.name}
+          coverImage={venue.photos[0]?.url ?? ''}
+          tagline={venue.tagline}
+        />
       </div>
 
       {/* ——— Галерея ——— */}

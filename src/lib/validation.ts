@@ -94,8 +94,28 @@ export const venueEditSchema = z.object({
 
 export type VenueEditValues = z.infer<typeof venueEditSchema>;
 
+export const createVenueSchema = venueEditSchema.extend({
+  categoryId: z.string().min(1, 'Выберите категорию'),
+  cuisineIds: z.array(z.string()).min(1, 'Выберите хотя бы одну кухню'),
+  districtId: z.string().min(1, 'Выберите район'),
+  amenities: z.array(z.string()).optional(),
+  tags: z.array(z.string()).optional(),
+});
+
+export type CreateVenueValues = z.infer<typeof createVenueSchema>;
+
 export const reviewSchema = z.object({
   rating: z.number().int().min(1).max(5),
   title: z.string().min(3, 'Добавьте заголовок').max(100),
   text: z.string().min(20, 'Расскажите подробнее — минимум 20 символов').max(2000),
+});
+
+export const mergeCreateSchema = z.object({
+  hostName: z.string().min(2, 'Как вас зовут?').max(40),
+  title: z.string().max(80).optional(),
+});
+
+export const mergeJoinSchema = z.object({
+  code: z.string().min(4).max(8),
+  name: z.string().min(2, 'Как вас зовут?').max(40),
 });

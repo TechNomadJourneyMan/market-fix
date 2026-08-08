@@ -17,6 +17,7 @@ import {
   Minus,
   Plus,
   ShieldCheck,
+  ShoppingBag,
   Star,
   Users,
 } from 'lucide-react';
@@ -34,6 +35,7 @@ import {
   plural,
 } from '@/lib/format';
 import { useBookingStore } from '@/store/use-booking-store';
+import { useCartStore } from '@/store/use-cart-store';
 import {
   Dialog,
   DialogBody,
@@ -67,6 +69,7 @@ const DEFAULT_USER = {
 export function BookingDialog() {
   const router = useRouter();
   const { target, isOpen, prefill, close } = useBookingStore();
+  const addToCart = useCartStore((state) => state.addItem);
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingFormSchema),
@@ -167,9 +170,39 @@ export function BookingDialog() {
     }
   });
 
+  const estimate = target ? target.averagePrice * guests : 0;
+
+  const onAddToCart = () => {
+    if (!target) return;
+    const values = form.getValues();
+    if (!values.date || !values.time) {
+      toast.error('Выберите дату и время');
+      return;
+    }
+    addToCart({
+      venueId: target.id,
+      venueSlug: target.slug,
+      venueName: target.name,
+      venueImage: target.coverImage,
+      venueAddress: target.address,
+      date: values.date,
+      time: values.time,
+      guests: values.guests,
+      comment: values.comment,
+      estimatedTotal: estimate,
+      extras: [],
+    });
+    toast.success('Добавлено в корзину броней', {
+      action: {
+        label: 'Открыть',
+        onClick: () => router.push('/cart'),
+      },
+    });
+    close();
+  };
+
   if (!target) return null;
 
-  const estimate = target.averagePrice * guests;
   const availableSlots = availability?.slots.filter((slot) => slot.isAvailable) ?? [];
   const selectedSlot = availability?.slots.find((slot) => slot.time === selectedTime);
 
@@ -417,14 +450,24 @@ export function BookingDialog() {
             </Badge>
           </div>
 
-          <Button
-            size="lg"
-            onClick={onSubmit}
-            isLoading={form.formState.isSubmitting}
-            className="w-full sm:w-auto"
-          >
-            {form.formState.isSubmitting ? 'Отправляем…' : 'Подтвердить бронирование'}
-          </Button>
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={onAddToCart}
+              className="w-full sm:w-auto"
+            >
+              <ShoppingBag />В корзину
+            </Button>
+            <Button
+              size="lg"
+              onClick={onSubmit}
+              isLoading={form.formState.isSubmitting}
+              className="w-full sm:w-auto"
+            >
+              {form.formState.isSubmitting ? 'Отправляем…' : 'Забронировать сейчас'}
+            </Button>
+          </div>
         </DialogFooter>
 
         {selectedDate && selectedTime ? (

@@ -16,3 +16,4 @@ export * from './payment';
 export * from './search';
 export * from './favorite';
 export * from './ai';
+export * from './merge';

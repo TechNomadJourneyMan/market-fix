@@ -12,7 +12,9 @@ import {
   Menu,
   Search,
   Settings,
+  ShoppingBag,
   Sparkles,
+  Users,
   User as UserIcon,
 } from 'lucide-react';
 import type { User } from '@/types';
@@ -38,13 +40,14 @@ import {
 } from '@/components/ui/sheet';
 import { SearchBar } from '@/components/search/search-bar';
 import { SignOutButton, SignOutMenuItem } from '@/components/auth/sign-out-button';
+import { selectCartCount, useCartStore } from '@/store/use-cart-store';
 import { ThemeToggle } from './theme-toggle';
 import { Logo } from './logo';
 
 const NAV_LINKS = [
   { href: '/catalog', label: 'Каталог', icon: LayoutGrid },
   { href: '/ai', label: 'AI-подбор', icon: Sparkles, highlight: true },
-  { href: '/account/favorites', label: 'Избранное', icon: Heart },
+  { href: '/merge', label: 'Merge Menu', icon: Users },
   { href: '/business', label: 'Для бизнеса', icon: Building2 },
 ];
 
@@ -58,6 +61,7 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const cartCount = useCartStore(selectCartCount);
 
   const isTransparentPage = pathname === '/';
   const isAuthPage = pathname.startsWith('/auth');
@@ -128,6 +132,17 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
           ) : null}
 
           <ThemeToggle className="hidden sm:inline-flex" />
+
+          <Button asChild variant="ghost" size="icon" className="relative hidden sm:inline-flex">
+            <Link href="/cart" aria-label="Корзина броней">
+              <ShoppingBag />
+              {cartCount > 0 ? (
+                <span className="absolute right-1.5 top-1.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
+                  {cartCount}
+                </span>
+              ) : null}
+            </Link>
+          </Button>
 
           {isAuthenticated && user ? (
             <>
@@ -243,6 +258,14 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
               <SheetBody className="space-y-1">
                 <MobileLink href="/catalog" icon={LayoutGrid} label="Каталог" onNavigate={() => setMobileOpen(false)} />
                 <MobileLink href="/ai" icon={Sparkles} label="AI-подбор" onNavigate={() => setMobileOpen(false)} highlight />
+                <MobileLink href="/merge" icon={Users} label="Merge Menu" onNavigate={() => setMobileOpen(false)} />
+                <MobileLink
+                  href="/cart"
+                  icon={ShoppingBag}
+                  label="Корзина"
+                  badge={cartCount || undefined}
+                  onNavigate={() => setMobileOpen(false)}
+                />
 
                 {isAuthenticated ? (
                   <>

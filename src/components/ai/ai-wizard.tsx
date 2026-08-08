@@ -31,6 +31,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Icon } from '@/components/ui/icon';
 import { Progress } from '@/components/ui/primitives';
+import { VoiceInputButton } from '@/components/ui/voice-input';
 import { AiResults } from './ai-results';
 
 const OCCASIONS: {
@@ -146,6 +147,11 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
             }}
             placeholder="Итальянская кухня, до 10 000 ₸, 8 человек, центр, вечером"
             className="h-12 flex-1 text-sm"
+          />
+          <VoiceInputButton
+            size="icon"
+            className="h-12 w-12 shrink-0 rounded-xl"
+            onTranscript={setFreeText}
           />
           <Button
             size="lg"

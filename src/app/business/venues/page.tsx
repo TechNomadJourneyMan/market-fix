@@ -29,9 +29,11 @@ export default function BusinessVenuesPage() {
             Карточки заведений, их показатели и быстрый доступ к редактированию
           </p>
         </div>
-        <Button size="sm">
-          <Plus />
-          Добавить объект
+        <Button asChild size="sm">
+          <Link href="/business/venues/new">
+            <Plus />
+            Добавить объект
+          </Link>
         </Button>
       </header>
 

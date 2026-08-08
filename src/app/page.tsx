@@ -10,6 +10,7 @@ import { HowItWorks } from '@/components/home/how-it-works';
 import { AiTeaser } from '@/components/home/ai-teaser';
 import { Testimonials } from '@/components/home/testimonials';
 import { BusinessCta } from '@/components/home/business-cta';
+import { RecentVenues } from '@/components/home/recent-venues';
 
 import { getCategories } from '@/server/repositories/taxonomy';
 import {
@@ -47,6 +48,8 @@ export default function HomePage() {
         />
         <CategoryGrid categories={categories} />
       </Section>
+
+      <RecentVenues />
 
       {/* ——— Выбор редакции ——— */}
       <Section className="pt-0">
