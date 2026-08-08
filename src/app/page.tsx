@@ -155,7 +155,7 @@ export default function HomePage() {
 
       {/* ——— Финальный CTA ——— */}
       <Section className="pt-0">
-        <div className="relative overflow-hidden rounded-3xl border bg-[hsl(18_72%_46%)] px-6 py-14 text-center text-white sm:px-10 sm:py-20">
+        <div className="relative overflow-hidden rounded-3xl border bg-primary px-6 py-14 text-center text-white sm:px-10 sm:py-20">
           <div className="pointer-events-none absolute inset-0 grid-noise opacity-15" />
           <div className="pointer-events-none absolute -right-20 top-0 size-64 rounded-full bg-white/10 blur-3xl" />
           <div className="relative mx-auto max-w-2xl space-y-5">
