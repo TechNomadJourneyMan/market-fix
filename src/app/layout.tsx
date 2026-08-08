@@ -9,11 +9,12 @@ import { MobileTabBar } from '@/components/layout/mobile-tabbar';
 import { themeScript } from '@/components/layout/theme-toggle';
 import { BookingDialog } from '@/components/booking/booking-dialog';
 import { getCategories } from '@/server/repositories/taxonomy';
+import { getSessionUser } from '@/lib/auth';
 import {
-  getCurrentUser,
   getFavoriteVenueIds,
   getUnreadNotificationCount,
 } from '@/server/repositories/users';
+import { DEMO_USER_ID } from '@/data/db';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
@@ -48,12 +49,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Данные оболочки читаются на сервере — шапка приходит уже заполненной.
-  const user = getCurrentUser();
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const sessionUser = await getSessionUser();
   const categories = getCategories();
-  const unreadCount = getUnreadNotificationCount(user.id);
-  const favoriteVenueIds = getFavoriteVenueIds(user.id);
+  const userId = sessionUser?.id ?? DEMO_USER_ID;
+  const unreadCount = sessionUser ? getUnreadNotificationCount(userId) : 0;
+  const favoriteVenueIds = sessionUser ? getFavoriteVenueIds(userId) : [];
 
   return (
     <html lang="ru" suppressHydrationWarning className={inter.variable}>
@@ -70,7 +71,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
 
           <div className="flex min-h-dvh flex-col">
-            <Header user={user} unreadCount={unreadCount} />
+            <Header
+              user={sessionUser}
+              isAuthenticated={Boolean(sessionUser)}
+              unreadCount={unreadCount}
+            />
             <main id="main" className="flex-1 pb-20 lg:pb-0">
               {children}
             </main>

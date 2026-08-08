@@ -45,13 +45,13 @@ export function BusinessCta() {
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
-              <Link href="/business">
-                Открыть кабинет бизнеса
+              <Link href="/auth/register?role=business&next=/business">
+                Подключить бизнес
                 <ArrowRight />
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link href="/business/analytics">Посмотреть аналитику</Link>
+              <Link href="/auth/login?role=business&next=/business">Войти в кабинет</Link>
             </Button>
           </div>
         </div>

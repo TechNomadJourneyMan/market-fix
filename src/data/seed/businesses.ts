@@ -604,7 +604,7 @@ export function buildBusinesses(venueIdsByBusinessKey: Map<string, string[]>): B
     name: seed.name,
     legalName: seed.legalName,
     taxId: `KZ${String(Math.abs(hash(seed.key))).padStart(12, '0').slice(0, 12)}`,
-    logo: `/api/photo/biz-${seed.key}/200/200`,
+    logo: `https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&h=200&fit=crop&q=80&sig=${seed.key}`,
     description: seed.description,
     owner: {
       userId: `user-owner-${seed.key}`,

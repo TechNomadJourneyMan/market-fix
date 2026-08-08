@@ -2,6 +2,7 @@ import type { Venue, VenuePhoto, VenueRating, VenueTable } from '@/types';
 import { clamp, createRandom, hashString } from '@/lib/utils';
 import { DISTRICT_BY_ID, DEFAULT_CITY_ID, CITIES } from '../seed/geo';
 import { buildWorkingHours } from '../seed/hours';
+import { pickVenuePhotoUrl } from '../seed/venue-photos';
 import type { VenueSeed } from '../seed/venue-seeds';
 
 const NOW = '2026-01-10T09:00:00.000Z';
@@ -18,13 +19,12 @@ const PHOTO_TAG_LABELS: Record<string, string> = {
 function buildPhotos(seed: VenueSeed): VenuePhoto[] {
   const random = createRandom(hashString(seed.slug));
   const tags = seed.photoTags ?? ['interior', 'food', 'exterior', 'event'];
-  // 8 фото на заведение — достаточно для большой галереи на детальной странице.
   return Array.from({ length: 8 }, (_, index) => {
     const tag = tags[index % tags.length];
     const isWide = index === 0 || random() > 0.65;
     return {
       id: `${seed.slug}-photo-${index + 1}`,
-      url: `/api/photo/${seed.slug}-${index + 1}/${isWide ? 1200 : 800}/${isWide ? 800 : 800}`,
+      url: pickVenuePhotoUrl(seed.slug, tag, index, seed.categoryId),
       alt: `${seed.name} — ${PHOTO_TAG_LABELS[tag]}`,
       tag,
       width: isWide ? 1200 : 800,

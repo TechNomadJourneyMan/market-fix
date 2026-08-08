@@ -318,7 +318,10 @@ export function buildMenu(venue: Venue): Menu {
         description: dish.description,
         price: roundPrice(venue.averagePrice * dish.factor),
         weight: dish.weight,
-        image: random() > 0.45 ? `/api/photo/${venue.slug}-dish-${key}-${index}/600/600` : undefined,
+        image:
+          random() > 0.45
+            ? `https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&h=600&fit=crop&q=80&sig=${venue.slug}-${key}-${index}`
+            : undefined,
         isPopular: index === 0 || random() > 0.78,
         isVegetarian: Boolean(dish.vegetarian),
         isSpicy: Boolean(dish.spicy),

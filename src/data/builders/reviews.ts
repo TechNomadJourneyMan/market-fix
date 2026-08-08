@@ -152,7 +152,7 @@ export function buildReviews(venue: Venue, count: number): Review[] {
       photos:
         random() > 0.72
           ? Array.from({ length: 1 + Math.floor(random() * 3) }, (_, photoIndex) =>
-              `/api/photo/${venue.slug}-review-${index}-${photoIndex}/500/500`,
+              `https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&h=500&fit=crop&q=80&sig=${venue.slug}-r${index}-${photoIndex}`,
             )
           : [],
       likes: Math.floor(random() ** 2 * 64),

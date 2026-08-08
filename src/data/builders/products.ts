@@ -90,7 +90,7 @@ export function buildProducts(venue: Venue): Product[] {
       kind: template.kind,
       price,
       oldPrice: template.discounted ? roundPrice(price * 1.25) : undefined,
-      image: `/api/photo/${venue.slug}-product-${index}/600/600`,
+      image: `https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&h=600&fit=crop&q=80&sig=${venue.slug}-p${index}`,
       inStock,
       stockCount: inStock ? 3 + Math.floor(random() * 40) : 0,
       isPopular: index === 0 || random() > 0.75,

@@ -17,8 +17,8 @@ const TABS = [
 export function MobileTabBar() {
   const pathname = usePathname();
 
-  // В кабинете бизнеса своя навигация — таббар только мешал бы.
-  if (pathname.startsWith('/business')) return null;
+  // В кабинете бизнеса и на экранах auth своя навигация.
+  if (pathname.startsWith('/business') || pathname.startsWith('/auth')) return null;
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t glass-strong pb-[env(safe-area-inset-bottom)] lg:hidden">

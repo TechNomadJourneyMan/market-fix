@@ -12,7 +12,8 @@ export const CATEGORIES: Category[] = [
     description: 'Ужин, который хочется повторить: авторская кухня, вино и безупречный сервис.',
     icon: 'UtensilsCrossed',
     gradient: 'from-orange-500 to-rose-500',
-    coverImage: '/api/photo/cat-restaurant-cover/800/600',
+    coverImage:
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop&q=80',
     venueCount: 0,
     isPopular: true,
     createdAt: NOW,
@@ -26,7 +27,8 @@ export const CATEGORIES: Category[] = [
     description: 'Место для завтрака, встречи и долгих разговоров без повода.',
     icon: 'CupSoda',
     gradient: 'from-amber-400 to-orange-500',
-    coverImage: '/api/photo/cat-cafe-cover/800/600',
+    coverImage:
+      'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&h=600&fit=crop&q=80',
     venueCount: 0,
     isPopular: true,
     createdAt: NOW,
@@ -40,7 +42,8 @@ export const CATEGORIES: Category[] = [
     description: 'Коктейли, крафт и музыка — вечер начинается здесь.',
     icon: 'Martini',
     gradient: 'from-violet-500 to-indigo-600',
-    coverImage: '/api/photo/cat-bar-cover/800/600',
+    coverImage:
+      'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&h=600&fit=crop&q=80',
     venueCount: 0,
     isPopular: true,
     createdAt: NOW,
@@ -54,7 +57,8 @@ export const CATEGORIES: Category[] = [
     description: 'Спешелти-кофе, десерты и розетка у окна для работы.',
     icon: 'Coffee',
     gradient: 'from-amber-600 to-yellow-500',
-    coverImage: '/api/photo/cat-coffee-cover/800/600',
+    coverImage:
+      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&h=600&fit=crop&q=80',
     venueCount: 0,
     isPopular: true,
     createdAt: NOW,
@@ -68,7 +72,8 @@ export const CATEGORIES: Category[] = [
     description: 'Свадьбы, юбилеи и корпоративы под ключ — от меню до декора.',
     icon: 'PartyPopper',
     gradient: 'from-pink-500 to-fuchsia-600',
-    coverImage: '/api/photo/cat-banquet-cover/800/600',
+    coverImage:
+      'https://images.unsplash.com/photo-1519167758481-83f29da45fce?w=800&h=600&fit=crop&q=80',
     venueCount: 0,
     isPopular: true,
     createdAt: NOW,
@@ -82,7 +87,8 @@ export const CATEGORIES: Category[] = [
     description: 'Приватные кабинки, огромный каталог песен и звук без компромиссов.',
     icon: 'Mic2',
     gradient: 'from-purple-500 to-pink-600',
-    coverImage: '/api/photo/cat-karaoke-cover/800/600',
+    coverImage:
+      'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&h=600&fit=crop&q=80',
     venueCount: 0,
     isPopular: false,
     createdAt: NOW,
@@ -96,7 +102,8 @@ export const CATEGORIES: Category[] = [
     description: 'Мягкий свет, диваны и вечер, который никуда не спешит.',
     icon: 'Flame',
     gradient: 'from-teal-500 to-emerald-600',
-    coverImage: '/api/photo/cat-lounge-cover/800/600',
+    coverImage:
+      'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800&h=600&fit=crop&q=80',
     venueCount: 0,
     isPopular: false,
     createdAt: NOW,
@@ -110,7 +117,8 @@ export const CATEGORIES: Category[] = [
     description: 'Танцпол, резиденты и столы у сцены — бронируйте заранее.',
     icon: 'Disc3',
     gradient: 'from-indigo-600 to-blue-700',
-    coverImage: '/api/photo/cat-club-cover/800/600',
+    coverImage:
+      'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&h=600&fit=crop&q=80',
     venueCount: 0,
     isPopular: false,
     createdAt: NOW,
@@ -124,7 +132,8 @@ export const CATEGORIES: Category[] = [
     description: 'Торты на заказ, круассаны с утра и витрина, мимо которой не пройти.',
     icon: 'CakeSlice',
     gradient: 'from-rose-400 to-red-500',
-    coverImage: '/api/photo/cat-bakery-cover/800/600',
+    coverImage:
+      'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&h=600&fit=crop&q=80',
     venueCount: 0,
     isPopular: false,
     createdAt: NOW,
@@ -138,7 +147,8 @@ export const CATEGORIES: Category[] = [
     description: 'Площадки с видом на горы — для больших компаний и съёмок.',
     icon: 'Mountain',
     gradient: 'from-sky-500 to-cyan-600',
-    coverImage: '/api/photo/cat-loft-cover/800/600',
+    coverImage:
+      'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=800&h=600&fit=crop&q=80',
     venueCount: 0,
     isPopular: false,
     createdAt: NOW,
