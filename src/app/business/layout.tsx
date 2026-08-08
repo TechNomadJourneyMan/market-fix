@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { BusinessNav } from '@/components/business/business-nav';
 
 export const metadata: Metadata = {
-  title: { default: 'Кабинет бизнеса', template: '%s · Бизнес · Мезгіл' },
+  title: { default: 'Кабинет бизнеса', template: '%s · Бизнес · Market Fix' },
 };
 
 const PLAN_LABELS: Record<string, string> = {

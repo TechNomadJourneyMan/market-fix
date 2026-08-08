@@ -33,8 +33,8 @@ export function Footer({ categories }: { categories: Category[] }) {
           <div className="space-y-4">
             <Logo />
             <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Находим места, куда хочется вернуться. Бронирование за 30 секунд, честные отзывы
-              и подбор, который понимает повод.
+            Находим места в Алматы. Бронирование за 30 секунд, честные отзывы
+              и AI-подбор, который понимает повод.
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               <a
@@ -44,10 +44,10 @@ export function Footer({ categories }: { categories: Category[] }) {
                 <Phone className="size-3.5" /> +7 700 000 00 00
               </a>
               <a
-                href="mailto:hello@mezgil.kz"
+                href="mailto:hello@market-fix.kz"
                 className="inline-flex items-center gap-2 rounded-xl border bg-background px-3 py-2 text-xs font-medium transition-colors hover:bg-secondary"
               >
-                <Mail className="size-3.5" /> hello@mezgil.kz
+                <Mail className="size-3.5" /> hello@market-fix.kz
               </a>
             </div>
           </div>
@@ -89,8 +89,7 @@ export function Footer({ categories }: { categories: Category[] }) {
 
         <div className="mt-12 flex flex-col gap-4 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Мезгіл. Демонстрационный MVP. Данные и заведения
-            вымышлены.
+            © {new Date().getFullYear()} Market Fix. Каталог заведений Алматы.
           </p>
           <div className="flex items-center gap-3">
             <FooterSocial href="https://instagram.com" label="Instagram">

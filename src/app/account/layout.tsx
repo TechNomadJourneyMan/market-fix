@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { AccountNav } from '@/components/account/account-nav';
 
 export const metadata: Metadata = {
-  title: { default: 'Личный кабинет', template: '%s · Кабинет · Мезгіл' },
+  title: { default: 'Личный кабинет', template: '%s · Кабинет · Market Fix' },
 };
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
