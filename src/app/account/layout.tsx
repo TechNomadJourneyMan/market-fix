@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { Gift } from 'lucide-react';
 
 import {
-  getCurrentUser,
   getUnreadNotificationCount,
   getUserStats,
 } from '@/server/repositories/users';
+import { getSessionUser } from '@/lib/auth';
 import { formatNumber, formatDateFull } from '@/lib/format';
 import { getInitials } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/primitives';
@@ -16,14 +17,17 @@ export const metadata: Metadata = {
   title: { default: 'Личный кабинет', template: '%s · Кабинет · Market Fix' },
 };
 
-export default function AccountLayout({ children }: { children: React.ReactNode }) {
-  const user = getCurrentUser();
+export default async function AccountLayout({ children }: { children: React.ReactNode }) {
+  const user = await getSessionUser();
+  if (!user) {
+    redirect('/auth/login?next=/account');
+  }
+
   const stats = getUserStats(user.id);
   const unreadCount = getUnreadNotificationCount(user.id);
 
   return (
     <div className="container py-6 sm:py-10">
-      {/* ——— Шапка профиля ——— */}
       <header className="flex flex-col gap-4 rounded-3xl border bg-card p-5 sm:flex-row sm:items-center sm:p-6">
         <Avatar className="size-16 sm:size-20">
           <AvatarImage src={user.avatar} alt={user.name} />

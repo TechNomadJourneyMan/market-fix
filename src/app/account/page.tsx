@@ -9,14 +9,15 @@ import {
   Wallet,
 } from 'lucide-react';
 
+import { redirect } from 'next/navigation';
 import {
-  getCurrentUser,
   getFavoriteVenues,
   getPersonalRecommendations,
   getUserStats,
 } from '@/server/repositories/users';
 import { getUserBookings } from '@/server/repositories/bookings';
 import { getAIAdvice } from '@/server/ai/advice';
+import { getSessionUser } from '@/lib/auth';
 import { CUISINE_BY_ID, CATEGORY_BY_ID } from '@/data/seed/categories';
 import { DISTRICT_BY_ID } from '@/data/seed/geo';
 import { formatPrice, formatNumber } from '@/lib/format';
@@ -28,8 +29,10 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { VenueCardMini } from '@/components/venue/venue-card';
 import { BookingCard } from '@/components/account/booking-card';
 
-export default function AccountOverviewPage() {
-  const user = getCurrentUser();
+export default async function AccountOverviewPage() {
+  const user = await getSessionUser();
+  if (!user) redirect('/auth/login?next=/account');
+
   const stats = getUserStats(user.id);
   const bookings = getUserBookings(user.id);
   const favorites = getFavoriteVenues(user.id).slice(0, 6);

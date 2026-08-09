@@ -5,9 +5,16 @@ import { toVenueListItem } from '../mappers';
 import { distanceKm } from '@/lib/geo';
 import { DEMO_USER_LOCATION } from '@/data/seed/users';
 
-/** Текущий пользователь. При подключении Auth.js заменится на getServerSession(). */
-export function getCurrentUser(): User {
-  return db.users.find((user) => user.id === DEMO_USER_ID) ?? db.users[0];
+/**
+ * Пользователь из in-memory БД (seed).
+ * Для страниц с реальной сессией предпочитайте getSessionUser() из @/lib/auth.
+ */
+export function getCurrentUser(userId: string = DEMO_USER_ID): User {
+  return (
+    db.users.find((user) => user.id === userId) ??
+    db.users.find((user) => user.id === DEMO_USER_ID) ??
+    db.users[0]
+  );
 }
 
 export function getUserById(id: string): User | null {

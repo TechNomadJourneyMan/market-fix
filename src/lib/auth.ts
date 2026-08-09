@@ -66,10 +66,14 @@ export function authUserToAppUser(authUser: AuthUser): User {
 }
 
 /**
- * Текущий пользователь: сессия Supabase, иначе null.
+ * Текущий пользователь: демо-сессия (локальная кука) или Supabase.
  * Для публичных страниц можно подставить DEMO_USER через getDisplayUser().
  */
 export async function getSessionUser(): Promise<User | null> {
+  const { getDemoSessionUser } = await import('@/lib/demo-auth');
+  const demoUser = await getDemoSessionUser();
+  if (demoUser) return demoUser;
+
   if (!isSupabaseConfigured()) return null;
 
   try {

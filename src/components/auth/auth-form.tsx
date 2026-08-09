@@ -132,6 +132,12 @@ export function AuthForm({
 
       <SubmitButton label={mode === 'login' ? 'Войти' : 'Создать аккаунт'} />
 
+      {mode === 'login' ? (
+        <p className="text-center text-xs text-muted-foreground">
+          Или выберите демо-аккаунт ниже — пароль уже подставлен.
+        </p>
+      ) : null}
+
       <p className="text-center text-sm text-muted-foreground">
         {mode === 'login' ? (
           <>
