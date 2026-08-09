@@ -17,15 +17,14 @@ import {
   getUpcomingBusinessBookings,
 } from '@/server/repositories/business';
 import { getBusinessReviews } from '@/server/repositories/reviews';
+import { formatPercent, formatPriceCompact } from '@/lib/format';
 import {
-  formatDate,
-  formatGuests,
-  formatNumber,
-  formatPercent,
-  formatPrice,
-  formatPriceCompact,
-  formatRating,
-} from '@/lib/format';
+  formatDateI18n,
+  formatNumberI18n,
+  formatPriceI18n,
+  formatRatingI18n,
+} from '@/i18n/format';
+import { getLocale, getTranslator } from '@/i18n/server';
 
 import { MetricCard } from '@/components/business/metric-card';
 import { AreaChart, BarList } from '@/components/business/charts';
@@ -33,7 +32,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 
-export default function BusinessDashboardPage() {
+export default async function BusinessDashboardPage() {
+  const t = await getTranslator('business');
+  const locale = await getLocale();
   const business = getCurrentBusiness();
   const metrics = getDashboardMetrics(business.id);
   const analytics = getBusinessAnalytics(business.id, 30);
@@ -43,37 +44,35 @@ export default function BusinessDashboardPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-xl font-semibold tracking-tight">Дашборд</h1>
-        <p className="text-sm text-muted-foreground">
-          Ключевые показатели за последние 30 дней
-        </p>
+        <h1 className="text-xl font-semibold tracking-tight">{t('dashboard.title')}</h1>
+        <p className="text-sm text-muted-foreground">{t('dashboard.description')}</p>
       </header>
 
       {/* ——— Метрики ——— */}
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
-          label="Просмотры карточек"
-          value={formatNumber(metrics.views)}
+          label={t('dashboard.metrics.views')}
+          value={formatNumberI18n(metrics.views, locale)}
           delta={metrics.viewsDelta}
           icon={Eye}
         />
         <MetricCard
-          label="Бронирования"
-          value={formatNumber(metrics.bookings)}
+          label={t('dashboard.metrics.bookings')}
+          value={formatNumberI18n(metrics.bookings, locale)}
           delta={metrics.bookingsDelta}
           icon={CalendarRange}
         />
         <MetricCard
-          label="Доход"
+          label={t('dashboard.metrics.revenue')}
           value={formatPriceCompact(metrics.revenue)}
           delta={metrics.revenueDelta}
           icon={Wallet}
         />
         <MetricCard
-          label="Конверсия"
+          label={t('dashboard.metrics.conversion')}
           value={formatPercent(metrics.conversionRate, 1)}
           delta={metrics.conversionDelta}
-          hint="просмотр → бронь"
+          hint={t('dashboard.metrics.conversionHint')}
           icon={Percent}
         />
       </section>
@@ -81,16 +80,18 @@ export default function BusinessDashboardPage() {
       {/* ——— График ——— */}
       <section className="rounded-2xl border bg-card p-5">
         <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="text-base font-semibold">Бронирования по дням</h2>
+          <div className="min-w-0">
+            <h2 className="text-base font-semibold">{t('dashboard.chartTitle')}</h2>
             <p className="text-sm text-muted-foreground">
-              Всего {formatNumber(metrics.bookings)} за месяц · средний чек{' '}
-              {formatPrice(metrics.averageCheck)}
+              {t('dashboard.chartSubtitle', {
+                bookings: formatNumberI18n(metrics.bookings, locale),
+                averageCheck: formatPriceI18n(metrics.averageCheck, locale),
+              })}
             </p>
           </div>
           <Button asChild variant="ghost" size="sm">
             <Link href="/business/analytics">
-              Полная аналитика
+              <span className="whitespace-nowrap">{t('dashboard.fullAnalytics')}</span>
               <ArrowRight />
             </Link>
           </Button>
@@ -103,20 +104,22 @@ export default function BusinessDashboardPage() {
         {/* ——— Ближайшие брони ——— */}
         <section className="space-y-4">
           <div className="flex items-end justify-between gap-3">
-            <h2 className="text-base font-semibold">Ближайшие брони</h2>
+            <h2 className="min-w-0 text-base font-semibold">
+              {t('dashboard.upcomingTitle')}
+            </h2>
             <Link
               href="/business/bookings"
               className="shrink-0 text-sm font-medium text-primary hover:underline"
             >
-              Все →
+              {t('dashboard.all')}
             </Link>
           </div>
 
           {upcoming.length === 0 ? (
             <EmptyState
               icon={<CalendarRange />}
-              title="Броней пока нет"
-              description="Как только гости начнут бронировать, заявки появятся здесь."
+              title={t('dashboard.upcomingEmpty.title')}
+              description={t('dashboard.upcomingEmpty.description')}
               compact
             />
           ) : (
@@ -128,14 +131,15 @@ export default function BusinessDashboardPage() {
                       {booking.date.slice(8, 10)}
                     </span>
                     <span className="mt-0.5 text-[9px] uppercase text-muted-foreground">
-                      {formatDate(booking.date).split(' ')[1]?.slice(0, 3)}
+                      {formatDateI18n(booking.date, locale, { month: 'short' })}
                     </span>
                   </div>
 
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">{booking.guest.name}</p>
                     <p className="truncate text-xs text-muted-foreground">
-                      {booking.venueName} · {booking.time} · {formatGuests(booking.guests)}
+                      {booking.venueName} · {booking.time} ·{' '}
+                      {t('common:counts.guests', { count: booking.guests })}
                     </p>
                   </div>
 
@@ -144,7 +148,9 @@ export default function BusinessDashboardPage() {
                     size="sm"
                     className="shrink-0"
                   >
-                    {booking.status === 'confirmed' ? 'Подтв.' : 'Ждёт'}
+                    {booking.status === 'confirmed'
+                      ? t('dashboard.statusShort.confirmed')
+                      : t('dashboard.statusShort.pending')}
                   </Badge>
                 </li>
               ))}
@@ -201,17 +207,19 @@ export default function BusinessDashboardPage() {
         <section className="space-y-4">
           <div className="flex items-end justify-between gap-3">
             <h2 className="flex items-center gap-2 text-base font-semibold">
-              Свежие отзывы
+              {t('dashboard.reviewsTitle')}
               <Badge variant="secondary" size="sm">
                 <Star className="size-2.5 fill-amber-400 text-amber-400" />
-                {formatRating(metrics.rating)}
+                {formatRatingI18n(metrics.rating, locale)}
               </Badge>
             </h2>
             <Link
               href="/business/reviews"
               className="shrink-0 text-sm font-medium text-primary hover:underline"
             >
-              Все {formatNumber(metrics.reviewsCount)} →
+              {t('dashboard.allReviews', {
+                count: formatNumberI18n(metrics.reviewsCount, locale),
+              })}
             </Link>
           </div>
 

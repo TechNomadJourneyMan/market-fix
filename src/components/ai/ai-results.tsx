@@ -15,7 +15,8 @@ import {
 } from 'lucide-react';
 import type { AIRecommendation, AIRecommendationResult } from '@/types';
 import { cn } from '@/lib/utils';
-import { formatPrice, formatRating, formatReviews } from '@/lib/format';
+import { formatPriceI18n, formatRatingI18n } from '@/i18n/format';
+import { useLocale, useT } from '@/i18n/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -29,14 +30,17 @@ export function AiResults({
   result: AIRecommendationResult;
   onRestart: () => void;
 }) {
+  const t = useT('ai');
+  const locale = useLocale();
+
   if (result.recommendations.length === 0) {
     return (
       <EmptyState
         icon={<Sparkles />}
-        title="Под такие условия ничего не нашлось"
-        description="Скорее всего, слишком узкий бюджет или район. Ослабьте одно условие — и мы найдём варианты."
-        action={{ label: 'Изменить запрос', onClick: onRestart }}
-        secondaryAction={{ label: 'Открыть каталог', href: '/catalog' }}
+        title={t('results.empty.title')}
+        description={t('results.empty.description')}
+        action={{ label: t('results.empty.action'), onClick: onRestart }}
+        secondaryAction={{ label: t('results.empty.secondaryAction'), href: '/catalog' }}
       />
     );
   }
@@ -48,18 +52,19 @@ export function AiResults({
           <span className="flex size-10 shrink-0 items-center justify-center rounded-xl brand-gradient text-white">
             <Sparkles className="size-5" />
           </span>
-          <div>
+          <div className="min-w-0">
             <p className="text-base font-semibold tracking-tight">{result.headline}</p>
             <p className="text-xs text-muted-foreground">
-              Подобрано за {(result.elapsedMs / 1000).toFixed(1).replace('.', ',')} с ·
-              демонстрационный движок без LLM
+              {t('results.elapsed', {
+                seconds: formatRatingI18n(result.elapsedMs / 1000, locale),
+              })}
             </p>
           </div>
         </div>
 
         <Button variant="outline" size="sm" onClick={onRestart} className="shrink-0">
           <RotateCcw />
-          Новый запрос
+          <span className="whitespace-nowrap">{t('results.newRequest')}</span>
         </Button>
       </div>
 
@@ -79,8 +84,8 @@ export function AiResults({
       {result.tips.length > 0 ? (
         <div className="rounded-2xl border border-dashed bg-muted/30 p-5">
           <p className="flex items-center gap-2 text-sm font-medium">
-            <Lightbulb className="size-4 text-warning" />
-            Как получить более точную подборку
+            <Lightbulb className="size-4 shrink-0 text-warning" />
+            <span className="min-w-0">{t('results.tipsTitle')}</span>
           </p>
           <ul className="mt-2.5 space-y-1.5">
             {result.tips.map((tip) => (
@@ -105,6 +110,8 @@ function RecommendationCard({
 }) {
   const [isExpanded, setIsExpanded] = React.useState(rank === 1);
   const openBooking = useBookingStore((state) => state.open);
+  const t = useT('ai');
+  const locale = useLocale();
   const { venue } = recommendation;
 
   return (
@@ -145,25 +152,36 @@ function RecommendationCard({
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
             <span className="inline-flex items-center gap-1 font-medium">
-              <Star className="size-3 fill-amber-400 text-amber-400" strokeWidth={0} />
-              {formatRating(venue.rating.score)}
+              <Star className="size-3 shrink-0 fill-amber-400 text-amber-400" strokeWidth={0} />
+              {formatRatingI18n(venue.rating.score, locale)}
             </span>
-            <span className="text-muted-foreground">{formatReviews(venue.rating.count)}</span>
+            <span className="text-muted-foreground">
+              {t('common:counts.reviews', { count: venue.rating.count })}
+            </span>
             <span className="text-muted-foreground">·</span>
             <span className="text-muted-foreground">
-              {formatPrice(venue.averagePrice)} / чел.
+              {t('results.perPerson', {
+                price: formatPriceI18n(venue.averagePrice, locale),
+              })}
             </span>
             <span className="text-muted-foreground">·</span>
             <span className="font-medium">
-              ≈ {formatPrice(recommendation.estimatedTotal)} на компанию
+              {t('results.estimatedTotal', {
+                price: formatPriceI18n(recommendation.estimatedTotal, locale),
+              })}
             </span>
           </div>
 
           {recommendation.caveats.length > 0 ? (
             <div className="flex flex-wrap gap-1.5">
               {recommendation.caveats.map((caveat) => (
-                <Badge key={caveat} variant="warning" size="sm" className="gap-1">
-                  <AlertCircle className="size-3" />
+                <Badge
+                  key={caveat}
+                  variant="warning"
+                  size="sm"
+                  className="max-w-full gap-1 whitespace-normal text-left"
+                >
+                  <AlertCircle className="size-3 shrink-0" />
                   {caveat}
                 </Badge>
               ))}
@@ -172,10 +190,10 @@ function RecommendationCard({
 
           <div className="flex flex-wrap items-center gap-2 pt-1">
             <Button size="sm" onClick={() => openBooking(venueToBookingTarget(venue))}>
-              Забронировать
+              {t('results.book')}
             </Button>
             <Button asChild variant="outline" size="sm">
-              <Link href={`/venue/${venue.slug}`}>Подробнее</Link>
+              <Link href={`/venue/${venue.slug}`}>{t('results.details')}</Link>
             </Button>
             <FavoriteButton
               venueId={venue.id}
@@ -187,11 +205,14 @@ function RecommendationCard({
             <button
               type="button"
               onClick={() => setIsExpanded((value) => !value)}
-              className="ml-auto inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+              className="ml-auto inline-flex items-center gap-1 text-left text-xs font-medium text-primary hover:underline"
             >
-              Почему это подходит
+              {t('results.why')}
               <ChevronDown
-                className={cn('size-3.5 transition-transform', isExpanded && 'rotate-180')}
+                className={cn(
+                  'size-3.5 shrink-0 transition-transform',
+                  isExpanded && 'rotate-180',
+                )}
               />
             </button>
           </div>
@@ -202,7 +223,7 @@ function RecommendationCard({
       {isExpanded ? (
         <div className="border-t bg-muted/30 p-4 sm:p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Как считался процент совпадения
+            {t('results.factorsTitle')}
           </p>
           <ul className="mt-3 space-y-2">
             {recommendation.factors.map((factor) => (

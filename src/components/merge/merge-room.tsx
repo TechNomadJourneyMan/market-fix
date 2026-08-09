@@ -338,11 +338,9 @@ export function MergeRoomView({
 
         {/* Shortlist */}
         <section className="space-y-3 rounded-3xl border bg-card p-4 sm:p-5">
-          <h2 className="text-sm font-semibold">Shortlist AI</h2>
+          <h2 className="text-sm font-semibold">{t('room.shortlistTitle')}</h2>
           {shortlist.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Отправьте предпочтения — здесь появятся варианты.
-            </p>
+            <p className="text-sm text-muted-foreground">{t('room.shortlistEmpty')}</p>
           ) : (
             shortlist.map((venue) => {
               const votes = voteCounts.get(venue.id) ?? 0;
@@ -387,16 +385,17 @@ export function MergeRoomView({
                         className="flex-1"
                         onClick={() => post({ action: 'vote', venueId: venue.id })}
                         disabled={busy}
+                        aria-label={t('room.voteAria', { name: venue.name })}
                       >
-                        <ThumbsUp className="size-3.5" />
+                        <ThumbsUp className="size-3.5 shrink-0" />
                         {votes}
                       </Button>
                       <Button
                         size="sm"
-                        className="flex-1"
+                        className="min-w-0 flex-1"
                         onClick={() => openBooking(venueToBookingTarget(venue))}
                       >
-                        Бронь
+                        <span className="truncate">{t('room.book')}</span>
                       </Button>
                     </div>
                   </div>

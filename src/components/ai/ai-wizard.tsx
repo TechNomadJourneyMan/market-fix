@@ -26,7 +26,8 @@ import type {
 } from '@/types';
 import { apiClient, ApiError } from '@/lib/api-client';
 import { cn } from '@/lib/utils';
-import { formatPrice, formatGuests } from '@/lib/format';
+import { formatPriceI18n } from '@/i18n/format';
+import { useLocale, useT } from '@/i18n/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Icon } from '@/components/ui/icon';
@@ -34,41 +35,23 @@ import { Progress } from '@/components/ui/primitives';
 import { VoiceInputButton } from '@/components/ui/voice-input';
 import { AiResults } from './ai-results';
 
-const OCCASIONS: {
-  value: Occasion;
-  label: string;
-  icon: string;
-  hint: string;
-}[] = [
-  { value: 'date', label: 'Свидание', icon: 'Heart', hint: 'Тихо, красиво, на двоих' },
-  { value: 'friends', label: 'С друзьями', icon: 'Users', hint: 'Живо и без формальностей' },
-  { value: 'family', label: 'С семьёй', icon: 'UsersRound', hint: 'Детская зона и удобный вход' },
-  { value: 'business', label: 'Деловая встреча', icon: 'Briefcase', hint: 'Спокойно, есть Wi-Fi' },
-  { value: 'celebration', label: 'Праздник', icon: 'PartyPopper', hint: 'Банкет, зал, ведущий' },
-  { value: 'solo', label: 'Один', icon: 'BookOpen', hint: 'Поработать или отдохнуть' },
+const OCCASIONS: { value: Occasion; icon: string }[] = [
+  { value: 'date', icon: 'Heart' },
+  { value: 'friends', icon: 'Users' },
+  { value: 'family', icon: 'UsersRound' },
+  { value: 'business', icon: 'Briefcase' },
+  { value: 'celebration', icon: 'PartyPopper' },
+  { value: 'solo', icon: 'BookOpen' },
 ];
 
-const DAY_PARTS: { value: DayPart; label: string; hint: string }[] = [
-  { value: 'morning', label: 'Утром', hint: 'до 11:00' },
-  { value: 'lunch', label: 'В обед', hint: '12:00–15:00' },
-  { value: 'afternoon', label: 'Днём', hint: '15:00–18:00' },
-  { value: 'evening', label: 'Вечером', hint: '19:00–22:00' },
-  { value: 'night', label: 'Ночью', hint: 'после 23:00' },
-];
+const DAY_PARTS: DayPart[] = ['morning', 'lunch', 'afternoon', 'evening', 'night'];
 
-const VIBES: { value: Vibe; label: string }[] = [
-  { value: 'cozy', label: 'Уютно' },
-  { value: 'lively', label: 'Оживлённо' },
-  { value: 'quiet', label: 'Тихо' },
-  { value: 'premium', label: 'Премиально' },
-  { value: 'trendy', label: 'Модно' },
-  { value: 'casual', label: 'По-простому' },
-];
+const VIBES: Vibe[] = ['cozy', 'lively', 'quiet', 'premium', 'trendy', 'casual'];
 
 const BUDGETS = [4000, 8000, 12000, 20000, 35000];
 const GUEST_PRESETS = [2, 4, 6, 8, 12, 20, 50];
 
-const STEPS = ['Повод', 'Кухня', 'Бюджет', 'Компания', 'Район и время'] as const;
+const STEPS = ['occasion', 'cuisine', 'budget', 'party', 'place'] as const;
 
 interface AiWizardProps {
   categories: Category[];
@@ -78,6 +61,8 @@ interface AiWizardProps {
 }
 
 export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWizardProps) {
+  const t = useT('ai');
+  const locale = useLocale();
   const [step, setStep] = React.useState(0);
   const [freeText, setFreeText] = React.useState(initialQuery ?? '');
   const [request, setRequest] = React.useState<AIRecommendationRequest>({});
@@ -135,8 +120,8 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
       {/* ——— Свободный ввод ——— */}
       <div className="rounded-3xl border bg-card p-5 shadow-soft sm:p-7">
         <div className="flex items-center gap-2 text-sm font-medium">
-          <Search className="size-4 text-primary" />
-          Опишите вечер своими словами
+          <Search className="size-4 shrink-0 text-primary" />
+          <span className="min-w-0">{t('freeInput.title')}</span>
         </div>
         <div className="mt-3 flex flex-col gap-2.5 sm:flex-row">
           <Input
@@ -145,8 +130,8 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
             onKeyDown={(event) => {
               if (event.key === 'Enter') submit();
             }}
-            placeholder="Итальянская кухня, до 10 000 ₸, 8 человек, центр, вечером"
-            className="h-12 flex-1 text-sm"
+            placeholder={t('freeInput.placeholder')}
+            className="h-12 min-w-0 flex-1 text-sm"
           />
           <VoiceInputButton
             size="icon"
@@ -160,29 +145,30 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
             className="shrink-0"
           >
             <Wand2 />
-            Подобрать
+            <span className="whitespace-nowrap">{t('freeInput.submit')}</span>
           </Button>
         </div>
-        <p className="mt-2.5 text-xs text-muted-foreground">
-          Ассистент разберёт кухню, бюджет, размер компании, район и время. Можно заполнить и
-          пошагово ниже — результат станет точнее.
-        </p>
+        <p className="mt-2.5 text-xs text-muted-foreground">{t('freeInput.hint')}</p>
       </div>
 
       {/* ——— Пошаговый мастер ——— */}
       <div className="rounded-3xl border bg-card p-5 sm:p-7">
         <div className="mb-6 space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-sm font-medium">
-              Шаг {step + 1} из {STEPS.length} · {STEPS[step]}
+          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
+            <p className="min-w-0 text-sm font-medium">
+              {t('wizard.stepCounter', {
+                current: step + 1,
+                total: STEPS.length,
+                name: t(`wizard.steps.${STEPS[step]}`),
+              })}
             </p>
             <button
               type="button"
               onClick={restart}
-              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
             >
-              <RotateCcw className="size-3" />
-              Начать заново
+              <RotateCcw className="size-3 shrink-0" />
+              {t('wizard.restart')}
             </button>
           </div>
           <Progress value={progress} className="h-1.5" />
@@ -199,8 +185,8 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
           >
             {step === 0 ? (
               <StepBlock
-                title="По какому поводу идём?"
-                hint="От повода зависит формат: для свидания и для тоя нужны разные места."
+                title={t('wizard.occasion.title')}
+                hint={t('wizard.occasion.hint')}
               >
                 <div className="grid gap-2.5 sm:grid-cols-3">
                   {OCCASIONS.map((occasion) => (
@@ -214,8 +200,8 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
                         })
                       }
                       icon={occasion.icon}
-                      title={occasion.label}
-                      hint={occasion.hint}
+                      title={t(`occasions.${occasion.value}.label`)}
+                      hint={t(`occasions.${occasion.value}.hint`)}
                     />
                   ))}
                 </div>
@@ -223,10 +209,7 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
             ) : null}
 
             {step === 1 ? (
-              <StepBlock
-                title="Какая кухня по душе?"
-                hint="Можно выбрать несколько — подберём места, где есть хотя бы одна из них."
-              >
+              <StepBlock title={t('wizard.cuisine.title')} hint={t('wizard.cuisine.hint')}>
                 <div className="flex flex-wrap gap-2">
                   {cuisines.map((cuisine) => (
                     <Chip
@@ -241,7 +224,7 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
                 </div>
 
                 <p className="mt-5 text-xs font-medium text-muted-foreground">
-                  Или выберите формат заведения
+                  {t('wizard.cuisine.categoriesLabel')}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {categories.map((category) => (
@@ -258,10 +241,7 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
             ) : null}
 
             {step === 2 ? (
-              <StepBlock
-                title="Сколько готовы потратить на человека?"
-                hint="Покажем места, которые укладываются в сумму. Немного дороже — тоже, но честно предупредим."
-              >
+              <StepBlock title={t('wizard.budget.title')} hint={t('wizard.budget.hint')}>
                 <div className="flex flex-wrap gap-2">
                   {BUDGETS.map((budget) => (
                     <Chip
@@ -274,7 +254,7 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
                         })
                       }
                     >
-                      до {formatPrice(budget)}
+                      {t('wizard.budget.upTo', { price: formatPriceI18n(budget, locale) })}
                     </Chip>
                   ))}
                 </div>
@@ -282,10 +262,7 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
             ) : null}
 
             {step === 3 ? (
-              <StepBlock
-                title="Сколько вас будет?"
-                hint="От восьми человек включаем в подбор места с банкетным обслуживанием."
-              >
+              <StepBlock title={t('wizard.party.title')} hint={t('wizard.party.hint')}>
                 <div className="flex flex-wrap gap-2">
                   {GUEST_PRESETS.map((guests) => (
                     <Chip
@@ -295,20 +272,24 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
                         patch({ guests: request.guests === guests ? undefined : guests })
                       }
                     >
-                      {guests >= 20 ? `${guests}+` : formatGuests(guests)}
+                      {guests >= 20
+                        ? `${guests}+`
+                        : t('common:counts.guests', { count: guests })}
                     </Chip>
                   ))}
                 </div>
 
-                <p className="mt-5 text-xs font-medium text-muted-foreground">Атмосфера</p>
+                <p className="mt-5 text-xs font-medium text-muted-foreground">
+                  {t('wizard.party.vibesLabel')}
+                </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {VIBES.map((vibe) => (
                     <Chip
-                      key={vibe.value}
-                      isActive={request.vibes?.includes(vibe.value) ?? false}
-                      onClick={() => toggleInList('vibes', vibe.value)}
+                      key={vibe}
+                      isActive={request.vibes?.includes(vibe) ?? false}
+                      onClick={() => toggleInList('vibes', vibe)}
                     >
-                      {vibe.label}
+                      {t(`vibes.${vibe}`)}
                     </Chip>
                   ))}
                 </div>
@@ -316,10 +297,7 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
             ) : null}
 
             {step === 4 ? (
-              <StepBlock
-                title="Где и когда?"
-                hint="Учтём расписание заведений — покажем только те, что работают в это время."
-              >
+              <StepBlock title={t('wizard.place.title')} hint={t('wizard.place.hint')}>
                 <div className="flex flex-wrap gap-2">
                   <Chip
                     isActive={Boolean(request.centerOnly)}
@@ -331,7 +309,7 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
                     }
                   >
                     <MapPin className="size-3.5 shrink-0" aria-hidden />
-                    Только центр
+                    {t('wizard.place.centerOnly')}
                   </Chip>
                   {districts.map((district) => (
                     <Chip
@@ -347,20 +325,22 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
                   ))}
                 </div>
 
-                <p className="mt-5 text-xs font-medium text-muted-foreground">Время</p>
+                <p className="mt-5 text-xs font-medium text-muted-foreground">
+                  {t('wizard.place.timeLabel')}
+                </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {DAY_PARTS.map((part) => (
                     <Chip
-                      key={part.value}
-                      isActive={request.dayPart === part.value}
+                      key={part}
+                      isActive={request.dayPart === part}
                       onClick={() =>
-                        patch({
-                          dayPart: request.dayPart === part.value ? undefined : part.value,
-                        })
+                        patch({ dayPart: request.dayPart === part ? undefined : part })
                       }
                     >
-                      {part.label}
-                      <span className="text-[10px] text-muted-foreground">{part.hint}</span>
+                      {t(`dayParts.${part}.label`)}
+                      <span className="text-[10px] text-muted-foreground">
+                        {t(`dayParts.${part}.hint`)}
+                      </span>
                     </Chip>
                   ))}
                 </div>
@@ -376,18 +356,18 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
             disabled={step === 0}
           >
             <ArrowLeft />
-            Назад
+            <span className="whitespace-nowrap">{t('wizard.back')}</span>
           </Button>
 
           {step < STEPS.length - 1 ? (
             <Button onClick={() => setStep((value) => value + 1)}>
-              Далее
+              <span className="whitespace-nowrap">{t('wizard.next')}</span>
               <ArrowRight />
             </Button>
           ) : (
             <Button onClick={submit} isLoading={mutation.isPending} size="lg">
               <Sparkles />
-              Показать подборку
+              <span className="min-w-0 text-balance">{t('wizard.submit')}</span>
             </Button>
           )}
         </div>
@@ -402,10 +382,10 @@ export function AiWizard({ categories, cuisines, districts, initialQuery }: AiWi
             <p className="text-sm font-medium text-destructive">
               {mutation.error instanceof ApiError
                 ? mutation.error.message
-                : 'Не удалось получить подборку'}
+                : t('error.text')}
             </p>
             <Button variant="outline" size="sm" className="mt-3" onClick={submit}>
-              Попробовать ещё раз
+              {t('error.retry')}
             </Button>
           </div>
         ) : null}
@@ -510,15 +490,10 @@ function Chip({
   );
 }
 
-const THINKING_STEPS = [
-  'Разбираем ваш запрос',
-  'Сверяем расписание заведений',
-  'Считаем бюджет на компанию',
-  'Сравниваем оценки гостей',
-  'Собираем объяснения',
-];
+const THINKING_STEPS = ['parse', 'schedule', 'budget', 'ratings', 'explain'] as const;
 
 function AiThinking() {
+  const t = useT('ai');
   const [index, setIndex] = React.useState(0);
 
   React.useEffect(() => {
@@ -535,29 +510,29 @@ function AiThinking() {
         <span className="flex size-10 items-center justify-center rounded-xl brand-gradient text-white">
           <Loader2 className="size-5 animate-spin" />
         </span>
-        <div>
-          <p className="text-sm font-semibold">Подбираем места</p>
-          <p className="text-xs text-muted-foreground">Обычно это занимает пару секунд</p>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold">{t('thinking.title')}</p>
+          <p className="text-xs text-muted-foreground">{t('thinking.subtitle')}</p>
         </div>
       </div>
 
       <ul className="mt-5 space-y-2">
-        {THINKING_STEPS.map((label, stepIndex) => (
+        {THINKING_STEPS.map((key, stepIndex) => (
           <li
-            key={label}
+            key={key}
             className={cn(
               'flex items-center gap-2.5 text-sm transition-colors',
               stepIndex <= index ? 'text-foreground' : 'text-muted-foreground/50',
             )}
           >
             {stepIndex < index ? (
-              <Check className="size-4 text-success" strokeWidth={3} />
+              <Check className="size-4 shrink-0 text-success" strokeWidth={3} />
             ) : stepIndex === index ? (
-              <Loader2 className="size-4 animate-spin text-primary" />
+              <Loader2 className="size-4 shrink-0 animate-spin text-primary" />
             ) : (
               <span className="size-4" />
             )}
-            {label}
+            <span className="min-w-0">{t(`thinking.steps.${key}`)}</span>
           </li>
         ))}
       </ul>

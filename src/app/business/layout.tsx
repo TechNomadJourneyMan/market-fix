@@ -4,22 +4,20 @@ import { BadgeCheck, ExternalLink } from 'lucide-react';
 
 import { getCurrentBusiness, getBusinessVenues } from '@/server/repositories/business';
 import { getBusinessBookings } from '@/server/repositories/bookings';
-import { formatVenues } from '@/lib/format';
+import { getTranslator } from '@/i18n/server';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { BusinessNav } from '@/components/business/business-nav';
 
-export const metadata: Metadata = {
-  title: { default: 'Кабинет бизнеса', template: '%s · Бизнес · Market Fix' },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslator('business');
+  return {
+    title: { default: t('meta.title'), template: t('meta.template') },
+  };
+}
 
-const PLAN_LABELS: Record<string, string> = {
-  free: 'Бесплатный',
-  pro: 'Pro',
-  premium: 'Premium',
-};
-
-export default function BusinessLayout({ children }: { children: React.ReactNode }) {
+export default async function BusinessLayout({ children }: { children: React.ReactNode }) {
+  const t = await getTranslator('business');
   const business = getCurrentBusiness();
   const venues = getBusinessVenues(business.id);
   const pendingCount = getBusinessBookings(business.id).filter(
@@ -43,15 +41,20 @@ export default function BusinessLayout({ children }: { children: React.ReactNode
             </h1>
             {business.isVerified ? (
               <Badge variant="success" className="gap-1">
-                <BadgeCheck className="size-3" />
-                Проверен
+                <BadgeCheck className="size-3 shrink-0" />
+                {t('header.verified')}
               </Badge>
             ) : null}
-            <Badge variant="secondary">Тариф {PLAN_LABELS[business.plan]}</Badge>
+            <Badge variant="secondary" className="whitespace-normal text-left">
+              {t('header.plan', { plan: t(`plans.${business.plan}`) })}
+            </Badge>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
-            {formatVenues(venues.length)} · комиссия {business.commissionPercent}% ·{' '}
-            {business.legalName}
+            {t('header.summary', {
+              venues: t('common:counts.venues', { count: venues.length }),
+              commission: business.commissionPercent,
+              legalName: business.legalName,
+            })}
           </p>
         </div>
 
@@ -59,7 +62,7 @@ export default function BusinessLayout({ children }: { children: React.ReactNode
           <Button asChild variant="outline" size="sm" className="shrink-0">
             <Link href={`/venue/${venues[0].slug}`}>
               <ExternalLink />
-              Как видят гости
+              <span className="whitespace-nowrap">{t('header.guestView')}</span>
             </Link>
           </Button>
         ) : null}
