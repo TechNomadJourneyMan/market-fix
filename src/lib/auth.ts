@@ -96,3 +96,13 @@ export async function getDisplayUser(): Promise<{ user: User; isAuthenticated: b
   }
   return { user: DEMO_USER, isAuthenticated: false };
 }
+
+/** Для защищённых страниц кабинета: сессия обязательна. */
+export async function requireSessionUser(nextPath = '/account'): Promise<User> {
+  const { redirect } = await import('next/navigation');
+  const user = await getSessionUser();
+  if (!user) {
+    redirect(`/auth/login?next=${encodeURIComponent(nextPath)}`);
+  }
+  return user as User;
+}

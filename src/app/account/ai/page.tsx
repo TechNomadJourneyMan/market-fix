@@ -2,13 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
-import { getCurrentUser } from '@/server/repositories/users';
 import { getAIAdvice } from '@/server/ai/advice';
 import { Icon } from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
 import { cn } from '@/lib/utils';
+import { requireSessionUser } from '@/lib/auth';
 
 export const metadata: Metadata = { title: 'AI-советы' };
 
@@ -19,8 +19,8 @@ const KIND_META: Record<string, { label: string; className: string }> = {
   timing: { label: 'Тайминг', className: 'bg-warning/15 text-warning' },
 };
 
-export default function AiAdvicePage() {
-  const user = getCurrentUser();
+export default async function AiAdvicePage() {
+  const user = await requireSessionUser();
   const advice = getAIAdvice(user.id);
 
   return (

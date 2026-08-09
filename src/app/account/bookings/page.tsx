@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 import { CalendarCheck } from 'lucide-react';
 
-import { getCurrentUser } from '@/server/repositories/users';
 import { getUserBookings } from '@/server/repositories/bookings';
 import { formatVenues } from '@/lib/format';
 import { BookingCard } from '@/components/account/booking-card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/primitives';
+import { requireSessionUser } from '@/lib/auth';
 
 export const metadata: Metadata = { title: 'История бронирований' };
 
-export default function AccountBookingsPage() {
-  const user = getCurrentUser();
+export default async function AccountBookingsPage() {
+  const user = await requireSessionUser();
   const { upcoming, past } = getUserBookings(user.id);
 
   return (

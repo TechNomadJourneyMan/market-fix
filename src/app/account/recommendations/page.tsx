@@ -2,18 +2,19 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Sparkles, Star } from 'lucide-react';
 
-import { getCurrentUser, getPersonalRecommendations } from '@/server/repositories/users';
+import { getPersonalRecommendations } from '@/server/repositories/users';
 import { getVenuesWithPromotions, getNewVenues } from '@/server/repositories/venues';
 import { CATEGORY_BY_ID, CUISINE_BY_ID } from '@/data/seed/categories';
 import { formatPrice } from '@/lib/format';
 import { VenueCard } from '@/components/venue/venue-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { requireSessionUser } from '@/lib/auth';
 
 export const metadata: Metadata = { title: 'Рекомендации' };
 
-export default function RecommendationsPage() {
-  const user = getCurrentUser();
+export default async function RecommendationsPage() {
+  const user = await requireSessionUser();
   const personal = getPersonalRecommendations(user.id, 9);
   const promotions = getVenuesWithPromotions(3);
   const fresh = getNewVenues(3);

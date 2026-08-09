@@ -26,6 +26,7 @@
       "bookings": "My bookings"
     },
     "business": {
+      "monetization": "Platform monetization",
       "connect": "List your venue",
       "analytics": "Dashboard and analytics",
       "bookings": "Manage bookings",

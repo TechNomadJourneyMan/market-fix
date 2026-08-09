@@ -57,7 +57,7 @@ const NAV_LINKS: {
   { href: '/services', key: 'services', icon: Package },
   { href: '/ai', key: 'ai', icon: Sparkles, highlight: true },
   { href: '/merge', key: 'merge', icon: Users },
-  { href: '/business', key: 'business', icon: Building2 },
+  { href: '/monetization', key: 'business', icon: Building2 },
 ];
 
 interface HeaderProps {
@@ -219,12 +219,16 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
                       <Settings /> {tLayout('header.settings')}
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/business">
-                      <Building2 /> {t('auth.businessCabinet')}
-                    </Link>
-                  </DropdownMenuItem>
+                  {user.role === 'business' ? (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/business">
+                          <Building2 /> {t('auth.businessCabinet')}
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  ) : null}
                   <DropdownMenuSeparator />
                   <SignOutMenuItem />
                 </DropdownMenuContent>

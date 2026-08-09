@@ -20,7 +20,8 @@ const COLUMNS: { titleKey: string; links: { key: string; href: string }[] }[] = 
   {
     titleKey: 'footer.business',
     links: [
-      { key: 'footer.business.connect', href: '/business' },
+      { key: 'footer.business.monetization', href: '/monetization' },
+      { key: 'footer.business.connect', href: '/auth/register?role=business&next=/business' },
       { key: 'footer.business.analytics', href: '/business/analytics' },
       { key: 'footer.business.bookings', href: '/business/bookings' },
       { key: 'footer.business.reviews', href: '/business/reviews' },

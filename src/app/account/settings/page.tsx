@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 
-import { getCurrentUser } from '@/server/repositories/users';
 import { SettingsForm } from '@/components/account/settings-form';
+import { requireSessionUser } from '@/lib/auth';
 
 export const metadata: Metadata = { title: 'Настройки' };
 
-export default function SettingsPage() {
-  const user = getCurrentUser();
+export default async function SettingsPage() {
+  const user = await requireSessionUser();
 
   return (
     <div className="space-y-5">

@@ -2,13 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { History, Search } from 'lucide-react';
 
-import { getCurrentUser, getSearchHistory } from '@/server/repositories/users';
+import { getSearchHistory } from '@/server/repositories/users';
 import { buildCatalogHref } from '@/lib/query-params';
 import { formatRelativeTime, formatVenues } from '@/lib/format';
 import { CATEGORY_BY_ID, CUISINE_BY_ID } from '@/data/seed/categories';
 import { DISTRICT_BY_ID } from '@/data/seed/geo';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
+import { requireSessionUser } from '@/lib/auth';
 
 export const metadata: Metadata = { title: 'История поиска' };
 
@@ -40,8 +41,8 @@ function describeFilters(filters: Record<string, unknown>): string[] {
   return parts;
 }
 
-export default function SearchHistoryPage() {
-  const user = getCurrentUser();
+export default async function SearchHistoryPage() {
+  const user = await requireSessionUser();
   const history = getSearchHistory(user.id);
 
   return (

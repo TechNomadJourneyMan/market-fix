@@ -1,14 +1,15 @@
 import type { Metadata } from 'next';
 import { Bell } from 'lucide-react';
 
-import { getCurrentUser, getNotifications } from '@/server/repositories/users';
+import { getNotifications } from '@/server/repositories/users';
 import { NotificationList } from '@/components/account/notification-list';
 import { EmptyState } from '@/components/ui/empty-state';
+import { requireSessionUser } from '@/lib/auth';
 
 export const metadata: Metadata = { title: 'Уведомления' };
 
-export default function NotificationsPage() {
-  const user = getCurrentUser();
+export default async function NotificationsPage() {
+  const user = await requireSessionUser();
   const notifications = getNotifications(user.id);
 
   return (

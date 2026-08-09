@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
 import { Heart, StickyNote } from 'lucide-react';
 
-import { getCurrentUser, getFavoriteVenues } from '@/server/repositories/users';
+import { getFavoriteVenues } from '@/server/repositories/users';
 import { formatVenues } from '@/lib/format';
 import { VenueCard } from '@/components/venue/venue-card';
 import { EmptyState } from '@/components/ui/empty-state';
+import { requireSessionUser } from '@/lib/auth';
 
 export const metadata: Metadata = { title: 'Избранное' };
 
-export default function FavoritesPage() {
-  const user = getCurrentUser();
+export default async function FavoritesPage() {
+  const user = await requireSessionUser();
   const favorites = getFavoriteVenues(user.id);
 
   return (
