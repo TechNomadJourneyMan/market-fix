@@ -276,11 +276,11 @@ export function MergeRoomView({
           </div>
           <Button className="w-full" onClick={applyPrefs} disabled={busy}>
             {busy ? <Loader2 className="animate-spin" /> : <Sparkles />}
-            Обновить подборку
+            <span className="min-w-0 whitespace-normal">{t('room.refresh')}</span>
           </Button>
 
           <div className="border-t pt-3">
-            <p className="mb-2 text-xs font-medium text-muted-foreground">В комнате</p>
+            <p className="mb-2 text-xs font-medium text-muted-foreground">{t('room.inRoom')}</p>
             <ul className="space-y-2">
               {room.participants.map((person) => (
                 <li key={person.id} className="flex items-center gap-2 text-sm">
@@ -290,7 +290,7 @@ export function MergeRoomView({
                   />
                   {person.name}
                   {person.isHost ? (
-                    <span className="text-[10px] text-muted-foreground">хост</span>
+                    <span className="text-[10px] text-muted-foreground">{t('room.host')}</span>
                   ) : null}
                 </li>
               ))}
@@ -300,7 +300,7 @@ export function MergeRoomView({
 
         {/* Chat */}
         <section className="flex min-h-[480px] flex-col rounded-3xl border bg-card">
-          <div className="border-b px-4 py-3 text-sm font-semibold">Чат комнаты</div>
+          <div className="border-b px-4 py-3 text-sm font-semibold">{t('room.chatTitle')}</div>
           <div className="flex-1 space-y-3 overflow-y-auto p-4">
             {room.messages.map((message) => (
               <div
@@ -327,10 +327,10 @@ export function MergeRoomView({
               onKeyDown={(event) => {
                 if (event.key === 'Enter') sendChat();
               }}
-              placeholder="Напишите друзьям…"
+              placeholder={t('room.chatPlaceholder')}
             />
             <VoiceInputButton onTranscript={(text) => setChat(text)} />
-            <Button size="icon" onClick={sendChat} disabled={busy}>
+            <Button size="icon" onClick={sendChat} disabled={busy} aria-label={t('room.sendAria')}>
               <Send className="size-4" />
             </Button>
           </div>
