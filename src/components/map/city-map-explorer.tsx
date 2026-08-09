@@ -296,7 +296,9 @@ export function CityMapExplorer({ venues, services, className }: CityMapExplorer
               <VoiceInputButton
                 size="icon-sm"
                 mode="replace"
-                onTranscript={(text) => setQuery(text)}
+                currentValue={query}
+                onInterimTranscript={setQuery}
+                onTranscript={setQuery}
               />
             </div>
           </div>

@@ -99,7 +99,11 @@ export function MergeLobby() {
                 onChange={(event) => setName(event.target.value)}
                 placeholder={t('lobby.namePlaceholder')}
               />
-              <VoiceInputButton onTranscript={setName} />
+              <VoiceInputButton
+                currentValue={name}
+                onInterimTranscript={setName}
+                onTranscript={setName}
+              />
             </div>
           </div>
 

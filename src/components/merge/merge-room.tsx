@@ -268,6 +268,10 @@ export function MergeRoomView({
                 placeholder={t('room.freeTextPlaceholder')}
               />
               <VoiceInputButton
+                currentValue={prefs.freeText ?? ''}
+                onInterimTranscript={(text) =>
+                  setPrefs((current) => ({ ...current, freeText: text }))
+                }
                 onTranscript={(text) =>
                   setPrefs((current) => ({ ...current, freeText: text }))
                 }
@@ -329,7 +333,11 @@ export function MergeRoomView({
               }}
               placeholder={t('room.chatPlaceholder')}
             />
-            <VoiceInputButton onTranscript={(text) => setChat(text)} />
+            <VoiceInputButton
+              currentValue={chat}
+              onInterimTranscript={setChat}
+              onTranscript={setChat}
+            />
             <Button size="icon" onClick={sendChat} disabled={busy} aria-label={t('room.sendAria')}>
               <Send className="size-4" />
             </Button>

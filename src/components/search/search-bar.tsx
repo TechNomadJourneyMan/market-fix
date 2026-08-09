@@ -130,8 +130,16 @@ export function SearchBar({
         <VoiceInputButton
           size={isHero ? 'icon' : 'icon-sm'}
           className="shrink-0 rounded-xl"
+          currentValue={value}
+          mode="replace"
+          onInterimTranscript={(text) => {
+            setValue(text);
+            setActiveIndex(-1);
+            setIsOpen(true);
+          }}
           onTranscript={(text) => {
             setValue(text);
+            setActiveIndex(-1);
             setIsOpen(true);
           }}
         />
