@@ -1,0 +1,71 @@
+{
+  "brand": "Market Fix",
+  "city": "Алматы",
+  "units": {
+    "m": "м",
+    "km": "км",
+    "currency": "₸",
+    "perPerson": "на человека",
+    "minutes": "мин"
+  },
+  "actions": {
+    "more": "Подробнее",
+    "open": "Открыть",
+    "close": "Закрыть",
+    "clear": "Очистить",
+    "reset": "Сбросить",
+    "retry": "Повторить",
+    "apply": "Применить",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "book": "Забронировать",
+    "rent": "Арендовать",
+    "order": "Заказать",
+    "directions": "Маршрут",
+    "share": "Поделиться",
+    "favorite": "В избранное",
+    "showAll": "Смотреть все"
+  },
+  "labels": {
+    "from": "от",
+    "rating": "рейтинг",
+    "verified": "Проверено платформой",
+    "popular": "Популярное",
+    "promo": "Акция",
+    "openNow": "Открыто",
+    "closed": "Закрыто",
+    "loading": "Загружаем…"
+  },
+  "counts": {
+    "results": {
+      "one": "{count} результат",
+      "few": "{count} результата",
+      "many": "{count} результатов",
+      "other": "{count} результата"
+    },
+    "venues": {
+      "one": "{count} заведение",
+      "few": "{count} заведения",
+      "many": "{count} заведений",
+      "other": "{count} заведения"
+    },
+    "reviews": {
+      "one": "{count} отзыв",
+      "few": "{count} отзыва",
+      "many": "{count} отзывов",
+      "other": "{count} отзыва"
+    },
+    "guests": {
+      "one": "{count} гость",
+      "few": "{count} гостя",
+      "many": "{count} гостей",
+      "other": "{count} гостя"
+    },
+    "offers": {
+      "one": "{count} предложение",
+      "few": "{count} предложения",
+      "many": "{count} предложений",
+      "other": "{count} предложения"
+    }
+  }
+}

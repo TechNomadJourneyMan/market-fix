@@ -1,0 +1,134 @@
+{
+  "notFound": "Venue not found",
+  "breadcrumbs": {
+    "home": "Home",
+    "catalog": "Venues"
+  },
+  "verified": "Verified",
+  "promoBadge": "−{percent}% offer",
+  "capacityGuests": "up to {count} guests",
+  "sections": {
+    "about": "About",
+    "services": "Services",
+    "menu": "Menu",
+    "photos": "Photos",
+    "reviews": "Reviews",
+    "location": "Map & contacts"
+  },
+  "about": {
+    "title": "About the venue",
+    "averageCheck": "Average spend",
+    "averageCheckHint": "per guest",
+    "capacity": "Capacity",
+    "capacityValue": "{count} guests",
+    "tables": "{count} tables",
+    "bookingsMonth": "Bookings this month",
+    "bookingsMonthHint": "through the platform"
+  },
+  "services": {
+    "title": "Services",
+    "description": "Everything this venue can arrange beyond an ordinary dinner.",
+    "unavailable": "Temporarily unavailable",
+    "from": "from {price}",
+    "groups": {
+      "dining": "Food & table",
+      "events": "Events",
+      "delivery": "Delivery",
+      "entertainment": "Entertainment",
+      "comfort": "Comfort"
+    }
+  },
+  "products": {
+    "title": "Products",
+    "description": "Gift cards, sets and deposits — buy them in advance.",
+    "outOfStock": "Out of stock"
+  },
+  "menu": {
+    "title": "Menu & prices",
+    "summary": "{items} items across {sections} sections",
+    "hit": "Popular",
+    "vegetarian": "Vegetarian",
+    "spicy": "Spicy",
+    "allergens": "Allergens: {list}",
+    "disclaimer": "The menu and prices may differ. Check the current line-up with the venue."
+  },
+  "photos": {
+    "title": "Photos",
+    "all": "All photos · {count}",
+    "dialogTitle": "Photos — {name}",
+    "previous": "Previous photo",
+    "next": "Next photo"
+  },
+  "reviews": {
+    "title": "Guest reviews",
+    "description": "Only from guests who actually came. The venue replies to reviews.",
+    "verifiedGuest": "Verified guest",
+    "helpful": "Helpful",
+    "reply": "Reply from “{name}”",
+    "showAllRatings": "Show all ratings",
+    "showMore": "Show {count} more",
+    "sort": {
+      "recent": "Newest first",
+      "helpful": "Most helpful",
+      "rating_desc": "Highest rated",
+      "rating_asc": "Lowest rated"
+    },
+    "criteria": {
+      "food": "Food",
+      "service": "Service",
+      "atmosphere": "Atmosphere",
+      "price": "Value for money"
+    },
+    "occasions": {
+      "date": "Date night",
+      "family": "With family",
+      "business": "Business meeting",
+      "friends": "With friends",
+      "celebration": "Celebration",
+      "solo": "Solo"
+    },
+    "empty": {
+      "title": "No reviews with that rating yet",
+      "description": "Have a look at all the reviews — there are enough of them to form an opinion.",
+      "action": "Show all"
+    }
+  },
+  "location": {
+    "title": "Getting there",
+    "workingHours": "Opening hours",
+    "contacts": "Contacts",
+    "dayOff": "Closed",
+    "travelEstimate": "≈ {drive} min by car · {walk} min on foot from the centre",
+    "directions": "Directions"
+  },
+  "status": {
+    "hours": "Opening hours",
+    "openUntil": "Open until {time}",
+    "opensAt": "Opens at {time}",
+    "opensTomorrow": "Opens tomorrow at {time}",
+    "opensOn": "Opens {weekday} at {time}",
+    "closed": "Closed"
+  },
+  "booking": {
+    "averageCheckHint": "average spend per person",
+    "bookTable": "Book a table",
+    "freeNote": "Booking is free. Confirmed within 15 minutes.",
+    "capacity": "Fits up to {count} guests",
+    "capacityHint": "{tables} tables across {zones} zones",
+    "holdTitle": "Your table is held for 20 minutes",
+    "holdHint": "Free cancellation up to 2 hours before",
+    "bookingsMonth": "{count} bookings this month",
+    "bookingsMonthHint": "A popular spot — better to book ahead",
+    "verifiedBadge": "Venue verified by Market Fix"
+  },
+  "similar": {
+    "title": "Similar places nearby",
+    "description": "If this one isn't right, here are {count} more",
+    "all": "All similar →"
+  },
+  "share": {
+    "action": "Share",
+    "text": "Check out “{name}” on Market Fix",
+    "copied": "Link copied"
+  }
+}

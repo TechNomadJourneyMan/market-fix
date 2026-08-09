@@ -1,0 +1,100 @@
+{
+  "hero": {
+    "eyebrow": "Market Fix · Almaty",
+    "titleLead": "Tables, rentals and delivery —",
+    "titleAccent": "all in one place",
+    "subtitle": "Find a venue, order delivery or rent a hall. Real reviews, honest prices, no phone calls.",
+    "searchPlaceholder": "Restaurant, delivery, hall rental, gift…",
+    "searchHint": "Start with a search — or open the",
+    "searchHintLink": "city map",
+    "cta": "Browse venues",
+    "scenarioHint": "Got an occasion in mind?",
+    "scenarioAi": "AI picks",
+    "scenarioServices": "All services",
+    "quick": {
+      "availableNow": "Free right now",
+      "banquet": "Banquets & weddings",
+      "delivery": "Delivery",
+      "rental": "Rentals",
+      "promo": "On sale"
+    },
+    "stats": {
+      "venues": "verified places",
+      "reviews": "real reviews",
+      "categories": "categories"
+    }
+  },
+  "recent": {
+    "eyebrow": "Pick up where you left off",
+    "title": "Recently viewed",
+    "description": "Go back to the places you already had your eye on.",
+    "action": "Browse venues",
+    "clear": "Clear history"
+  },
+  "servicesShowcase": {
+    "eyebrow": "Services",
+    "title": "More than a table — delivery, rentals and gifts",
+    "description": "Plan the whole evening: the table, the ride, the décor, the catering and the gift — in one place.",
+    "action": "All services",
+    "showAll": "See all services"
+  },
+  "aiTeaser": {
+    "badge": "Matched to your occasion",
+    "title": "Describe your evening — get five spot-on options",
+    "description": "We factor in cuisine, budget, party size, district and time. Every place comes with a plain-language reason why it fits.",
+    "cta": "Find me a place",
+    "manual": "Or search manually",
+    "examplesTitle": "Try something like:",
+    "examples": [
+      "Italian food, under 10,000 ₸, 8 people, city centre, evening",
+      "A quiet spot for a business meeting with Wi-Fi",
+      "A banquet for 120 guests with a halal menu",
+      "A café nearby where I can work on my laptop"
+    ]
+  },
+  "howItWorks": {
+    "eyebrow": "How it works",
+    "title": "Three steps from “let's go somewhere” to “we're at the table”",
+    "description": "No more calling five places to find out whether there's a table for eight on Friday. We already know.",
+    "cta": "Describe it to the AI",
+    "steps": {
+      "describe": {
+        "title": "Describe the occasion",
+        "text": "Cuisine, budget, district, party size. Or just type “dinner for two downtown” — we'll get the idea."
+      },
+      "time": {
+        "title": "Pick a time",
+        "text": "You can see which places actually have tables free right now. Bookings are confirmed within 15 minutes, no calls."
+      },
+      "come": {
+        "title": "Just show up",
+        "text": "The table is held, your notes are passed on, the deposit goes towards the bill. All that's left is to enjoy it."
+      }
+    }
+  },
+  "businessCta": {
+    "eyebrow": "For business",
+    "title": "Fill the tables that are sitting empty tonight",
+    "description": "We bring guests who have already settled on a format and a budget. All you do is accept the booking — and give them a warm welcome.",
+    "join": "List your business",
+    "login": "Go to dashboard",
+    "benefits": {
+      "bookings": {
+        "title": "Bookings without phone calls",
+        "text": "Requests land in your dashboard with every detail — guests, time, notes."
+      },
+      "analytics": {
+        "title": "Analytics, not guesswork",
+        "text": "Views, conversion, revenue and hour-by-hour occupancy in a single dashboard."
+      },
+      "reviews": {
+        "title": "Review management",
+        "text": "Reply to reviews and win back the guests who left unhappy."
+      },
+      "commission": {
+        "title": "Transparent commission",
+        "text": "Pay a percentage only on bookings that actually happen. No subscription fees."
+      }
+    }
+  }
+}

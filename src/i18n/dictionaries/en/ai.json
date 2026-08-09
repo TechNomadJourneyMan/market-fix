@@ -1,0 +1,126 @@
+{
+  "meta": {
+    "title": "AI venue picks",
+    "description": "Describe the occasion, budget, party and district — the assistant will pick places and explain why it chose them."
+  },
+  "page": {
+    "badge": "Demo AI · runs on mock logic",
+    "title": "Tell us about the evening — we'll find the place",
+    "description": "No need to scroll through dozens of cards. The assistant weighs cuisine, budget, party size, district and time — and explains every choice.",
+    "disclaimer": "In this MVP the matching runs on a transparent scoring algorithm with no language model involved. The interface and API contract are ready for OpenAI — only the engine changes.",
+    "features": {
+      "context": {
+        "title": "Understands context",
+        "text": "Pulls cuisine, budget, party size, district and time out of a plain sentence."
+      },
+      "explains": {
+        "title": "Explains its choice",
+        "text": "Shows how the match score adds up — and what might not work for you."
+      },
+      "schedule": {
+        "title": "Checks opening hours",
+        "text": "It won't suggest a place that's closed when you want to go."
+      }
+    }
+  },
+  "freeInput": {
+    "title": "Describe the evening in your own words",
+    "placeholder": "Italian food, up to 10,000 ₸, 8 people, city centre, evening",
+    "submit": "Find places",
+    "hint": "The assistant will parse cuisine, budget, party size, district and time. You can also answer step by step below for a sharper result."
+  },
+  "wizard": {
+    "stepCounter": "Step {current} of {total} · {name}",
+    "restart": "Start over",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Show my picks",
+    "steps": {
+      "occasion": "Occasion",
+      "cuisine": "Cuisine",
+      "budget": "Budget",
+      "party": "Party",
+      "place": "Area and time"
+    },
+    "occasion": {
+      "title": "What's the occasion?",
+      "hint": "The occasion sets the format: a date and a big celebration call for very different places."
+    },
+    "cuisine": {
+      "title": "What kind of food?",
+      "hint": "Pick several — we'll look for places that serve at least one of them.",
+      "categoriesLabel": "Or choose a type of venue"
+    },
+    "budget": {
+      "title": "How much per person?",
+      "hint": "We'll show places that fit the amount. Slightly pricier ones too, but we'll say so upfront.",
+      "upTo": "up to {price}"
+    },
+    "party": {
+      "title": "How many of you?",
+      "hint": "From eight people we start including venues with banquet service.",
+      "vibesLabel": "Atmosphere"
+    },
+    "place": {
+      "title": "Where and when?",
+      "hint": "We'll check opening hours and only show places open at that time.",
+      "centerOnly": "City centre only",
+      "timeLabel": "Time"
+    }
+  },
+  "occasions": {
+    "date": { "label": "Date night", "hint": "Quiet, pretty, for two" },
+    "friends": { "label": "With friends", "hint": "Lively and informal" },
+    "family": { "label": "With family", "hint": "Kids' area and easy access" },
+    "business": { "label": "Business meeting", "hint": "Calm, with Wi-Fi" },
+    "celebration": { "label": "Celebration", "hint": "Banquet, private room, host" },
+    "solo": { "label": "On my own", "hint": "To work or unwind" }
+  },
+  "dayParts": {
+    "morning": { "label": "Morning", "hint": "before 11:00" },
+    "lunch": { "label": "Lunchtime", "hint": "12:00–15:00" },
+    "afternoon": { "label": "Afternoon", "hint": "15:00–18:00" },
+    "evening": { "label": "Evening", "hint": "19:00–22:00" },
+    "night": { "label": "Late night", "hint": "after 23:00" }
+  },
+  "vibes": {
+    "cozy": "Cozy",
+    "lively": "Lively",
+    "quiet": "Quiet",
+    "premium": "Premium",
+    "trendy": "Trendy",
+    "casual": "Casual"
+  },
+  "thinking": {
+    "title": "Finding places",
+    "subtitle": "This usually takes a couple of seconds",
+    "steps": {
+      "parse": "Reading your request",
+      "schedule": "Checking opening hours",
+      "budget": "Working out the budget for your party",
+      "ratings": "Comparing guest ratings",
+      "explain": "Putting together the explanations"
+    }
+  },
+  "error": {
+    "text": "Couldn't get the picks",
+    "retry": "Try again"
+  },
+  "results": {
+    "empty": {
+      "title": "Nothing matches those conditions",
+      "description": "The budget or the area is probably too tight. Relax one condition and we'll find options.",
+      "action": "Change the request",
+      "secondaryAction": "Open the catalog"
+    },
+    "elapsed": "Matched in {seconds}s · demo engine, no LLM",
+    "newRequest": "New request",
+    "tipsTitle": "How to get a sharper match",
+    "perPerson": "{price} / person",
+    "estimatedTotal": "≈ {price} for the party",
+    "book": "Book a table",
+    "details": "Details",
+    "why": "Why this fits",
+    "factorsTitle": "How the match score was calculated"
+  }
+}

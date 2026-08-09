@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "title": "Кабинет бизнеса",
+    "template": "%s · Бизнес · Market Fix"
+  },
+  "header": {
+    "verified": "Проверен",
+    "plan": "Тариф {plan}",
+    "summary": "{venues} · комиссия {commission}% · {legalName}",
+    "guestView": "Как видят гости"
+  },
+  "plans": {
+    "free": "Бесплатный",
+    "pro": "Pro",
+    "premium": "Premium"
+  },
+  "nav": {
+    "dashboard": "Дашборд",
+    "venues": "Мои объекты",
+    "bookings": "Бронирования",
+    "menu": "Меню и услуги",
+    "products": "Товары",
+    "photos": "Фотографии",
+    "reviews": "Отзывы",
+    "analytics": "Аналитика"
+  },
+  "dashboard": {
+    "title": "Дашборд",
+    "description": "Ключевые показатели за последние 30 дней",
+    "metrics": {
+      "views": "Просмотры карточек",
+      "bookings": "Бронирования",
+      "revenue": "Доход",
+      "conversion": "Конверсия",
+      "conversionHint": "просмотр → бронь"
+    },
+    "chartTitle": "Бронирования по дням",
+    "chartSubtitle": "Всего {bookings} за месяц · средний чек {averageCheck}",
+    "fullAnalytics": "Полная аналитика",
+    "upcomingTitle": "Ближайшие брони",
+    "all": "Все →",
+    "upcomingEmpty": {
+      "title": "Броней пока нет",
+      "description": "Как только гости начнут бронировать, заявки появятся здесь."
+    },
+    "statusShort": {
+      "confirmed": "Подтв.",
+      "pending": "Ждёт"
+    },
+    "sourcesTitle": "Откуда приходят гости",
+    "sourcesHint": "AI-подбор приводит {percent}% гостей — это самый быстрорастущий канал.",
+    "topVenuesTitle": "Объекты по доходу",
+    "manage": "Управлять →",
+    "venueBookings": "{count} броней за месяц",
+    "reviewsTitle": "Свежие отзывы",
+    "allReviews": "Все {count} →",
+    "reply": "Ответить",
+    "occupancyTitle": "Заполняемость {percent}",
+    "occupancyHint": "Доля состоявшихся броней от всех заявок за период",
+    "occupancyAction": "Как это улучшить"
+  },
+  "newVenue": {
+    "metaTitle": "Добавить место",
+    "title": "Добавить новое место",
+    "description": "Ресторан, кафе, бар, банкетный зал или любая площадка для бронирования. Карточка сразу появится в каталоге."
+  }
+}

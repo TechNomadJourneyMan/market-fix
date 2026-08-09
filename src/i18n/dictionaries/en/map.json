@@ -1,0 +1,106 @@
+{
+  "title": "Almaty map",
+  "section": {
+    "eyebrow": "City map",
+    "title": "Almaty on the map",
+    "description": "Venues, delivery and rentals on one map: search, filters, geolocation and one-tap booking. Powered by OpenStreetMap — no API keys required.",
+    "action": "Browse the catalog on a map"
+  },
+  "searchPlaceholder": "District, venue, delivery, rental…",
+  "searchLabel": "Search the map",
+  "regionLabel": "Interactive map of Almaty",
+  "layers": {
+    "label": "Layer",
+    "all": "All",
+    "venues": "Venues",
+    "services": "Services"
+  },
+  "filters": {
+    "label": "Quick filters",
+    "all": "All",
+    "nearby": "Nearby",
+    "open": "Open now",
+    "promo": "Deals",
+    "delivery": "Delivery",
+    "rental": "Rental",
+    "gifts": "Gifts"
+  },
+  "controls": {
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "reset": "Fit all results",
+    "locate": "My location",
+    "fullscreenEnter": "Enter fullscreen",
+    "fullscreenExit": "Exit fullscreen",
+    "showList": "List",
+    "showMap": "Map"
+  },
+  "status": {
+    "demoOrigin": "Almaty city center",
+    "yourLocation": "Your location",
+    "locating": "Finding your location…",
+    "hint": "Drag the map, zoom with the wheel or pinch",
+    "points": {
+      "one": "{count} pin",
+      "other": "{count} pins"
+    },
+    "hidden": "{count} more outside the view"
+  },
+  "searchArea": {
+    "button": "Search this area",
+    "reset": "Back to the whole city"
+  },
+  "cluster": {
+    "aria": "Cluster of {count} places",
+    "hint": "Click to expand"
+  },
+  "pin": {
+    "venueAria": "{name}, from {price}",
+    "serviceAria": "{name}, service"
+  },
+  "types": {
+    "venue": "Venue",
+    "delivery": "Delivery",
+    "rental": "Rental",
+    "services": "Service",
+    "gifts": "Gift",
+    "catering": "Catering",
+    "transport": "Transport",
+    "events": "Event",
+    "other": "Service"
+  },
+  "card": {
+    "book": "Book a table",
+    "openService": "Open service",
+    "details": "Details",
+    "directions": "Get directions",
+    "close": "Close card",
+    "distance": "{distance} from you"
+  },
+  "states": {
+    "loading": "Loading the map…",
+    "emptyTitle": "Nothing in this area",
+    "emptyDescription": "Zoom out, clear the filters or view the whole city.",
+    "emptyAction": "Show the whole city",
+    "errorTitle": "The map didn't load",
+    "errorDescription": "Check your connection — map tiles are unavailable right now.",
+    "errorAction": "Load again",
+    "offlineTitle": "You're offline",
+    "offlineDescription": "The map works without a connection: the result list stays available and tiles will load once you're back online.",
+    "manyMarkers": "Lots of places here — nearby ones are grouped. Zoom in to see each one.",
+    "noLocationTitle": "Location is off",
+    "noLocationDescription": "Allow location access in your browser to see distances and places near you."
+  },
+  "toast": {
+    "located": "Found you on the map",
+    "denied": "Couldn't get your location. Allow access in your browser settings.",
+    "unsupported": "This browser doesn't support geolocation"
+  },
+  "list": {
+    "title": "Results",
+    "emptyTitle": "Nothing found",
+    "emptyDescription": "Change the filter or clear the search.",
+    "activeItem": "Show on the map"
+  },
+  "attribution": "Map data © OpenStreetMap contributors"
+}

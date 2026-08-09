@@ -39,6 +39,13 @@
     --ring: 18 72% 46%;
 
     --radius: 0.85rem;
+
+    /* Карта: цвета семейств пинов и точки геолокации */
+    --map-venue: 18 72% 46%;
+    --map-delivery: 158 40% 32%;
+    --map-service: 231 44% 50%;
+    --map-geo: 212 90% 48%;
+    --map-surface: 40 20% 92%;
   }
 
   .dark {
@@ -75,6 +82,12 @@
     --border: 24 10% 20%;
     --input: 24 10% 22%;
     --ring: 18 78% 56%;
+
+    --map-venue: 18 78% 56%;
+    --map-delivery: 158 44% 46%;
+    --map-service: 231 60% 68%;
+    --map-geo: 212 92% 62%;
+    --map-surface: 24 14% 12%;
   }
 
   * {
@@ -129,6 +142,280 @@
 
   .interactive-lift {
     @apply transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lift;
+  }
+}
+
+/* ───────────────────────────── Карта (Leaflet + OpenStreetMap) ─────────────────────────────
+   Пины строятся как divIcon с этими классами, поэтому автоматически следуют
+   светлой/тёмной теме и токенам дизайн-системы. */
+
+.leaflet-container {
+  font-family: inherit;
+  font-size: 0.75rem;
+  background: hsl(var(--map-surface));
+  outline: none;
+}
+
+.leaflet-container a {
+  color: inherit;
+}
+
+.leaflet-container:focus-visible {
+  box-shadow: inset 0 0 0 2px hsl(var(--ring));
+}
+
+/* Обязательная атрибуция OpenStreetMap: оформляем аккуратно, но не скрываем. */
+.leaflet-control-attribution {
+  max-width: 72%;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background) / 0.85) !important;
+  padding: 2px 6px !important;
+  font-size: 10px !important;
+  line-height: 1.35;
+  color: hsl(var(--muted-foreground)) !important;
+  backdrop-filter: blur(8px);
+  margin: 0 6px 6px 0 !important;
+}
+
+.leaflet-control-attribution a {
+  color: hsl(var(--muted-foreground)) !important;
+  text-decoration: underline;
+  text-decoration-color: hsl(var(--border));
+}
+
+.leaflet-control-attribution a:hover {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Пин: сам divIcon нулевого размера и стоит точно в геоточке,
+   видимая часть сдвигается transform'ом — ширина ценника не влияет на якорь. */
+.mf-pin-root {
+  outline: none !important;
+}
+
+.mf-pin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -100%);
+  transition: transform 160ms ease-out;
+}
+
+.mf-pin__body {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 11rem;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  padding: 4px 9px;
+  font-size: 11.5px;
+  font-weight: 650;
+  line-height: 1.2;
+  box-shadow:
+    0 1px 2px hsl(24 18% 12% / 0.08),
+    0 6px 16px hsl(24 18% 12% / 0.12);
+  transition:
+    background-color 140ms ease-out,
+    color 140ms ease-out,
+    border-color 140ms ease-out,
+    box-shadow 140ms ease-out;
+}
+
+.mf-pin__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mf-pin__glyph {
+  display: inline-flex;
+  color: hsl(var(--map-venue));
+}
+
+.mf-pin__glyph svg {
+  width: 13px;
+  height: 13px;
+}
+
+.mf-pin__tail {
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border-right: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  transform: rotate(45deg);
+  transition:
+    background-color 140ms ease-out,
+    border-color 140ms ease-out;
+}
+
+.mf-pin__promo {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: hsl(var(--destructive));
+}
+
+.mf-pin--venue .mf-pin__glyph {
+  color: hsl(var(--map-venue));
+}
+.mf-pin--delivery .mf-pin__glyph {
+  color: hsl(var(--map-delivery));
+}
+.mf-pin--service .mf-pin__glyph {
+  color: hsl(var(--map-service));
+}
+
+/* Hover — приподнимаем, active — заливаем цветом типа объекта. */
+.mf-pin-root:hover .mf-pin,
+.mf-pin-root:focus-visible .mf-pin {
+  transform: translate(-50%, calc(-100% - 2px));
+  z-index: 500;
+}
+
+.mf-pin-root:hover .mf-pin__body {
+  border-color: hsl(var(--map-venue) / 0.5);
+}
+
+.mf-pin-root:focus-visible .mf-pin__body {
+  box-shadow:
+    0 0 0 2px hsl(var(--background)),
+    0 0 0 4px hsl(var(--ring));
+}
+
+.mf-pin.is-active .mf-pin__body,
+.mf-pin.is-active .mf-pin__tail {
+  color: #fff;
+  background: hsl(var(--map-venue));
+  border-color: hsl(var(--map-venue));
+}
+
+.mf-pin--delivery.is-active .mf-pin__body,
+.mf-pin--delivery.is-active .mf-pin__tail {
+  background: hsl(var(--map-delivery));
+  border-color: hsl(var(--map-delivery));
+}
+
+.mf-pin--service.is-active .mf-pin__body,
+.mf-pin--service.is-active .mf-pin__tail {
+  background: hsl(var(--map-service));
+  border-color: hsl(var(--map-service));
+}
+
+.mf-pin.is-active .mf-pin__glyph,
+.mf-pin.is-active .mf-pin__promo {
+  color: #fff;
+  background: none;
+}
+
+.mf-pin.is-active .mf-pin__promo {
+  background: #fff;
+}
+
+.mf-pin.is-active .mf-pin__body {
+  box-shadow:
+    0 2px 4px hsl(24 18% 12% / 0.14),
+    0 10px 24px hsl(var(--map-venue) / 0.35);
+}
+
+/* Кластер: круг со счётчиком, размер задаётся переменной из JS. */
+.mf-cluster {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mf-cluster-size, 40px);
+  height: var(--mf-cluster-size, 40px);
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: hsl(var(--map-venue));
+  color: #fff;
+  font-weight: 700;
+  font-size: 12.5px;
+  box-shadow:
+    0 0 0 4px hsl(var(--map-venue) / 0.18),
+    0 6px 18px hsl(24 18% 12% / 0.25);
+  transition:
+    transform 160ms ease-out,
+    box-shadow 160ms ease-out;
+}
+
+.mf-pin-root:hover .mf-cluster,
+.mf-pin-root:focus-visible .mf-cluster {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow:
+    0 0 0 6px hsl(var(--map-venue) / 0.22),
+    0 8px 22px hsl(24 18% 12% / 0.3);
+}
+
+.mf-pin-root:focus-visible .mf-cluster {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 3px;
+}
+
+/* Точка пользователя. */
+.mf-geo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+}
+
+.mf-geo__dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: hsl(var(--map-geo));
+  border: 3px solid hsl(var(--background));
+  box-shadow: 0 2px 8px hsl(24 18% 12% / 0.3);
+}
+
+.mf-geo__pulse {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: hsl(var(--map-geo) / 0.22);
+  animation: mf-geo-pulse 2.4s ease-out infinite;
+}
+
+@keyframes mf-geo-pulse {
+  0% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mf-geo__pulse {
+    animation: none;
+  }
+  .mf-pin,
+  .mf-cluster,
+  .mf-pin__body {
+    transition: none;
   }
 }
 

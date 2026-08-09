@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "title": "My account",
+    "template": "%s · Account · Market Fix"
+  },
+  "header": {
+    "memberSince": "{email} · with us since {date}",
+    "bookings": "{count} bookings",
+    "favorites": "{count} saved",
+    "reviews": "{count} reviews",
+    "loyaltyPoints": "bonus points"
+  },
+  "nav": {
+    "profile": "Profile",
+    "bookings": "Bookings",
+    "favorites": "Favorites",
+    "recommendations": "Recommendations",
+    "ai": "AI tips",
+    "searches": "Search history",
+    "notifications": "Notifications",
+    "settings": "Settings"
+  },
+  "overview": {
+    "stats": {
+      "upcoming": "upcoming visits",
+      "favorites": "saved places",
+      "reviews": "reviews written",
+      "saved": "saved with offers"
+    },
+    "upcomingTitle": "Upcoming visits",
+    "upcomingDescription": "Confirmed bookings — don't miss them",
+    "allBookings": "All bookings →",
+    "upcomingEmpty": {
+      "title": "Nothing planned yet",
+      "description": "Pick a place and your evening is sorted. Booking takes 30 seconds.",
+      "action": "Find a venue",
+      "secondaryAction": "Try AI picks"
+    },
+    "adviceTitle": "Personal tips",
+    "adviceDescription": "Drawn from your visit history and preferences",
+    "allAdvice": "All tips →",
+    "recommendationsTitle": "You might like",
+    "recommendationsDescription": "Based on your visits and the tastes in your profile",
+    "showAll": "Show all →",
+    "favoritesTitle": "Favorites",
+    "allFavorites": "All {count} →",
+    "preferencesTitle": "Your preferences",
+    "preferencesDescription": "We factor them into recommendations and AI picks",
+    "edit": "Edit",
+    "preferences": {
+      "categories": "Favorite categories",
+      "cuisines": "Favorite cuisines",
+      "districts": "Preferred districts",
+      "budget": "Comfortable budget",
+      "budgetValue": "{price} per person · usually {size} people",
+      "notSet": "not set"
+    }
+  },
+  "bookings": {
+    "metaTitle": "Booking history",
+    "title": "Bookings",
+    "description": "Upcoming visits and your full history — with references and statuses",
+    "tabUpcoming": "Upcoming",
+    "tabPast": "History",
+    "visited": "You've visited {venues}",
+    "emptyUpcoming": {
+      "title": "No upcoming bookings",
+      "description": "Now is a good time to pick a place for the weekend — the best tables go 3 days ahead.",
+      "action": "Find a venue",
+      "secondaryAction": "Try AI picks"
+    },
+    "emptyPast": {
+      "title": "Your history is empty",
+      "description": "Places you've already visited will show up here, along with the option to leave a review.",
+      "action": "Browse venues"
+    },
+    "card": {
+      "reference": "Booking reference:",
+      "payDeposit": "Pay the deposit",
+      "directions": "How to get there",
+      "leaveReview": "Leave a review",
+      "bookAgain": "Book again",
+      "cancel": "Cancel",
+      "cancelled": "Booking cancelled",
+      "cancelError": "Couldn't cancel the booking",
+      "status": {
+        "pending": "Awaiting confirmation",
+        "awaiting_payment": "Awaiting payment",
+        "confirmed": "Confirmed",
+        "completed": "Visited",
+        "cancelled": "Cancelled",
+        "no_show": "No-show"
+      }
+    }
+  },
+  "favorites": {
+    "metaTitle": "Favorites",
+    "title": "Favorites",
+    "descriptionFilled": "{venues} — saved so you don't have to search again",
+    "descriptionEmpty": "Save places so you can come back to them later",
+    "empty": {
+      "title": "No favorites yet",
+      "description": "Tap the heart on any card and the place is saved here. Handy for building a shortlist before a big night.",
+      "action": "Browse venues",
+      "secondaryAction": "Try AI picks"
+    }
+  },
+  "notifications": {
+    "metaTitle": "Notifications",
+    "title": "Notifications",
+    "description": "Booking reminders, replies from venues and offers worth your time",
+    "unread": "unread",
+    "markAll": "Mark all as read",
+    "empty": {
+      "title": "No notifications",
+      "description": "Booking reminders and offers that suit you will appear here.",
+      "action": "Browse venues"
+    }
+  },
+  "searches": {
+    "metaTitle": "Search history",
+    "title": "Search history",
+    "description": "Repeat any search in one click — your filters are saved",
+    "byFilters": "Search by filters",
+    "repeat": "Repeat →",
+    "chips": {
+      "guests": "{count} guests",
+      "priceMax": "up to {price} ₸",
+      "promo": "Special offers",
+      "openToday": "Open today",
+      "availableNow": "Free right now",
+      "radius": "within {km} km",
+      "amenities": "with amenities"
+    },
+    "empty": {
+      "title": "You haven't searched yet",
+      "description": "Your searches and their filters will show up here so you can return to them.",
+      "action": "Start searching"
+    }
+  },
+  "recommendations": {
+    "metaTitle": "Recommendations",
+    "title": "Recommended for you",
+    "description": "Matched to your visit history, favorites and profile preferences",
+    "basedOn": "Based on:",
+    "budgetChip": "budget {price}",
+    "configure": "Adjust",
+    "exactTitle": "Spot on",
+    "promoTitle": "On offer right now",
+    "freshTitle": "Worth a try",
+    "ctaTitle": "Need something for one specific evening?",
+    "ctaDescription": "Describe the occasion, budget and party — the AI will build a list for the job and explain its choices.",
+    "ctaAction": "Open AI picks"
+  },
+  "advice": {
+    "metaTitle": "AI tips",
+    "title": "AI tips",
+    "description": "Personal observations from your history — how to go out more often and spend less",
+    "kinds": {
+      "insight": "Observation",
+      "saving": "Saving",
+      "discovery": "Discovery",
+      "timing": "Timing"
+    },
+    "empty": {
+      "title": "Not enough data yet",
+      "description": "Make a couple of bookings and the assistant will start spotting patterns in your visits.",
+      "action": "Find a venue"
+    },
+    "disclaimer": "Tips are generated by a transparent algorithm from your bookings, favorites and profile settings — no language model involved. The architecture is ready for OpenAI: only the text source changes."
+  },
+  "settings": {
+    "metaTitle": "Settings",
+    "title": "Settings",
+    "description": "Personal details, matching preferences and notifications",
+    "profileTitle": "Personal details",
+    "profileHint": "These details are pre-filled in the booking form",
+    "nameLabel": "Name",
+    "phoneLabel": "Phone",
+    "emailLabel": "Email",
+    "preferencesTitle": "Matching preferences",
+    "preferencesHint": "They shape your recommendations and AI picks",
+    "budgetLabel": "Comfortable budget per person",
+    "budgetAria": "Budget",
+    "partySizeLabel": "Usual party size",
+    "partySizeHint": "We use it as the default when booking",
+    "geolocationLabel": "Use my location",
+    "geolocationHint": "Needed for “nearest first” sorting and finding places close by",
+    "notificationsTitle": "Notifications",
+    "notificationsHint": "Choose what to hear about — nothing else will bother you",
+    "notificationItems": {
+      "bookingUpdates": "Booking updates",
+      "bookingUpdatesHint": "Confirmations, reminders, cancellations",
+      "promotions": "Offers and promotions",
+      "promotionsHint": "Only for places you care about",
+      "recommendations": "Personal recommendations",
+      "recommendationsHint": "New places matched to your tastes",
+      "reviewReplies": "Replies to reviews",
+      "reviewRepliesHint": "When a venue replies to you"
+    },
+    "channelsTitle": "Delivery channels",
+    "channels": {
+      "email": "Email",
+      "push": "Push notifications",
+      "sms": "SMS"
+    },
+    "privacyTitle": "Language and privacy",
+    "privacyText": "We never share your contact details with third parties. The venue only sees your name, phone number and booking note.",
+    "save": "Save changes",
+    "saved": "Settings saved"
+  }
+}

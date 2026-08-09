@@ -1,0 +1,61 @@
+{
+  "brand": "Market Fix",
+  "city": "Almaty",
+  "units": {
+    "m": "m",
+    "km": "km",
+    "currency": "₸",
+    "perPerson": "per person",
+    "minutes": "min"
+  },
+  "actions": {
+    "more": "Details",
+    "open": "Open",
+    "close": "Close",
+    "clear": "Clear",
+    "reset": "Reset",
+    "retry": "Try again",
+    "apply": "Apply",
+    "cancel": "Cancel",
+    "save": "Save",
+    "book": "Book a table",
+    "rent": "Rent",
+    "order": "Order",
+    "directions": "Directions",
+    "share": "Share",
+    "favorite": "Save to favorites",
+    "showAll": "See all"
+  },
+  "labels": {
+    "from": "from",
+    "rating": "rating",
+    "verified": "Verified by Market Fix",
+    "popular": "Popular",
+    "promo": "Deal",
+    "openNow": "Open now",
+    "closed": "Closed",
+    "loading": "Loading…"
+  },
+  "counts": {
+    "results": {
+      "one": "{count} result",
+      "other": "{count} results"
+    },
+    "venues": {
+      "one": "{count} venue",
+      "other": "{count} venues"
+    },
+    "reviews": {
+      "one": "{count} review",
+      "other": "{count} reviews"
+    },
+    "guests": {
+      "one": "{count} guest",
+      "other": "{count} guests"
+    },
+    "offers": {
+      "one": "{count} offer",
+      "other": "{count} offers"
+    }
+  }
+}

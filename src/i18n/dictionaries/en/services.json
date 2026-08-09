@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "title": "Services: delivery, rentals, gifts",
+    "description": "Delivery, rentals, services and gifts in Almaty — right next to table booking.",
+    "fallbackTitle": "Service"
+  },
+  "index": {
+    "eyebrow": "Services marketplace",
+    "title": "Delivery, rentals, services and gifts",
+    "description": "Beyond booking a table — order a courier, rent a hall, hire a host or pick out a gift.",
+    "found": "Found {count}",
+    "listingCount": "{count} listings",
+    "empty": {
+      "title": "Nothing here yet",
+      "description": "There are no listings in this category yet. Have a look at the other verticals — you'll find something there.",
+      "action": "All services"
+    }
+  },
+  "verticals": {
+    "all": "All",
+    "delivery": "Delivery",
+    "rental": "Rentals",
+    "services": "Services",
+    "gifts": "Gifts",
+    "catering": "Catering",
+    "transport": "Transport",
+    "events": "Events",
+    "other": "Other"
+  },
+  "verticalBadge": {
+    "delivery": "Delivery",
+    "rental": "Rental",
+    "services": "Service",
+    "gifts": "Gift",
+    "catering": "Catering",
+    "transport": "Transport",
+    "events": "Event",
+    "other": "Service"
+  },
+  "card": {
+    "verified": "Verified",
+    "popular": "Popular",
+    "eta": "~{minutes} min"
+  },
+  "detail": {
+    "breadcrumb": "Services",
+    "verifiedProvider": "Verified provider",
+    "popular": "Popular",
+    "reviews": "({count} reviews)",
+    "aboutTitle": "About this service",
+    "provider": "Provider:",
+    "includedTitle": "What's included",
+    "backToAll": "← All services"
+  },
+  "order": {
+    "nameLabel": "Name",
+    "namePlaceholder": "What should we call you?",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+7 7XX XXX XX XX",
+    "dateLabel": "Date / when you need it",
+    "commentLabel": "Notes",
+    "commentPlaceholder": "Address, details, requests",
+    "submit": "{cta} · add to cart",
+    "note": "No hidden fees. The provider confirms your order within 15 minutes.",
+    "errorContacts": "Enter your name and phone number",
+    "success": "Added to cart — you can pay now"
+  },
+  "cta": {
+    "order": "Order",
+    "rent": "Rent",
+    "chooseGift": "Choose a gift",
+    "book": "Reserve"
+  }
+}

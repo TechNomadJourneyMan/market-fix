@@ -1,0 +1,42 @@
+{
+  "skipToContent": "Skip to content",
+  "menu": "Menu",
+  "closeMenu": "Close menu",
+  "links": {
+    "home": "Home",
+    "catalog": "Venues",
+    "services": "Services",
+    "ai": "AI picks",
+    "merge": "Merge Menu",
+    "business": "For business",
+    "cart": "Cart",
+    "account": "Profile",
+    "bookings": "My bookings",
+    "favorites": "Favorites",
+    "notifications": "Notifications"
+  },
+  "searchPlaceholder": "Where to tonight?",
+  "search": "Search",
+  "auth": {
+    "login": "Log in",
+    "register": "Sign up",
+    "logout": "Log out",
+    "businessCabinet": "Business dashboard"
+  },
+  "theme": {
+    "toggle": "Switch theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "label": "Interface language",
+    "change": "Change language"
+  },
+  "footer": {
+    "guests": "For guests",
+    "business": "For business",
+    "categories": "Categories",
+    "tagline": "We find places in Almaty. Book in 30 seconds, read honest reviews and let AI match the occasion."
+  }
+}

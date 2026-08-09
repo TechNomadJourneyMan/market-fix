@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "title": "Merge Menu",
+    "description": "Pick a restaurant together with friends — chat, votes and an AI shortlist.",
+    "roomTitle": "Merge Menu room"
+  },
+  "lobby": {
+    "badge": "Merge Menu",
+    "title": "Choose a place together with friends",
+    "description": "A live chat: everyone shares their vibe and budget, the AI builds a shortlist, you vote — until you land on a match.",
+    "tabCreate": "Create a room",
+    "tabJoin": "Join with a code",
+    "nameLabel": "Your name",
+    "namePlaceholder": "Alisher",
+    "topicLabel": "What's the occasion",
+    "topicPlaceholder": "Friday dinner / Birthday",
+    "codeLabel": "Room code",
+    "codePlaceholder": "ABC123",
+    "submitCreate": "Create and invite",
+    "submitJoin": "Join",
+    "errors": {
+      "name": "Enter your name",
+      "generic": "Something went wrong"
+    }
+  },
+  "room": {
+    "participants": {
+      "one": "{count} participant",
+      "other": "{count} participants"
+    },
+    "statusLabel": "status",
+    "statusMatched": "match found",
+    "statusChoosing": "still choosing",
+    "invite": "Invite",
+    "linkCopied": "Link copied",
+    "bookMatch": "Book the match",
+    "matchTitle": "Match: “{name}” — everyone agrees",
+    "notFound": "Room not found",
+    "joinFirst": "Join the room from the Merge Menu start page first",
+    "error": "Something went wrong",
+    "preferencesTitle": "Your preferences",
+    "cuisine": "Cuisine",
+    "vibe": "Vibe",
+    "budget": "Budget per person",
+    "budgetUpTo": "up to {price}",
+    "freeText": "In your own words",
+    "freeTextPlaceholder": "Quiet, with a terrace, no loud music…",
+    "refresh": "Refresh the shortlist",
+    "inRoom": "In the room",
+    "host": "host",
+    "chatTitle": "Room chat",
+    "chatPlaceholder": "Message your friends…",
+    "sendAria": "Send message",
+    "shortlistTitle": "AI shortlist",
+    "shortlistEmpty": "Send your preferences and options will show up here.",
+    "priceFrom": "from {price}",
+    "voteAria": "Vote for {name}",
+    "book": "Book"
+  },
+  "vibes": {
+    "cozy": "Cozy",
+    "lively": "Lively",
+    "quiet": "Quiet",
+    "premium": "Premium",
+    "trendy": "Trendy",
+    "casual": "Casual"
+  }
+}

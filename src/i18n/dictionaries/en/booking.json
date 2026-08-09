@@ -1,0 +1,84 @@
+{
+  "dialog": {
+    "date": "Date",
+    "time": "Time",
+    "guests": "Number of guests",
+    "guestsLess": "Fewer guests",
+    "guestsMore": "More guests",
+    "slots": {
+      "one": "{count} slot",
+      "other": "{count} slots"
+    },
+    "noSeats": "fully booked",
+    "dayOff": "closed",
+    "noSlots": "No slots left for this day. Pick another date — there is almost always something nearby.",
+    "seatsLeft": {
+      "one": "Only {count} seat left at this time",
+      "other": "Only {count} seats left at this time"
+    },
+    "largePartyNote": "For parties of 8 or more the venue will confirm by phone and suggest a banquet menu.",
+    "commentLabel": "Notes for the venue",
+    "commentHint": "Table by the window, a high chair, allergies — anything worth knowing in advance",
+    "commentPlaceholder": "For example: it's a birthday, we'd like a cake with candles",
+    "contactsTitle": "Contact details for confirmation",
+    "nameLabel": "Name",
+    "namePlaceholder": "What should we call you?",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+7 700 000 00 00",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.kz",
+    "agree": "I agree to the booking rules: the table is held for 20 minutes after the chosen time, cancellation no later than 2 hours before.",
+    "estimate": "Estimated",
+    "freeBadge": "Booking is free",
+    "addToCart": "Add to cart",
+    "submit": "Book now",
+    "submitting": "Sending…",
+    "summary": "{date}, {time} · {guests}"
+  },
+  "toast": {
+    "createdNeedsPayment": "Booking created — just pay the deposit",
+    "created": "Table booked! Booking reference {reference}",
+    "createError": "Couldn't create the booking",
+    "pickDateTime": "Choose a date and time",
+    "addedToCart": "Added to your booking cart",
+    "openCart": "Open"
+  },
+  "status": {
+    "pending": "Awaiting confirmation",
+    "confirmed": "Confirmed",
+    "cancelled": "Cancelled",
+    "completed": "Completed",
+    "awaitingPayment": "Awaiting payment",
+    "noShow": "No-show"
+  },
+  "success": {
+    "metaTitle": "Booking confirmed",
+    "title": "All set — the table is yours",
+    "description": "We've sent a confirmation to {email} and passed every detail on to the venue. Your booking reference is",
+    "demoPaymentTitle": "Card processing comes later",
+    "demoPaymentText": "This is a demo payment of {amount}. Nothing was actually charged — the payment provider is connected at the next stage.",
+    "commentTitle": "Your note was passed to the venue",
+    "paid": "Paid",
+    "directions": "Directions",
+    "myBookings": "My bookings",
+    "openVenue": "Open venue page",
+    "nextTitle": "What happens next",
+    "next": [
+      "The venue will confirm within 15 minutes — you'll get a notification.",
+      "The day before we'll remind you about the booking and when to set off.",
+      "After the visit you can leave a review and collect bonus points."
+    ],
+    "similarTitle": "Might come in handy next time",
+    "details": {
+      "date": "Date",
+      "time": "Time",
+      "guests": "Guests"
+    }
+  },
+  "cancellation": {
+    "title": "Cancellation policy",
+    "free": "Free cancellation up to 2 hours before your visit.",
+    "deposit": "The deposit is refunded in full if you cancel 2 hours before the visit.",
+    "hold": "The table is held for 20 minutes after the chosen time."
+  }
+}

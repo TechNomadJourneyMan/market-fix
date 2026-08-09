@@ -1,0 +1,15 @@
+{
+  "generic": "Something went wrong. Please try again.",
+  "network": "No connection to the server. Check your internet.",
+  "notFound": "Page not found",
+  "notFoundDescription": "The link may be outdated or the venue is no longer published.",
+  "unauthorized": "Please log in to continue",
+  "forbidden": "You don't have permission for this action",
+  "validation": "Please check the fields below",
+  "required": "This field is required",
+  "invalidEmail": "Enter a valid email address",
+  "invalidPhone": "Enter a phone number like +7 7XX XXX XX XX",
+  "tooShort": "This value is too short",
+  "geolocation": "Couldn't determine your location",
+  "mapTiles": "Map tiles are unavailable"
+}

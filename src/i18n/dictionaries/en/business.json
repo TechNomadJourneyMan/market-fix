@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "title": "Business dashboard",
+    "template": "%s · Business · Market Fix"
+  },
+  "header": {
+    "verified": "Verified",
+    "plan": "{plan} plan",
+    "summary": "{venues} · {commission}% commission · {legalName}",
+    "guestView": "See the guest view"
+  },
+  "plans": {
+    "free": "Free",
+    "pro": "Pro",
+    "premium": "Premium"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "venues": "My venues",
+    "bookings": "Bookings",
+    "menu": "Menu and services",
+    "products": "Products",
+    "photos": "Photos",
+    "reviews": "Reviews",
+    "analytics": "Analytics"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Key numbers for the last 30 days",
+    "metrics": {
+      "views": "Listing views",
+      "bookings": "Bookings",
+      "revenue": "Revenue",
+      "conversion": "Conversion",
+      "conversionHint": "view → booking"
+    },
+    "chartTitle": "Bookings by day",
+    "chartSubtitle": "{bookings} this month · average check {averageCheck}",
+    "fullAnalytics": "Full analytics",
+    "upcomingTitle": "Upcoming bookings",
+    "all": "All →",
+    "upcomingEmpty": {
+      "title": "No bookings yet",
+      "description": "As soon as guests start booking, their requests will appear here."
+    },
+    "statusShort": {
+      "confirmed": "Conf.",
+      "pending": "Pending"
+    },
+    "sourcesTitle": "Where guests come from",
+    "sourcesHint": "AI picks bring in {percent}% of guests — the fastest growing channel.",
+    "topVenuesTitle": "Venues by revenue",
+    "manage": "Manage →",
+    "venueBookings": "{count} bookings this month",
+    "reviewsTitle": "Latest reviews",
+    "allReviews": "All {count} →",
+    "reply": "Reply",
+    "occupancyTitle": "Occupancy {percent}",
+    "occupancyHint": "Share of requests that turned into actual visits over the period",
+    "occupancyAction": "How to improve it"
+  },
+  "newVenue": {
+    "metaTitle": "Add a venue",
+    "title": "Add a new venue",
+    "description": "A restaurant, café, bar, banquet hall or any bookable space. The listing goes live in the catalog right away."
+  }
+}

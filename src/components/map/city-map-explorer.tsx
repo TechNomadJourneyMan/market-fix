@@ -4,39 +4,40 @@ import * as React from 'react';
 import Link from 'next/link';
 import {
   Crosshair,
-  Filter,
   Gift,
   KeyRound,
   LayoutGrid,
   List,
+  Loader2,
+  Map as MapIcon,
   MapPin,
+  Percent,
   Search,
   Truck,
   UtensilsCrossed,
   X,
 } from 'lucide-react';
+import { toast } from 'sonner';
+
 import type { Coordinates, MarketplaceListing, VenueListItem } from '@/types';
+import type { MapPinKind } from '@/lib/map-config';
 import { DEMO_USER_LOCATION } from '@/data/seed/users';
 import { distanceKm } from '@/lib/geo';
 import { getOpenStatus } from '@/lib/hours';
 import { cn } from '@/lib/utils';
-import { formatPrice, formatRating } from '@/lib/format';
+import { useLocale, useT } from '@/i18n/client';
+import { formatDistanceI18n, formatPriceI18n, formatRatingI18n } from '@/i18n/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { VenueMap } from '@/components/map/venue-map';
+import type { MapBoundsRect } from '@/components/map/map-types';
 import { VoiceInputButton } from '@/components/ui/voice-input';
-import { toast } from 'sonner';
 
-type LayerMode = 'venues' | 'services' | 'all';
+type LayerMode = 'all' | 'venues' | 'services';
 
-type QuickFilter =
-  | 'all'
-  | 'open'
-  | 'promo'
-  | 'delivery'
-  | 'rental'
-  | 'gifts'
-  | 'nearby';
+type QuickFilter = 'all' | 'nearby' | 'open' | 'promo' | 'delivery' | 'rental' | 'gifts';
+
+type PaneMode = 'map' | 'list';
 
 interface CityMapExplorerProps {
   venues: VenueListItem[];
@@ -44,170 +45,249 @@ interface CityMapExplorerProps {
   className?: string;
 }
 
-const QUICK_FILTERS: { id: QuickFilter; label: string; icon: React.ReactNode }[] = [
-  { id: 'all', label: 'Всё', icon: <LayoutGrid className="size-3.5" /> },
-  { id: 'nearby', label: 'Рядом', icon: <MapPin className="size-3.5" /> },
-  { id: 'open', label: 'Открыто', icon: <UtensilsCrossed className="size-3.5" /> },
-  { id: 'promo', label: 'Акции', icon: <Filter className="size-3.5" /> },
-  { id: 'delivery', label: 'Доставка', icon: <Truck className="size-3.5" /> },
-  { id: 'rental', label: 'Аренда', icon: <KeyRound className="size-3.5" /> },
-  { id: 'gifts', label: 'Подарки', icon: <Gift className="size-3.5" /> },
+/** Единая модель для списка и для карты — гарантирует их синхронность. */
+interface ExplorerItem {
+  id: string;
+  kind: MapPinKind;
+  href: string;
+  title: string;
+  subtitle: string;
+  district: string;
+  price: number;
+  priceLabel?: string;
+  image: string;
+  rating: number;
+  distanceKm: number;
+  promo: boolean;
+  isOpen?: boolean;
+  searchIndex: string;
+  pin: VenueListItem;
+}
+
+const QUICK_FILTERS: { id: QuickFilter; icon: React.ElementType }[] = [
+  { id: 'all', icon: LayoutGrid },
+  { id: 'nearby', icon: MapPin },
+  { id: 'open', icon: UtensilsCrossed },
+  { id: 'promo', icon: Percent },
+  { id: 'delivery', icon: Truck },
+  { id: 'rental', icon: KeyRound },
+  { id: 'gifts', icon: Gift },
 ];
 
+const LAYERS: LayerMode[] = ['all', 'venues', 'services'];
+
 /**
- * Интерактивная карта в духе 2GIS: поиск, слои, фильтры, геолокация,
- * список результатов + пины с превью.
+ * Карта города: поиск, слои, быстрые фильтры, геолокация и список результатов.
+ * Desktop — список слева и карта справа, mobile — переключатель «Карта / Список».
  */
 export function CityMapExplorer({ venues, services, className }: CityMapExplorerProps) {
+  const t = useT('map');
+  const locale = useLocale();
+
   const [query, setQuery] = React.useState('');
   const [layer, setLayer] = React.useState<LayerMode>('all');
   const [quick, setQuick] = React.useState<QuickFilter>('all');
   const [origin, setOrigin] = React.useState<Coordinates>(DEMO_USER_LOCATION);
-  const [geoLabel, setGeoLabel] = React.useState('Демо-точка · Алматы');
+  const [originIsUser, setOriginIsUser] = React.useState(false);
   const [locating, setLocating] = React.useState(false);
   const [activeId, setActiveId] = React.useState<string | null>(null);
-  const [panelOpen, setPanelOpen] = React.useState(true);
-  const listRef = React.useRef<HTMLDivElement>(null);
+  const [pane, setPane] = React.useState<PaneMode>('map');
+  const [area, setArea] = React.useState<MapBoundsRect | null>(null);
 
-  const locateMe = () => {
-    if (!navigator.geolocation) {
-      toast.error('Геолокация недоступна в этом браузере');
+  const listRef = React.useRef<HTMLDivElement>(null);
+  const searchInputId = React.useId();
+
+  const locateMe = React.useCallback(() => {
+    if (!('geolocation' in navigator)) {
+      toast.error(t('toast.unsupported'));
       return;
     }
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setOrigin({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-        setGeoLabel('Ваше местоположение');
+        setOrigin({ lat: position.coords.latitude, lng: position.coords.longitude });
+        setOriginIsUser(true);
         setQuick('nearby');
         setLocating(false);
-        toast.success('Нашли вас на карте');
+        toast.success(t('toast.located'));
       },
       () => {
         setLocating(false);
-        toast.error('Не удалось получить геолокацию. Разрешите доступ в браузере.');
+        toast.error(t('toast.denied'));
       },
-      { enableHighAccuracy: true, timeout: 10000 },
+      { enableHighAccuracy: true, timeout: 10_000 },
     );
-  };
+  }, [t]);
 
-  const filteredVenues = React.useMemo(() => {
-    if (layer === 'services') return [];
-    const q = query.trim().toLowerCase();
-    let items = venues.map((venue) => ({
-      ...venue,
-      distanceKm: Number(
-        distanceKm(origin, venue.location.coordinates).toFixed(2),
-      ),
+  /** Собираем места и сервисы в один список с расстояниями от текущей точки. */
+  const allItems = React.useMemo<ExplorerItem[]>(() => {
+    const venueItems = venues.map<ExplorerItem>((venue) => {
+      const status = venue.workingHours.length ? getOpenStatus(venue.workingHours) : null;
+      return {
+        id: venue.id,
+        kind: 'venue',
+        href: `/venue/${venue.slug}`,
+        title: venue.name,
+        subtitle: venue.categoryName,
+        district: venue.location.districtName,
+        price: venue.averagePrice,
+        image: venue.coverImage,
+        rating: venue.rating.score,
+        distanceKm: distanceKm(origin, venue.location.coordinates),
+        promo: Boolean(venue.promotion),
+        isOpen: status?.isOpen,
+        searchIndex: [
+          venue.name,
+          venue.categoryName,
+          venue.location.districtName,
+          venue.location.address,
+          ...venue.tags,
+        ]
+          .join(' ')
+          .toLowerCase(),
+        pin: venue,
+      };
+    });
+
+    const serviceItems = services.map<ExplorerItem>((service) => ({
+      id: `svc-${service.id}`,
+      kind: service.vertical,
+      href: `/services/${service.slug}`,
+      title: service.name,
+      subtitle: service.tagline,
+      district: service.location.districtName,
+      price: service.priceFrom,
+      priceLabel: service.priceLabel,
+      image: service.coverImage,
+      rating: service.rating.score,
+      distanceKm: distanceKm(origin, service.location.coordinates),
+      promo: service.isPopular,
+      searchIndex: [
+        service.name,
+        service.tagline,
+        service.providerName,
+        service.location.districtName,
+        ...service.tags,
+      ]
+        .join(' ')
+        .toLowerCase(),
+      pin: serviceToMapPin(service),
     }));
 
-    if (q) {
-      items = items.filter(
-        (venue) =>
-          venue.name.toLowerCase().includes(q) ||
-          venue.categoryName.toLowerCase().includes(q) ||
-          venue.location.districtName.toLowerCase().includes(q) ||
-          venue.location.address.toLowerCase().includes(q),
-      );
+    return [...venueItems, ...serviceItems];
+  }, [venues, services, origin]);
+
+  const filtered = React.useMemo(() => {
+    const q = query.trim().toLowerCase();
+
+    let items = allItems.filter((item) => {
+      if (layer === 'venues' && item.kind !== 'venue') return false;
+      if (layer === 'services' && item.kind === 'venue') return false;
+      if (q && !item.searchIndex.includes(q)) return false;
+
+      switch (quick) {
+        case 'open':
+          return item.isOpen === true;
+        case 'promo':
+          return item.promo;
+        case 'delivery':
+          return item.kind === 'delivery' || item.kind === 'catering';
+        case 'rental':
+          return item.kind === 'rental' || item.kind === 'transport';
+        case 'gifts':
+          return item.kind === 'gifts';
+        default:
+          return true;
+      }
+    });
+
+    if (area) {
+      items = items.filter((item) => {
+        const { lat, lng } = item.pin.location.coordinates;
+        return (
+          lat <= area.north && lat >= area.south && lng <= area.east && lng >= area.west
+        );
+      });
     }
 
-    if (quick === 'promo') items = items.filter((venue) => Boolean(venue.promotion));
-    if (quick === 'open') {
-      items = items.filter((venue) => getOpenStatus(venue.workingHours).isOpen);
-    }
-    if (quick === 'nearby') {
-      items = [...items].sort((a, b) => (a.distanceKm ?? 99) - (b.distanceKm ?? 99));
-    }
-    if (quick === 'delivery' || quick === 'rental' || quick === 'gifts') {
-      return [];
+    if (quick === 'nearby' || originIsUser) {
+      items = [...items].sort((a, b) => a.distanceKm - b.distanceKm);
     }
 
     return items;
-  }, [venues, query, quick, layer, origin]);
+  }, [allItems, layer, quick, query, area, originIsUser]);
 
-  const filteredServices = React.useMemo(() => {
-    if (layer === 'venues') return [];
-    const q = query.trim().toLowerCase();
-    let items = services.map((item) => ({
-      ...item,
-      distanceKm: Number(
-        distanceKm(origin, item.location.coordinates).toFixed(2),
-      ),
-    }));
+  const kindById = React.useMemo(() => {
+    const map = new Map<string, MapPinKind>();
+    filtered.forEach((item) => map.set(item.id, item.kind));
+    return map;
+  }, [filtered]);
 
-    if (q) {
-      items = items.filter(
-        (item) =>
-          item.name.toLowerCase().includes(q) ||
-          item.tagline.toLowerCase().includes(q) ||
-          item.tags.some((tag) => tag.toLowerCase().includes(q)),
-      );
-    }
+  const hrefById = React.useMemo(() => {
+    const map = new Map<string, string>();
+    filtered.forEach((item) => map.set(item.id, item.href));
+    return map;
+  }, [filtered]);
 
-    if (quick === 'delivery') items = items.filter((item) => item.vertical === 'delivery');
-    if (quick === 'rental') items = items.filter((item) => item.vertical === 'rental');
-    if (quick === 'gifts') items = items.filter((item) => item.vertical === 'gifts');
-    if (quick === 'promo' || quick === 'open') {
-      if (layer === 'services') return items.filter((item) => item.isPopular);
-      if (quick === 'open' || quick === 'promo') return [];
-    }
-    if (quick === 'nearby') {
-      items = [...items].sort((a, b) => (a.distanceKm ?? 99) - (b.distanceKm ?? 99));
-    }
+  const pins = React.useMemo(
+    () => filtered.map((item) => ({ ...item.pin, distanceKm: item.distanceKm })),
+    [filtered],
+  );
 
-    return items;
-  }, [services, query, quick, layer, origin]);
-
-  /** Пины на карте — заведения; сервисы показываем в списке и как «виртуальные» пины через адаптер. */
-  const mapVenues = React.useMemo(() => {
-    const venuePins = filteredVenues;
-    const serviceAsPins: VenueListItem[] = filteredServices.map((item) =>
-      serviceToMapPin(item),
-    );
-    if (layer === 'venues') return venuePins;
-    if (layer === 'services') return serviceAsPins;
-    return [...venuePins, ...serviceAsPins];
-  }, [filteredVenues, filteredServices, layer]);
-
-  const handleActiveChange = (id: string | null) => {
+  /** Выбор пина на карте подсвечивает и подкручивает список к элементу. */
+  const handleMapActiveChange = React.useCallback((id: string | null) => {
     setActiveId(id);
-    if (!id || !listRef.current) return;
-    const target = listRef.current.querySelector(`[data-map-id="${id}"]`);
+    if (!id) return;
+    const target = listRef.current?.querySelector(`[data-item-id="${id}"]`);
     target?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  };
+  }, []);
 
-  const resultCount = filteredVenues.length + filteredServices.length;
+  const resetAll = React.useCallback(() => {
+    setQuery('');
+    setLayer('all');
+    setQuick('all');
+    setArea(null);
+    setActiveId(null);
+  }, []);
+
+  const hasFilters = Boolean(query) || layer !== 'all' || quick !== 'all' || Boolean(area);
+
+  const statusLine = [
+    originIsUser ? t('status.yourLocation') : t('status.demoOrigin'),
+    t('common:counts.results', { count: filtered.length }),
+    t('status.hint'),
+  ].join(' · ');
 
   return (
-    <div
-      className={cn(
-        'overflow-hidden rounded-3xl border bg-card shadow-soft',
-        className,
-      )}
-    >
-      {/* Панель поиска — как в 2GIS */}
+    <div className={cn('overflow-hidden rounded-3xl border bg-card shadow-soft', className)}>
+      {/* Панель поиска и фильтров */}
       <div className="flex flex-col gap-3 border-b p-3 sm:p-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <div className="relative min-w-0 flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <label className="sr-only" htmlFor={searchInputId}>
+              {t('searchLabel')}
+            </label>
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden
+            />
             <Input
+              id={searchInputId}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Поиск на карте: район, ресторан, доставка, аренда…"
-              className="h-11 pl-9 pr-20"
+              placeholder={t('searchPlaceholder')}
+              className="h-11 pl-9 pr-[4.75rem]"
+              autoComplete="off"
             />
             <div className="absolute right-1.5 top-1/2 flex -translate-y-1/2 items-center gap-1">
               {query ? (
                 <button
                   type="button"
                   onClick={() => setQuery('')}
-                  className="rounded-lg p-1.5 text-muted-foreground hover:bg-secondary"
-                  aria-label="Очистить"
+                  className="focus-ring rounded-lg p-1.5 text-muted-foreground hover:bg-secondary"
+                  aria-label={t('common:actions.clear')}
                 >
-                  <X className="size-4" />
+                  <X className="size-4" aria-hidden />
                 </button>
               ) : null}
               <VoiceInputButton
@@ -223,177 +303,237 @@ export function CityMapExplorer({ venues, services, className }: CityMapExplorer
               type="button"
               variant="outline"
               size="sm"
-              className="h-11 gap-1.5"
+              className="h-11 min-w-11 gap-1.5"
               onClick={locateMe}
               disabled={locating}
+              aria-label={t('controls.locate')}
             >
-              <Crosshair className={cn('size-4', locating && 'animate-spin')} />
-              <span className="hidden sm:inline">Где я</span>
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="h-11 gap-1.5 lg:hidden"
-              onClick={() => setPanelOpen((value) => !value)}
-            >
-              <List className="size-4" />
-              Список
+              {locating ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+              ) : (
+                <Crosshair className="size-4" aria-hidden />
+              )}
+              <span className="hidden truncate sm:inline">{t('controls.locate')}</span>
             </Button>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex rounded-xl border p-0.5">
-            {(
-              [
-                ['all', 'Всё'],
-                ['venues', 'Места'],
-                ['services', 'Сервисы'],
-              ] as const
-            ).map(([id, label]) => (
+          <div
+            className="flex rounded-xl border p-0.5"
+            role="group"
+            aria-label={t('layers.label')}
+          >
+            {LAYERS.map((id) => (
               <button
                 key={id}
                 type="button"
                 onClick={() => setLayer(id)}
+                aria-pressed={layer === id}
                 className={cn(
-                  'rounded-lg px-3 py-1.5 text-xs font-medium transition-colors',
+                  'focus-ring min-h-9 rounded-lg px-3 text-xs font-medium transition-colors',
                   layer === id
                     ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground',
                 )}
               >
-                {label}
+                {t(`layers.${id}`)}
               </button>
             ))}
           </div>
 
-          <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
-            {QUICK_FILTERS.map((item) => (
+          <div
+            className="no-scrollbar -mx-1 flex flex-1 gap-1.5 overflow-x-auto px-1"
+            role="group"
+            aria-label={t('filters.label')}
+          >
+            {QUICK_FILTERS.map(({ id, icon: Icon }) => (
               <button
-                key={item.id}
+                key={id}
                 type="button"
-                onClick={() => setQuick(item.id)}
+                onClick={() => setQuick(id)}
+                aria-pressed={quick === id}
                 className={cn(
-                  'inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
-                  quick === item.id
+                  'focus-ring inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-xs font-medium transition-colors',
+                  quick === id
                     ? 'border-primary bg-primary/10 text-primary'
                     : 'bg-background text-muted-foreground hover:text-foreground',
                 )}
               >
-                {item.icon}
-                {item.label}
+                <Icon className="size-3.5" aria-hidden />
+                {t(`filters.${id}`)}
               </button>
             ))}
           </div>
+
+          {hasFilters ? (
+            <button
+              type="button"
+              onClick={resetAll}
+              className="focus-ring inline-flex min-h-9 shrink-0 items-center gap-1 rounded-full px-2.5 text-xs font-medium text-muted-foreground hover:text-foreground"
+            >
+              <X className="size-3.5" aria-hidden />
+              {t('common:actions.reset')}
+            </button>
+          ) : null}
         </div>
 
-        <p className="text-xs text-muted-foreground">
-          {geoLabel} · найдено {resultCount} · масштабируйте колесом / жестом · перетаскивайте карту
+        <p className="text-xs text-muted-foreground" aria-live="polite">
+          {statusLine}
         </p>
+
+        {/* Переключатель «Карта / Список» — только мобильный сценарий */}
+        <div className="flex rounded-xl border p-0.5 lg:hidden" role="group">
+          {(
+            [
+              ['map', MapIcon, t('controls.showMap')],
+              ['list', List, t('controls.showList')],
+            ] as const
+          ).map(([id, Icon, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setPane(id)}
+              aria-pressed={pane === id}
+              className={cn(
+                'focus-ring inline-flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-lg text-sm font-medium transition-colors',
+                pane === id
+                  ? 'bg-secondary text-foreground'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              <Icon className="size-4" aria-hidden />
+              {label}
+              {id === 'list' ? (
+                <span className="text-xs text-muted-foreground">({filtered.length})</span>
+              ) : null}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="grid lg:grid-cols-[minmax(0,340px)_1fr]">
-        {/* Список как в 2GIS */}
+      <div className="lg:grid lg:grid-cols-[minmax(0,20.5rem)_1fr]">
         <div
           ref={listRef}
           className={cn(
-            'max-h-[420px] space-y-2 overflow-y-auto border-b p-3 lg:max-h-[560px] lg:border-b-0 lg:border-r',
-            !panelOpen && 'hidden lg:block',
+            'max-h-[60vh] space-y-2 overflow-y-auto border-b p-3 lg:max-h-[34rem] lg:border-b-0 lg:border-r',
+            pane === 'map' && 'hidden lg:block',
           )}
         >
-          {resultCount === 0 ? (
-            <div className="rounded-2xl border border-dashed p-6 text-center text-sm text-muted-foreground">
-              Ничего не найдено. Смените фильтр или сбросьте поиск.
+          {filtered.length === 0 ? (
+            <div className="rounded-2xl border border-dashed p-6 text-center">
+              <p className="text-sm font-semibold">{t('list.emptyTitle')}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t('list.emptyDescription')}
+              </p>
+              {hasFilters ? (
+                <Button size="sm" variant="outline" className="mt-3 h-9" onClick={resetAll}>
+                  {t('common:actions.reset')}
+                </Button>
+              ) : null}
             </div>
           ) : null}
 
-          {filteredVenues.map((venue) => (
-            <button
-              key={venue.id}
-              type="button"
-              data-map-id={venue.id}
-              onClick={() => setActiveId(venue.id)}
-              onMouseEnter={() => setActiveId(venue.id)}
-              className={cn(
-                'flex w-full gap-3 rounded-2xl border p-2.5 text-left transition-all',
-                activeId === venue.id
-                  ? 'border-primary bg-primary/5'
-                  : 'hover:border-primary/30',
-              )}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={venue.coverImage}
-                alt=""
-                className="size-16 shrink-0 rounded-xl object-cover"
-              />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold">{venue.name}</p>
-                <p className="truncate text-xs text-muted-foreground">
-                  {venue.categoryName} · {formatRating(venue.rating.score)}
-                </p>
-                <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                  {venue.location.districtName}
-                  {venue.distanceKm !== undefined ? ` · ${venue.distanceKm} км` : ''}
-                </p>
-                <p className="mt-1 text-xs font-medium text-primary">
-                  от {formatPrice(venue.averagePrice, false)} ₸
-                </p>
-              </div>
-            </button>
-          ))}
-
-          {filteredServices.map((item) => (
-            <Link
+          {filtered.map((item) => (
+            <ResultRow
               key={item.id}
-              href={`/services/${item.slug}`}
-              data-map-id={`svc-${item.id}`}
-              onMouseEnter={() => setActiveId(`svc-${item.id}`)}
-              className={cn(
-                'flex w-full gap-3 rounded-2xl border p-2.5 text-left transition-all',
-                activeId === `svc-${item.id}`
-                  ? 'border-primary bg-primary/5'
-                  : 'hover:border-primary/30',
-              )}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={item.coverImage}
-                alt=""
-                className="size-16 shrink-0 rounded-xl object-cover"
-              />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold">{item.name}</p>
-                <p className="truncate text-xs text-muted-foreground">{item.tagline}</p>
-                <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                  {item.location.districtName}
-                  {item.distanceKm !== undefined ? ` · ${item.distanceKm} км` : ''}
-                </p>
-                <p className="mt-1 text-xs font-medium text-primary">{item.priceLabel}</p>
-              </div>
-            </Link>
+              item={item}
+              active={activeId === item.id}
+              locale={locale}
+              unitM={t('common:units.m')}
+              unitKm={t('common:units.km')}
+              fromLabel={t('common:labels.from')}
+              onHover={() => setActiveId(item.id)}
+              onFocus={() => setActiveId(item.id)}
+            />
           ))}
         </div>
 
-        <VenueMap
-          venues={mapVenues}
-          origin={origin}
-          activeVenueId={activeId ?? undefined}
-          onActiveChange={handleActiveChange}
-          className="h-[52vh] rounded-none border-0 lg:h-[560px]"
-          enableWheelZoom
-          showLocateControl={false}
-          mapLabel={`Карта Алматы · ${mapVenues.length} точек`}
-        />
+        <div className={cn(pane === 'list' && 'hidden lg:block')}>
+          <VenueMap
+            venues={pins}
+            origin={origin}
+            originIsUser={originIsUser}
+            activeVenueId={activeId ?? undefined}
+            onActiveChange={handleMapActiveChange}
+            className="h-[58vh] rounded-none border-0 shadow-none lg:h-[34rem]"
+            locating={locating}
+            onLocateRequest={locateMe}
+            resolveKind={(venue) => kindById.get(venue.id) ?? 'venue'}
+            resolveHref={(venue) => hrefById.get(venue.id) ?? `/venue/${venue.slug}`}
+            onSearchArea={setArea}
+            onResetArea={() => setArea(null)}
+            areaFilterActive={Boolean(area)}
+            onResetFilters={resetAll}
+            mapLabel={`${t(`layers.${layer}`)} · ${t('status.points', { count: pins.length })}`}
+          />
+        </div>
       </div>
     </div>
   );
 }
 
-function serviceToMapPin(
-  item: MarketplaceListing & { distanceKm?: number },
-): VenueListItem {
+/** Карточка результата в списке: связана с пином через data-item-id. */
+function ResultRow({
+  item,
+  active,
+  locale,
+  unitM,
+  unitKm,
+  fromLabel,
+  onHover,
+  onFocus,
+}: {
+  item: ExplorerItem;
+  active: boolean;
+  locale: ReturnType<typeof useLocale>;
+  unitM: string;
+  unitKm: string;
+  fromLabel: string;
+  onHover: () => void;
+  onFocus: () => void;
+}) {
+  const distance = formatDistanceI18n(item.distanceKm, locale, { m: unitM, km: unitKm });
+
+  return (
+    <Link
+      href={item.href}
+      data-item-id={item.id}
+      onMouseEnter={onHover}
+      onFocus={onFocus}
+      aria-current={active}
+      className={cn(
+        'focus-ring flex w-full gap-3 rounded-2xl border p-2.5 text-left transition-colors',
+        active ? 'border-primary bg-primary/5' : 'hover:border-primary/30 hover:bg-secondary/40',
+      )}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={item.image}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        className="size-16 shrink-0 rounded-xl object-cover"
+      />
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-semibold">{item.title}</p>
+        <p className="truncate text-xs text-muted-foreground">
+          {item.subtitle} · {formatRatingI18n(item.rating, locale)}
+        </p>
+        <p className="mt-0.5 truncate text-xs text-muted-foreground">
+          {item.district}
+          {distance ? ` · ${distance}` : ''}
+        </p>
+        <p className="mt-1 truncate text-xs font-semibold text-primary">
+          {item.priceLabel ?? `${fromLabel} ${formatPriceI18n(item.price, locale)}`}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
+/** Сервис → пин карты: переиспользуем модель VenueListItem без изменения типов. */
+function serviceToMapPin(item: MarketplaceListing & { distanceKm?: number }): VenueListItem {
   return {
     id: `svc-${item.id}`,
     slug: item.slug,

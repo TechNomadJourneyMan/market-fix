@@ -1,0 +1,42 @@
+{
+  "skipToContent": "Негізгі мазмұнға өту",
+  "menu": "Мәзір",
+  "closeMenu": "Мәзірді жабу",
+  "links": {
+    "home": "Басты бет",
+    "catalog": "Каталог",
+    "services": "Сервистер",
+    "ai": "AI-таңдау",
+    "merge": "Merge Menu",
+    "business": "Бизнеске",
+    "cart": "Себет",
+    "account": "Профиль",
+    "bookings": "Брондарым",
+    "favorites": "Таңдаулылар",
+    "notifications": "Хабарламалар"
+  },
+  "searchPlaceholder": "Қайда барамыз?",
+  "search": "Іздеу",
+  "auth": {
+    "login": "Кіру",
+    "register": "Тіркелу",
+    "logout": "Шығу",
+    "businessCabinet": "Бизнес кабинеті"
+  },
+  "theme": {
+    "toggle": "Тақырыпты ауыстыру",
+    "light": "Ашық",
+    "dark": "Күңгірт",
+    "system": "Жүйелік"
+  },
+  "language": {
+    "label": "Интерфейс тілі",
+    "change": "Тілді ауыстыру"
+  },
+  "footer": {
+    "guests": "Қонақтарға",
+    "business": "Бизнеске",
+    "categories": "Санаттар",
+    "tagline": "Алматыдағы орындарды табамыз. 30 секундта брондау, шынайы пікірлер және оқиғаға сай AI-таңдау."
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "title": "Merge Menu",
+    "description": "Мейрамхананы достарыңызбен бірге таңдаңыз — чат, дауыс беру және AI-шортлист.",
+    "roomTitle": "Merge Menu бөлмесі"
+  },
+  "lobby": {
+    "badge": "Merge Menu",
+    "title": "Орынды достарыңызбен бірге таңдаңыз",
+    "description": "Интерактивті чат: әркім өз көңіл-күйі мен бюджетін жазады, AI шортлист жинайды, сіздер дауыс бересіздер — сәйкестік табылғанша.",
+    "tabCreate": "Бөлме құру",
+    "tabJoin": "Код бойынша кіру",
+    "nameLabel": "Атыңыз",
+    "namePlaceholder": "Әлішер",
+    "topicLabel": "Кездесу тақырыбы",
+    "topicPlaceholder": "Жұманың кешкі асы / Туған күн",
+    "codeLabel": "Бөлме коды",
+    "codePlaceholder": "ABC123",
+    "submitCreate": "Құру және шақыру",
+    "submitJoin": "Қосылу",
+    "errors": {
+      "name": "Атыңызды көрсетіңіз",
+      "generic": "Қате"
+    }
+  },
+  "room": {
+    "participants": {
+      "one": "{count} қатысушы",
+      "other": "{count} қатысушы"
+    },
+    "statusLabel": "күйі",
+    "statusMatched": "сәйкестік табылды",
+    "statusChoosing": "таңдап отырмыз",
+    "invite": "Шақыру",
+    "linkCopied": "Сілтеме көшірілді",
+    "bookMatch": "Сәйкестікті брондау",
+    "matchTitle": "Сәйкестік: «{name}» — компания келісті",
+    "notFound": "Бөлме табылмады",
+    "joinFirst": "Алдымен Merge Menu басты бетінен бөлмеге кіріңіз",
+    "error": "Қате",
+    "preferencesTitle": "Қалауларыңыз",
+    "cuisine": "Асхана",
+    "vibe": "Көңіл-күй",
+    "budget": "Бір адамға бюджет",
+    "budgetUpTo": "{price} дейін",
+    "freeText": "Өз сөзіңізбен",
+    "freeTextPlaceholder": "Тыныш, террасасы бар, қатты музыкасыз…",
+    "refresh": "Таңдауды жаңарту",
+    "inRoom": "Бөлмеде",
+    "host": "хост",
+    "chatTitle": "Бөлме чаты",
+    "chatPlaceholder": "Достарыңызға жазыңыз…",
+    "sendAria": "Хабарлама жіберу",
+    "shortlistTitle": "AI шортлисті",
+    "shortlistEmpty": "Қалауларыңызды жіберіңіз — нұсқалар осында шығады.",
+    "priceFrom": "{price} бастап",
+    "voteAria": "{name} үшін дауыс беру",
+    "book": "Брондау"
+  },
+  "vibes": {
+    "cozy": "Жайлы",
+    "lively": "Көңілді",
+    "quiet": "Тыныш",
+    "premium": "Премиум",
+    "trendy": "Сәнді",
+    "casual": "Қарапайым"
+  }
+}

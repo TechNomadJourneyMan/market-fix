@@ -1,0 +1,134 @@
+{
+  "notFound": "Орын табылмады",
+  "breadcrumbs": {
+    "home": "Басты бет",
+    "catalog": "Каталог"
+  },
+  "verified": "Тексерілген",
+  "promoBadge": "Акция бойынша −{percent}%",
+  "capacityGuests": "{count} қонаққа дейін",
+  "sections": {
+    "about": "Орын туралы",
+    "services": "Қызметтер",
+    "menu": "Мәзір",
+    "photos": "Фото",
+    "reviews": "Пікірлер",
+    "location": "Карта және байланыс"
+  },
+  "about": {
+    "title": "Орын туралы",
+    "averageCheck": "Орташа шот",
+    "averageCheckHint": "бір қонаққа",
+    "capacity": "Сыйымдылығы",
+    "capacityValue": "{count} қонақ",
+    "tables": "{count} үстел",
+    "bookingsMonth": "Айдағы брондау",
+    "bookingsMonthHint": "платформа арқылы"
+  },
+  "services": {
+    "title": "Қызметтер",
+    "description": "Кәдімгі кешкі астан басқа орын ұйымдастыра алатын бәрі.",
+    "unavailable": "Уақытша қолжетімсіз",
+    "from": "{price} бастап",
+    "groups": {
+      "dining": "Асхана және үстел",
+      "events": "Іс-шаралар",
+      "delivery": "Жеткізу",
+      "entertainment": "Ойын-сауық",
+      "comfort": "Қолайлылық"
+    }
+  },
+  "products": {
+    "title": "Тауарлар",
+    "description": "Сертификаттар, жинақтар және депозиттер — алдын ала сатып алуға болады.",
+    "outOfStock": "Қоймада жоқ"
+  },
+  "menu": {
+    "title": "Мәзір және бағалар",
+    "summary": "{sections} бөлімде {items} позиция",
+    "hit": "Хит",
+    "vegetarian": "Вегетариандық",
+    "spicy": "Ащы",
+    "allergens": "Аллергендер: {list}",
+    "disclaimer": "Мәзір мен бағалар өзгеше болуы мүмкін. Нақты құрамын орыннан сұраңыз."
+  },
+  "photos": {
+    "title": "Фотосуреттер",
+    "all": "Барлық фото · {count}",
+    "dialogTitle": "Фотосуреттер — {name}",
+    "previous": "Алдыңғы фото",
+    "next": "Келесі фото"
+  },
+  "reviews": {
+    "title": "Қонақтардың пікірлері",
+    "description": "Тек шынымен болғандардан. Орын пікірлерге жауап береді.",
+    "verifiedGuest": "Тексерілген қонақ",
+    "helpful": "Пайдалы",
+    "reply": "«{name}» орнының жауабы",
+    "showAllRatings": "Барлық бағаларды көрсету",
+    "showMore": "Тағы {count} көрсету",
+    "sort": {
+      "recent": "Алдымен жаңалары",
+      "helpful": "Алдымен пайдалылары",
+      "rating_desc": "Алдымен жоғары бағалар",
+      "rating_asc": "Алдымен төмен бағалар"
+    },
+    "criteria": {
+      "food": "Асхана",
+      "service": "Сервис",
+      "atmosphere": "Атмосфера",
+      "price": "Баға/сапа"
+    },
+    "occasions": {
+      "date": "Кездесу",
+      "family": "Жанұямен",
+      "business": "Іскерлік кездесу",
+      "friends": "Достармен",
+      "celebration": "Мереке",
+      "solo": "Жалғыз"
+    },
+    "empty": {
+      "title": "Мұндай бағамен пікір әзірге жоқ",
+      "description": "Барлық пікірлерді қарап көріңіз — ой қалыптастыруға жетеді.",
+      "action": "Барлығын көрсету"
+    }
+  },
+  "location": {
+    "title": "Қалай жетуге болады",
+    "workingHours": "Жұмыс уақыты",
+    "contacts": "Байланыс",
+    "dayOff": "Демалыс",
+    "travelEstimate": "≈ орталықтан {drive} мин көлікпен · {walk} мин жаяу",
+    "directions": "Жету"
+  },
+  "status": {
+    "hours": "Жұмыс уақыты",
+    "openUntil": "{time} дейін ашық",
+    "opensAt": "{time} ашылады",
+    "opensTomorrow": "Ертең {time} ашылады",
+    "opensOn": "{weekday} күні {time} ашылады",
+    "closed": "Жабық"
+  },
+  "booking": {
+    "averageCheckHint": "бір адамға орташа шот",
+    "bookTable": "Үстел брондау",
+    "freeNote": "Брондау тегін. Растау — 15 минутта.",
+    "capacity": "{count} қонаққа дейін сыйымдылық",
+    "capacityHint": "{zones} аймақта {tables} үстел",
+    "holdTitle": "Үстел 20 минут сақталады",
+    "holdHint": "Келуге 2 сағат қалғанға дейін бас тарту тегін",
+    "bookingsMonth": "Айына {count} брондау",
+    "bookingsMonthHint": "Танымал орын — алдын ала брондаған дұрыс",
+    "verifiedBadge": "Орын платформамен тексерілген"
+  },
+  "similar": {
+    "title": "Жақындағы ұқсас орындар",
+    "description": "Егер бұл сай келмесе — тағы {count} қараңыз",
+    "all": "Барлық ұқсастар →"
+  },
+  "share": {
+    "action": "Бөлісу",
+    "text": "Market Fix-те «{name}» орнын көр",
+    "copied": "Сілтеме көшірілді"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "header": {
+    "homeAria": "Go to homepage",
+    "cartAria": "Booking cart",
+    "profileMenuAria": "Profile menu",
+    "myBookings": "My bookings",
+    "settings": "Settings",
+    "createAccount": "Create an account",
+    "connectBusiness": "List your business",
+    "themeLabel": "Appearance"
+  },
+  "tabbar": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "services": "Services",
+    "ai": "AI",
+    "cart": "Cart"
+  },
+  "footer": {
+    "guests": {
+      "catalog": "Venue catalog",
+      "services": "Services: delivery and rental",
+      "ai": "AI venue picks",
+      "merge": "Merge Menu with friends",
+      "availableNow": "Free right now",
+      "bookings": "My bookings"
+    },
+    "business": {
+      "connect": "List your venue",
+      "analytics": "Dashboard and analytics",
+      "bookings": "Manage bookings",
+      "reviews": "Working with reviews"
+    },
+    "copyright": "© {year} Market Fix. Venue catalog for Almaty."
+  }
+}

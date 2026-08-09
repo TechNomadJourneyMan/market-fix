@@ -1,0 +1,134 @@
+{
+  "notFound": "Заведение не найдено",
+  "breadcrumbs": {
+    "home": "Главная",
+    "catalog": "Каталог"
+  },
+  "verified": "Проверено",
+  "promoBadge": "−{percent}% по акции",
+  "capacityGuests": "до {count} гостей",
+  "sections": {
+    "about": "О месте",
+    "services": "Услуги",
+    "menu": "Меню",
+    "photos": "Фото",
+    "reviews": "Отзывы",
+    "location": "Карта и контакты"
+  },
+  "about": {
+    "title": "О заведении",
+    "averageCheck": "Средний чек",
+    "averageCheckHint": "на одного гостя",
+    "capacity": "Вместимость",
+    "capacityValue": "{count} гостей",
+    "tables": "{count} столов",
+    "bookingsMonth": "Броней за месяц",
+    "bookingsMonthHint": "через платформу"
+  },
+  "services": {
+    "title": "Услуги",
+    "description": "Всё, что заведение может организовать помимо обычного ужина.",
+    "unavailable": "Временно недоступно",
+    "from": "от {price}",
+    "groups": {
+      "dining": "Кухня и стол",
+      "events": "Мероприятия",
+      "delivery": "Доставка",
+      "entertainment": "Развлечения",
+      "comfort": "Комфорт"
+    }
+  },
+  "products": {
+    "title": "Товары",
+    "description": "Сертификаты, наборы и депозиты — можно купить заранее.",
+    "outOfStock": "Нет в наличии"
+  },
+  "menu": {
+    "title": "Меню и цены",
+    "summary": "{items} позиций в {sections} разделах",
+    "hit": "Хит",
+    "vegetarian": "Вегетарианское",
+    "spicy": "Острое",
+    "allergens": "Аллергены: {list}",
+    "disclaimer": "Меню и цены могут отличаться. Актуальный состав уточняйте у заведения."
+  },
+  "photos": {
+    "title": "Фотографии",
+    "all": "Все фото · {count}",
+    "dialogTitle": "Фотографии — {name}",
+    "previous": "Предыдущее фото",
+    "next": "Следующее фото"
+  },
+  "reviews": {
+    "title": "Отзывы гостей",
+    "description": "Только от тех, кто действительно был. Заведение отвечает на отзывы.",
+    "verifiedGuest": "Проверенный гость",
+    "helpful": "Полезно",
+    "reply": "Ответ заведения «{name}»",
+    "showAllRatings": "Показать все оценки",
+    "showMore": "Показать ещё {count}",
+    "sort": {
+      "recent": "Сначала свежие",
+      "helpful": "Сначала полезные",
+      "rating_desc": "Сначала высокие оценки",
+      "rating_asc": "Сначала низкие оценки"
+    },
+    "criteria": {
+      "food": "Кухня",
+      "service": "Сервис",
+      "atmosphere": "Атмосфера",
+      "price": "Цена/качество"
+    },
+    "occasions": {
+      "date": "Свидание",
+      "family": "С семьёй",
+      "business": "Деловая встреча",
+      "friends": "С друзьями",
+      "celebration": "Праздник",
+      "solo": "Один"
+    },
+    "empty": {
+      "title": "С такой оценкой отзывов пока нет",
+      "description": "Попробуйте посмотреть все отзывы — их достаточно, чтобы составить мнение.",
+      "action": "Показать все"
+    }
+  },
+  "location": {
+    "title": "Как добраться",
+    "workingHours": "Часы работы",
+    "contacts": "Контакты",
+    "dayOff": "Выходной",
+    "travelEstimate": "≈ {drive} мин на авто · {walk} мин пешком от центра",
+    "directions": "Доехать"
+  },
+  "status": {
+    "hours": "Часы работы",
+    "openUntil": "Открыто до {time}",
+    "opensAt": "Откроется в {time}",
+    "opensTomorrow": "Откроется завтра в {time}",
+    "opensOn": "Откроется в {weekday} в {time}",
+    "closed": "Закрыто"
+  },
+  "booking": {
+    "averageCheckHint": "средний чек на человека",
+    "bookTable": "Забронировать стол",
+    "freeNote": "Бронирование бесплатно. Подтверждение за 15 минут.",
+    "capacity": "Вместимость до {count} гостей",
+    "capacityHint": "{tables} столов в {zones} зонах",
+    "holdTitle": "Стол держат 20 минут",
+    "holdHint": "Отмена бесплатна за 2 часа до визита",
+    "bookingsMonth": "{count} броней за месяц",
+    "bookingsMonthHint": "Популярное место — лучше бронировать заранее",
+    "verifiedBadge": "Заведение проверено платформой"
+  },
+  "similar": {
+    "title": "Похожие места рядом",
+    "description": "Если это не подойдёт — посмотрите ещё {count}",
+    "all": "Все похожие →"
+  },
+  "share": {
+    "action": "Поделиться",
+    "text": "Смотри «{name}» на Market Fix",
+    "copied": "Ссылка скопирована"
+  }
+}

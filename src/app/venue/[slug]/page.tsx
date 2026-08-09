@@ -317,6 +317,8 @@ export default async function VenuePage({ params }: { params: Promise<{ slug: st
             <VenueMap
               venues={[toVenueListItem(venue)]}
               className="h-[320px]"
+              compact
+              showLocateControl={false}
             />
 
             <div className="grid gap-6 pt-2 sm:grid-cols-2">

@@ -1,0 +1,36 @@
+{
+  "header": {
+    "homeAria": "На главную",
+    "cartAria": "Корзина броней",
+    "profileMenuAria": "Меню профиля",
+    "myBookings": "Мои бронирования",
+    "settings": "Настройки",
+    "createAccount": "Создать аккаунт",
+    "connectBusiness": "Подключить бизнес",
+    "themeLabel": "Тема оформления"
+  },
+  "tabbar": {
+    "home": "Главная",
+    "catalog": "Каталог",
+    "services": "Сервисы",
+    "ai": "AI",
+    "cart": "Корзина"
+  },
+  "footer": {
+    "guests": {
+      "catalog": "Каталог заведений",
+      "services": "Сервисы: доставка и аренда",
+      "ai": "AI-подбор места",
+      "merge": "Merge Menu с друзьями",
+      "availableNow": "Свободно сейчас",
+      "bookings": "Мои бронирования"
+    },
+    "business": {
+      "connect": "Подключить заведение",
+      "analytics": "Дашборд и аналитика",
+      "bookings": "Управление бронями",
+      "reviews": "Работа с отзывами"
+    },
+    "copyright": "© {year} Market Fix. Каталог заведений Алматы."
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "title": "Бизнес кабинеті",
+    "template": "%s · Бизнес · Market Fix"
+  },
+  "header": {
+    "verified": "Тексерілген",
+    "plan": "{plan} тарифі",
+    "summary": "{venues} · комиссия {commission}% · {legalName}",
+    "guestView": "Қонақтар қалай көреді"
+  },
+  "plans": {
+    "free": "Тегін",
+    "pro": "Pro",
+    "premium": "Premium"
+  },
+  "nav": {
+    "dashboard": "Дашборд",
+    "venues": "Менің орындарым",
+    "bookings": "Брондаулар",
+    "menu": "Мәзір және қызметтер",
+    "products": "Тауарлар",
+    "photos": "Фотосуреттер",
+    "reviews": "Пікірлер",
+    "analytics": "Аналитика"
+  },
+  "dashboard": {
+    "title": "Дашборд",
+    "description": "Соңғы 30 күндегі негізгі көрсеткіштер",
+    "metrics": {
+      "views": "Карточка қаралымы",
+      "bookings": "Брондаулар",
+      "revenue": "Табыс",
+      "conversion": "Конверсия",
+      "conversionHint": "қаралым → брондау"
+    },
+    "chartTitle": "Күндер бойынша брондаулар",
+    "chartSubtitle": "Айына барлығы {bookings} · орташа чек {averageCheck}",
+    "fullAnalytics": "Толық аналитика",
+    "upcomingTitle": "Жақындағы брондаулар",
+    "all": "Барлығы →",
+    "upcomingEmpty": {
+      "title": "Әзірге брондау жоқ",
+      "description": "Қонақтар брондай бастаған бойда өтінімдер осында көрінеді."
+    },
+    "statusShort": {
+      "confirmed": "Раст.",
+      "pending": "Күтуде"
+    },
+    "sourcesTitle": "Қонақтар қайдан келеді",
+    "sourcesHint": "AI-таңдау қонақтардың {percent}%-ін әкеледі — бұл ең жылдам өсіп келе жатқан арна.",
+    "topVenuesTitle": "Табыс бойынша орындар",
+    "manage": "Басқару →",
+    "venueBookings": "айына {count} брондау",
+    "reviewsTitle": "Жаңа пікірлер",
+    "allReviews": "Барлық {count} →",
+    "reply": "Жауап беру",
+    "occupancyTitle": "Толымдылық {percent}",
+    "occupancyHint": "Кезең ішінде өтінімдердің қаншасы нақты сапарға айналғаны",
+    "occupancyAction": "Қалай жақсартуға болады"
+  },
+  "newVenue": {
+    "metaTitle": "Орын қосу",
+    "title": "Жаңа орын қосу",
+    "description": "Мейрамхана, кафе, бар, банкет залы немесе брондауға жарамды кез келген алаң. Карточка каталогта бірден пайда болады."
+  }
+}

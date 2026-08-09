@@ -1,0 +1,61 @@
+{
+  "brand": "Market Fix",
+  "city": "Алматы",
+  "units": {
+    "m": "м",
+    "km": "км",
+    "currency": "₸",
+    "perPerson": "бір адамға",
+    "minutes": "мин"
+  },
+  "actions": {
+    "more": "Толығырақ",
+    "open": "Ашу",
+    "close": "Жабу",
+    "clear": "Тазалау",
+    "reset": "Қалпына келтіру",
+    "retry": "Қайталау",
+    "apply": "Қолдану",
+    "cancel": "Болдырмау",
+    "save": "Сақтау",
+    "book": "Брондау",
+    "rent": "Жалға алу",
+    "order": "Тапсырыс беру",
+    "directions": "Бағыт",
+    "share": "Бөлісу",
+    "favorite": "Таңдаулыға қосу",
+    "showAll": "Барлығын көру"
+  },
+  "labels": {
+    "from": "бастап",
+    "rating": "рейтинг",
+    "verified": "Платформа тексерген",
+    "popular": "Танымал",
+    "promo": "Акция",
+    "openNow": "Ашық",
+    "closed": "Жабық",
+    "loading": "Жүктелуде…"
+  },
+  "counts": {
+    "results": {
+      "one": "{count} нәтиже",
+      "other": "{count} нәтиже"
+    },
+    "venues": {
+      "one": "{count} орын",
+      "other": "{count} орын"
+    },
+    "reviews": {
+      "one": "{count} пікір",
+      "other": "{count} пікір"
+    },
+    "guests": {
+      "one": "{count} қонақ",
+      "other": "{count} қонақ"
+    },
+    "offers": {
+      "one": "{count} ұсыныс",
+      "other": "{count} ұсыныс"
+    }
+  }
+}

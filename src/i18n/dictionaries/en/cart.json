@@ -1,0 +1,62 @@
+{
+  "title": "Cart",
+  "subtitle": "Bookings and services · {count} · about {total}",
+  "positions": {
+    "one": "{count} item",
+    "other": "{count} items"
+  },
+  "clear": "Clear",
+  "remove": "Remove",
+  "guestsOption": "{count} guests",
+  "checkout": {
+    "title": "Checkout",
+    "nameLabel": "Name",
+    "namePlaceholder": "Aigerim",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+7 700 000 00 00",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@email.kz",
+    "total": "Estimated total",
+    "submit": "Book and pay",
+    "note": "Banquets and clubs require a deposit. Ordinary tables are confirmed right away.",
+    "errorContacts": "Please fill in your contact details",
+    "success": "Bookings created",
+    "error": "Checkout failed",
+    "promoLabel": "Promo code",
+    "promoPlaceholder": "Enter promo code",
+    "promoApply": "Apply"
+  },
+  "empty": {
+    "title": "Your cart is empty",
+    "description": "Table bookings and service orders (delivery, rentals, gifts) land here. Collect a few items and pay for them together.",
+    "action": "Browse venues",
+    "secondaryAction": "Services"
+  },
+  "payment": {
+    "metaTitle": "Booking payment",
+    "metaDescription": "Check your order details and confirm the deposit payment.",
+    "back": "Back to the venue",
+    "title": "One step left — confirm the payment",
+    "description": "Booking {reference} is being held for you. Once paid, the status changes to “Confirmed” and the deposit goes towards your bill at the venue.",
+    "methodTitle": "Payment method",
+    "awaitingPayment": "Awaiting payment",
+    "orderTitle": "Order",
+    "subtotal": "Subtotal",
+    "commission": "Service fee · {percent}%",
+    "discount": "Promo discount",
+    "total": "Total",
+    "depositNote": "The deposit is deducted from your final bill at the venue. Cancel 2 hours before the visit and it is refunded in full.",
+    "demoCard": "Demo form — no real card details are collected",
+    "pay": "Pay {amount}",
+    "paying": "Processing payment…",
+    "secured": "Payment is secure. The deposit goes towards your bill at the venue.",
+    "demoNote": "This is demo mode: nothing is charged, card processing is connected later.",
+    "success": "Payment successful",
+    "error": "Couldn't process the payment",
+    "labels": {
+      "date": "Date",
+      "time": "Time",
+      "guests": "Guests"
+    }
+  }
+}

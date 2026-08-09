@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "title": "Almaty venues",
+    "description": "Restaurants, cafés, bars, banquet halls and lofts in Almaty. Filter by cuisine, price, district and amenities; sort by rating or distance."
+  },
+  "title": {
+    "default": "Venues",
+    "query": "Results for “{query}”",
+    "promo": "Venues with special offers",
+    "availableNow": "Free right now",
+    "banquet": "Banquet venues"
+  },
+  "subtitle": "Real reviews, honest prices and booking without phone calls — take your time.",
+  "searchPlaceholder": "Name, cuisine, district or occasion",
+  "found": "Found",
+  "showCount": "Show {count}",
+  "sort": {
+    "label": "Sort by",
+    "popularity": "Most popular",
+    "popularityHint": "What most guests choose",
+    "rating": "Highest rated",
+    "ratingHint": "Best scores first",
+    "price_asc": "Price: low to high",
+    "price_ascHint": "Budget-friendly",
+    "price_desc": "Price: high to low",
+    "price_descHint": "Premium segment",
+    "distance": "Nearest first",
+    "distanceHint": "Closest to you"
+  },
+  "view": {
+    "list": "List",
+    "map": "Map"
+  },
+  "filters": {
+    "title": "Filters",
+    "reset": "Reset",
+    "resetAll": "Reset all",
+    "apply": "Apply",
+    "category": "Category",
+    "cuisine": "Cuisine",
+    "price": "Average spend per person",
+    "priceRange": "Price range",
+    "noLimit": "no limit",
+    "rating": "Rating",
+    "ratingFrom": "{value} ★ and up",
+    "guests": "Party size",
+    "district": "District",
+    "central": "central",
+    "amenities": "Amenities",
+    "priceLevels": {
+      "1": "under 5,000",
+      "2": "5–12k",
+      "3": "12–18k",
+      "4": "18k and up"
+    }
+  },
+  "quickFilters": {
+    "availableNow": "Free right now",
+    "openToday": "Open today",
+    "hasPromotion": "Special offers",
+    "banquet": "Banquet",
+    "petsAllowed": "Pet friendly"
+  },
+  "amenities": {
+    "parking": "Parking",
+    "wifi": "Wi-Fi",
+    "terrace": "Summer terrace",
+    "kids": "Kids' area",
+    "vip": "VIP room",
+    "music": "Live music",
+    "delivery": "Delivery",
+    "catering": "Catering",
+    "hookah": "Hookah",
+    "halal": "Halal",
+    "accessible": "Step-free access",
+    "sports_broadcast": "Live sports",
+    "banquet": "Banquet",
+    "pets": "Pet friendly",
+    "card_payment": "Card payment"
+  },
+  "chips": {
+    "price": "Price: {min}–{max} ₸",
+    "rating": "Rating {value}+",
+    "guests": "{count} guests",
+    "query": "“{query}”"
+  },
+  "empty": {
+    "title": "Nothing matches these filters",
+    "description": "Try removing a filter or raising your budget — there is definitely a place for you in the city. Or let the AI pick for you.",
+    "action": "Reset filters",
+    "secondaryAction": "Try AI picks"
+  },
+  "aiHint": {
+    "title": "Not quite what you wanted?",
+    "description": "Describe your evening in your own words — the AI will weigh up your budget, party and occasion and offer five precise options with reasons.",
+    "action": "Try AI picks →"
+  },
+  "pagination": {
+    "label": "Pages",
+    "previous": "Previous page",
+    "next": "Next page"
+  },
+  "search": {
+    "ariaLabel": "Search venues",
+    "submit": "Search",
+    "matches": "Matches",
+    "popular": "Popular searches",
+    "empty": "No matches. Try “dinner”, “banquet” or a district name.",
+    "clear": "Clear",
+    "kinds": {
+      "venue": "Venue",
+      "category": "Category",
+      "cuisine": "Cuisine",
+      "district": "District",
+      "query": "Search"
+    }
+  },
+  "card": {
+    "openPage": "Open {name}",
+    "directions": "Directions",
+    "averageCheck": "Average spend",
+    "perPerson": "/ person",
+    "capacityUpTo": "up to {count}",
+    "details": "Details",
+    "book": "Book a table",
+    "promo": "−{percent}% · Offer",
+    "editorsChoice": "Editors' choice",
+    "favoriteAdd": "Add to favorites",
+    "favoriteRemove": "Remove from favorites",
+    "inFavorites": "Saved",
+    "toFavorites": "Save",
+    "favoriteToastAdded": "“{name}” saved to favorites",
+    "favoriteToastRemoved": "“{name}” removed from favorites"
+  }
+}

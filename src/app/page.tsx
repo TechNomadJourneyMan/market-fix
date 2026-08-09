@@ -13,6 +13,7 @@ import { BusinessCta } from '@/components/home/business-cta';
 import { RecentVenues } from '@/components/home/recent-venues';
 import { ServicesShowcase } from '@/components/home/services-showcase';
 import { CityMapExplorer } from '@/components/map/city-map-explorer';
+import { getTranslator } from '@/i18n/server';
 
 import { getCategories } from '@/server/repositories/taxonomy';
 import {
@@ -29,7 +30,8 @@ import {
   getPopularMarketplaceListings,
 } from '@/server/repositories/marketplace';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const tMap = await getTranslator('map');
   const categories = getCategories();
   const featured = getFeaturedVenues(6);
   const topRated = getTopRatedVenues(8);
@@ -51,10 +53,10 @@ export default function HomePage() {
       {/* ——— Интерактивная карта ——— */}
       <Section id="city-map" className="scroll-mt-24 pt-4 sm:pt-6">
         <SectionHeader
-          eyebrow="Карта Алматы"
-          title="Ищите на карте — как в 2GIS"
-          description="Фильтры по местам и сервисам, геолокация, масштаб колесом и поиск. Клик по пину — карточка и маршрут."
-          action={{ label: 'Каталог списком', href: '/catalog' }}
+          eyebrow={tMap('section.eyebrow')}
+          title={tMap('section.title')}
+          description={tMap('section.description')}
+          action={{ label: tMap('section.action'), href: '/catalog?view=map' }}
         />
         <CityMapExplorer venues={mapVenues} services={marketplaceListings} />
       </Section>

@@ -1,0 +1,36 @@
+{
+  "header": {
+    "homeAria": "Басты бетке",
+    "cartAria": "Брондау себеті",
+    "profileMenuAria": "Профиль мәзірі",
+    "myBookings": "Менің брондауларым",
+    "settings": "Параметрлер",
+    "createAccount": "Аккаунт құру",
+    "connectBusiness": "Бизнесті қосу",
+    "themeLabel": "Безендіру тақырыбы"
+  },
+  "tabbar": {
+    "home": "Басты",
+    "catalog": "Каталог",
+    "services": "Қызметтер",
+    "ai": "AI",
+    "cart": "Себет"
+  },
+  "footer": {
+    "guests": {
+      "catalog": "Орындар каталогы",
+      "services": "Қызметтер: жеткізу және жалға алу",
+      "ai": "AI-мен орын таңдау",
+      "merge": "Достармен Merge Menu",
+      "availableNow": "Дәл қазір бос",
+      "bookings": "Менің брондауларым"
+    },
+    "business": {
+      "connect": "Орынды қосу",
+      "analytics": "Дашборд және аналитика",
+      "bookings": "Брондауларды басқару",
+      "reviews": "Пікірлермен жұмыс"
+    },
+    "copyright": "© {year} Market Fix. Алматы орындарының каталогы."
+  }
+}

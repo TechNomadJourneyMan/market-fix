@@ -15,6 +15,8 @@ import {
   getUnreadNotificationCount,
 } from '@/server/repositories/users';
 import { DEMO_USER_ID } from '@/data/db';
+import { getI18nBootstrap, getTranslator } from '@/i18n/server';
+import { OG_LOCALES } from '@/i18n/config';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
@@ -50,24 +52,33 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const sessionUser = await getSessionUser();
+  const [sessionUser, { locale, dictionary }, t] = await Promise.all([
+    getSessionUser(),
+    getI18nBootstrap(),
+    getTranslator('navigation'),
+  ]);
   const categories = getCategories();
   const userId = sessionUser?.id ?? DEMO_USER_ID;
   const unreadCount = sessionUser ? getUnreadNotificationCount(userId) : 0;
   const favoriteVenueIds = sessionUser ? getFavoriteVenueIds(userId) : [];
 
   return (
-    <html lang="ru" suppressHydrationWarning className={inter.variable}>
+    <html lang={locale} suppressHydrationWarning className={inter.variable}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <meta property="og:locale" content={OG_LOCALES[locale]} />
       </head>
       <body className="min-h-dvh font-sans">
-        <Providers favoriteVenueIds={favoriteVenueIds}>
+        <Providers
+          favoriteVenueIds={favoriteVenueIds}
+          locale={locale}
+          dictionary={dictionary}
+        >
           <a
             href="#main"
             className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-background focus:px-4 focus:py-2 focus:shadow-lift"
           >
-            Перейти к содержимому
+            {t('skipToContent')}
           </a>
 
           <div className="flex min-h-dvh flex-col">

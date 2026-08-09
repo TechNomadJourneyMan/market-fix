@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "title": "Merge Menu",
+    "description": "Выберите ресторан вместе с друзьями — чат, голоса и AI-shortlist.",
+    "roomTitle": "Комната Merge Menu"
+  },
+  "lobby": {
+    "badge": "Merge Menu",
+    "title": "Выберите место вместе с друзьями",
+    "description": "Интерактивный чат: каждый пишет вайб и бюджет, AI собирает shortlist, вы голосуете — пока не найдёте матч.",
+    "tabCreate": "Создать комнату",
+    "tabJoin": "Войти по коду",
+    "nameLabel": "Ваше имя",
+    "namePlaceholder": "Алишер",
+    "topicLabel": "Тема встречи",
+    "topicPlaceholder": "Пятничный ужин / День рождения",
+    "codeLabel": "Код комнаты",
+    "codePlaceholder": "ABC123",
+    "submitCreate": "Создать и пригласить",
+    "submitJoin": "Присоединиться",
+    "errors": {
+      "name": "Укажите имя",
+      "generic": "Ошибка"
+    }
+  },
+  "room": {
+    "participants": {
+      "one": "{count} участник",
+      "few": "{count} участника",
+      "many": "{count} участников",
+      "other": "{count} участников"
+    },
+    "statusLabel": "статус",
+    "statusMatched": "матч найден",
+    "statusChoosing": "выбираем",
+    "invite": "Пригласить",
+    "linkCopied": "Ссылка скопирована",
+    "bookMatch": "Забронировать матч",
+    "matchTitle": "Матч: «{name}» — компания согласна",
+    "notFound": "Комната не найдена",
+    "joinFirst": "Сначала войдите в комнату с главной Merge Menu",
+    "error": "Ошибка",
+    "preferencesTitle": "Ваши предпочтения",
+    "cuisine": "Кухня",
+    "vibe": "Вайб",
+    "budget": "Бюджет на человека",
+    "budgetUpTo": "до {price}",
+    "freeText": "Своими словами",
+    "freeTextPlaceholder": "Тихо, с террасой, без громкой музыки…",
+    "refresh": "Обновить подборку",
+    "inRoom": "В комнате",
+    "host": "хост",
+    "chatTitle": "Чат комнаты",
+    "chatPlaceholder": "Напишите друзьям…",
+    "sendAria": "Отправить сообщение",
+    "shortlistTitle": "Shortlist AI",
+    "shortlistEmpty": "Отправьте предпочтения — здесь появятся варианты.",
+    "priceFrom": "от {price}",
+    "voteAria": "Голосовать за {name}",
+    "book": "Бронь"
+  },
+  "vibes": {
+    "cozy": "Уютно",
+    "lively": "Оживлённо",
+    "quiet": "Тихо",
+    "premium": "Премиум",
+    "trendy": "Модно",
+    "casual": "Просто"
+  }
+}

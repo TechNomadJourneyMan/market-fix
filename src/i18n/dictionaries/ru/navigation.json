@@ -1,0 +1,42 @@
+{
+  "skipToContent": "Перейти к содержимому",
+  "menu": "Меню",
+  "closeMenu": "Закрыть меню",
+  "links": {
+    "home": "Главная",
+    "catalog": "Каталог",
+    "services": "Сервисы",
+    "ai": "AI-подбор",
+    "merge": "Merge Menu",
+    "business": "Для бизнеса",
+    "cart": "Корзина",
+    "account": "Профиль",
+    "bookings": "Мои брони",
+    "favorites": "Избранное",
+    "notifications": "Уведомления"
+  },
+  "searchPlaceholder": "Куда пойдём?",
+  "search": "Поиск",
+  "auth": {
+    "login": "Войти",
+    "register": "Регистрация",
+    "logout": "Выйти",
+    "businessCabinet": "Кабинет бизнеса"
+  },
+  "theme": {
+    "toggle": "Сменить тему",
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "system": "Системная"
+  },
+  "language": {
+    "label": "Язык интерфейса",
+    "change": "Сменить язык"
+  },
+  "footer": {
+    "guests": "Гостям",
+    "business": "Бизнесу",
+    "categories": "Категории",
+    "tagline": "Находим места в Алматы. Бронирование за 30 секунд, честные отзывы и AI-подбор, который понимает повод."
+  }
+}
