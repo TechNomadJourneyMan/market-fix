@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import type { Review } from '@/types';
-import { formatRelativeTime } from '@/lib/format';
+import { formatDateI18n } from '@/i18n/format';
+import { useLocale } from '@/i18n/client';
 import { truncate, getInitials } from '@/lib/utils';
 import { Stars } from '@/components/ui/rating';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/primitives';
@@ -12,6 +13,8 @@ type ShowcaseReview = Review & { venueSlug: string; venueName: string };
 
 /** Отзывы гостей — социальное доказательство перед финальным CTA. */
 export function Testimonials({ reviews }: { reviews: ShowcaseReview[] }) {
+  const locale = useLocale();
+
   return (
     <Stagger className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {reviews.map((review) => (
@@ -39,7 +42,7 @@ export function Testimonials({ reviews }: { reviews: ShowcaseReview[] }) {
                     {review.venueName}
                   </Link>
                   {' · '}
-                  {formatRelativeTime(review.createdAt)}
+                  {formatDateI18n(review.createdAt, locale)}
                 </p>
               </div>
             </figcaption>

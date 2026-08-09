@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Heart } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { useT } from '@/i18n/client';
 import { useFavoritesStore } from '@/store/use-favorites-store';
 
 interface FavoriteButtonProps {
@@ -23,6 +24,7 @@ export function FavoriteButton({
   className,
   withLabel,
 }: FavoriteButtonProps) {
+  const t = useT('catalog');
   const venueIds = useFavoritesStore((state) => state.venueIds);
   const toggle = useFavoritesStore((state) => state.toggle);
   const isFavorite = venueIds.includes(venueId);
@@ -34,7 +36,9 @@ export function FavoriteButton({
 
     const next = await toggle(venueId);
     toast[next ? 'success' : 'message'](
-      next ? `«${venueName}» в избранном` : `«${venueName}» удалено из избранного`,
+      next
+        ? t('card.favoriteToastAdded', { name: venueName })
+        : t('card.favoriteToastRemoved', { name: venueName }),
     );
   };
 
@@ -42,7 +46,7 @@ export function FavoriteButton({
     <button
       type="button"
       onClick={handleClick}
-      aria-label={isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}
+      aria-label={isFavorite ? t('card.favoriteRemove') : t('card.favoriteAdd')}
       aria-pressed={isFavorite}
       className={cn(
         'inline-flex items-center justify-center gap-2 rounded-full transition-all active:scale-90',
@@ -63,8 +67,8 @@ export function FavoriteButton({
         )}
       />
       {withLabel ? (
-        <span className="text-sm font-medium">
-          {isFavorite ? 'В избранном' : 'В избранное'}
+        <span className="whitespace-nowrap text-sm font-medium">
+          {isFavorite ? t('card.inFavorites') : t('card.toFavorites')}
         </span>
       ) : null}
     </button>

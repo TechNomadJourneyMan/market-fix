@@ -2,15 +2,12 @@ import Link from 'next/link';
 import { ArrowRight, Compass, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FadeUp } from '@/components/ui/motion';
+import { getTranslator } from '@/i18n/server';
 
-const EXAMPLES = [
-  'Итальянская кухня, до 10 000 ₸, 8 человек, центр, вечером',
-  'Тихое место для деловой встречи с Wi-Fi',
-  'Банкет на 120 гостей с халяль-меню',
-  'Кофейня рядом, где можно поработать с ноутбуком',
-];
+export async function AiTeaser() {
+  const t = await getTranslator('home');
+  const examples = t.list('aiTeaser.examples');
 
-export function AiTeaser() {
   return (
     <div className="relative overflow-hidden rounded-3xl border bg-card p-6 shadow-soft sm:p-10">
       <div className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full bg-primary/8 blur-3xl" />
@@ -18,29 +15,28 @@ export function AiTeaser() {
       <div className="relative grid gap-8 lg:grid-cols-2 lg:items-center">
         <FadeUp className="space-y-5">
           <span className="inline-flex items-center gap-2 rounded-full border bg-secondary/60 px-3 py-1.5 text-xs font-medium">
-            <Compass className="size-3.5 text-primary" />
-            Подбор по сценарию
+            <Compass className="size-3.5 shrink-0 text-primary" />
+            {t('aiTeaser.badge')}
           </span>
 
           <h2 className="text-balance text-2xl font-semibold tracking-tight sm:text-3xl">
-            Опишите вечер словами — получите пять точных вариантов
+            {t('aiTeaser.title')}
           </h2>
 
           <p className="text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Учитываем кухню, бюджет, размер компании, район и время. Для каждого места —
-            понятное объяснение, почему оно подходит именно вам.
+            {t('aiTeaser.description')}
           </p>
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
               <Link href="/ai">
                 <Search />
-                Подобрать место
+                {t('aiTeaser.cta')}
               </Link>
             </Button>
             <Button asChild variant="ghost" size="lg">
               <Link href="/catalog">
-                Или искать вручную
+                {t('aiTeaser.manual')}
                 <ArrowRight />
               </Link>
             </Button>
@@ -48,8 +44,10 @@ export function AiTeaser() {
         </FadeUp>
 
         <div className="space-y-2.5">
-          <p className="text-xs font-medium text-muted-foreground">Попробуйте так:</p>
-          {EXAMPLES.map((example, index) => (
+          <p className="text-xs font-medium text-muted-foreground">
+            {t('aiTeaser.examplesTitle')}
+          </p>
+          {examples.map((example, index) => (
             <FadeUp key={example} delay={0.05 * index}>
               <Link
                 href={`/ai?q=${encodeURIComponent(example)}`}

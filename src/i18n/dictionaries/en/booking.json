@@ -9,6 +9,8 @@
       "one": "{count} slot",
       "other": "{count} slots"
     },
+    "today": "Today",
+    "tomorrow": "Tomorrow",
     "noSeats": "fully booked",
     "dayOff": "closed",
     "noSlots": "No slots left for this day. Pick another date — there is almost always something nearby.",

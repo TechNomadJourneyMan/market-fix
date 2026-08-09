@@ -72,6 +72,51 @@
       }
     }
   },
+  "sections": {
+    "categories": {
+      "eyebrow": "Where to go",
+      "title": "Pick the vibe for the night",
+      "description": "From morning coffee to a 300-guest celebration — every category is made of places we trust.",
+      "action": "All categories"
+    },
+    "featured": {
+      "eyebrow": "Editor's picks",
+      "title": "Places that don't disappoint",
+      "description": "We visited them ourselves, read hundreds of reviews and kept only the ones people return to.",
+      "action": "See all"
+    },
+    "availableNow": {
+      "eyebrow": "No planning needed",
+      "title": "Open tables right now",
+      "description": "Open now, tables available, not far away. Perfect for a spontaneous plan.",
+      "action": "All available",
+      "cta": "Show where there's space tonight"
+    },
+    "promo": {
+      "eyebrow": "Good deals",
+      "title": "This week's offers",
+      "description": "The same places — for less. Offers run for a limited time.",
+      "action": "All deals",
+      "more": "{count} more offers"
+    },
+    "fresh": {
+      "eyebrow": "New on Market Fix",
+      "title": "Just opened",
+      "description": "Fresh spots with strong ratings that not everyone knows about yet.",
+      "action": "Browse catalog"
+    },
+    "reviews": {
+      "eyebrow": "Guests say",
+      "title": "Reviews from people who already went",
+      "description": "Only from guests who booked through the platform. No fake ratings."
+    },
+    "finalCta": {
+      "title": "Friday dinner won't book itself",
+      "description": "The best tables go three days ahead. Pick a place now — a minute now saves the evening.",
+      "catalog": "Choose a venue",
+      "ai": "Match by occasion"
+    }
+  },
   "businessCta": {
     "eyebrow": "For business",
     "title": "Fill the tables that are sitting empty tonight",

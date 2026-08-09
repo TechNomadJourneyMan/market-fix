@@ -4,10 +4,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { History } from 'lucide-react';
 import { useRecentStore } from '@/store/use-recent-store';
+import { useT } from '@/i18n/client';
 import { Section, SectionHeader, ScrollRow } from '@/components/ui/section';
 import { Button } from '@/components/ui/button';
 
 export function RecentVenues() {
+  const t = useT('home');
   const items = useRecentStore((state) => state.items);
   const clear = useRecentStore((state) => state.clear);
 
@@ -16,10 +18,10 @@ export function RecentVenues() {
   return (
     <Section className="pt-0">
       <SectionHeader
-        eyebrow="Продолжить"
-        title="Недавно смотрели"
-        description="Вернитесь к местам, которые уже приметили."
-        action={{ label: 'В каталог', href: '/catalog' }}
+        eyebrow={t('recent.eyebrow')}
+        title={t('recent.title')}
+        description={t('recent.description')}
+        action={{ label: t('recent.action'), href: '/catalog' }}
       />
       <ScrollRow>
         {items.map((item) => (
@@ -52,7 +54,7 @@ export function RecentVenues() {
       </ScrollRow>
       <div className="mt-4 flex justify-end">
         <Button type="button" variant="ghost" size="sm" onClick={clear}>
-          Очистить историю
+          {t('recent.clear')}
         </Button>
       </div>
     </Section>

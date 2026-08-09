@@ -13,21 +13,15 @@ import {
 import { toast } from 'sonner';
 import type { Cuisine, MergePreferences, MergeRoom, VenueListItem, Vibe } from '@/types';
 import { apiClient, ApiError } from '@/lib/api-client';
-import { formatPrice, formatRating } from '@/lib/format';
+import { formatPriceI18n, formatRatingI18n } from '@/i18n/format';
+import { useLocale, useT } from '@/i18n/client';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { VoiceInputButton } from '@/components/ui/voice-input';
 import { useBookingStore, venueToBookingTarget } from '@/store/use-booking-store';
 
-const VIBES: { value: Vibe; label: string }[] = [
-  { value: 'cozy', label: 'Уютно' },
-  { value: 'lively', label: 'Оживлённо' },
-  { value: 'quiet', label: 'Тихо' },
-  { value: 'premium', label: 'Премиум' },
-  { value: 'trendy', label: 'Модно' },
-  { value: 'casual', label: 'Просто' },
-];
+const VIBES: Vibe[] = ['cozy', 'lively', 'quiet', 'premium', 'trendy', 'casual'];
 
 const BUDGETS = [5000, 10000, 15000, 25000];
 
@@ -45,6 +39,8 @@ export function MergeRoomView({
   cuisines: Cuisine[];
 }) {
   const openBooking = useBookingStore((state) => state.open);
+  const t = useT('merge');
+  const locale = useLocale();
   const [data, setData] = React.useState<RoomPayload | null>(null);
   const [participantId, setParticipantId] = React.useState<string | null>(null);
   const [chat, setChat] = React.useState('');
@@ -72,7 +68,8 @@ export function MergeRoomView({
         /* ignore */
       }
     }
-    load().catch(() => toast.error('Комната не найдена'));
+    load().catch(() => toast.error(t('room.notFound')));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, load]);
 
   React.useEffect(() => {
@@ -88,7 +85,7 @@ export function MergeRoomView({
 
   const post = async (body: Record<string, unknown>) => {
     if (!participantId) {
-      toast.error('Сначала войдите в комнату с главной Merge Menu');
+      toast.error(t('room.joinFirst'));
       return;
     }
     setBusy(true);
@@ -99,7 +96,7 @@ export function MergeRoomView({
       });
       setData(next);
     } catch (error) {
-      toast.error(error instanceof ApiError ? error.message : 'Ошибка');
+      toast.error(error instanceof ApiError ? error.message : t('room.error'));
     } finally {
       setBusy(false);
     }
@@ -142,8 +139,10 @@ export function MergeRoomView({
           </p>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight">{room.title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {room.participants.length} участников · статус:{' '}
-            {room.status === 'matched' ? 'матч найден' : 'выбираем'}
+            {t('room.participants', { count: room.participants.length })}
+            {' · '}
+            {t('room.statusLabel')}:{' '}
+            {room.status === 'matched' ? t('room.statusMatched') : t('room.statusChoosing')}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -152,18 +151,18 @@ export function MergeRoomView({
             size="sm"
             onClick={async () => {
               await navigator.clipboard.writeText(shareUrl);
-              toast.success('Ссылка скопирована');
+              toast.success(t('room.linkCopied'));
             }}
           >
-            <Copy className="size-4" />
-            Пригласить
+            <Copy className="size-4 shrink-0" />
+            {t('room.invite')}
           </Button>
           {matched ? (
             <Button
               size="sm"
               onClick={() => openBooking(venueToBookingTarget(matched))}
             >
-              Забронировать матч
+              {t('room.bookMatch')}
             </Button>
           ) : null}
         </div>
@@ -172,7 +171,7 @@ export function MergeRoomView({
       {matched ? (
         <div className="mb-6 rounded-2xl border border-success/30 bg-success/5 p-4">
           <p className="text-sm font-semibold text-success">
-            Матч: «{matched.name}» — компания согласна
+            {t('room.matchTitle', { name: matched.name })}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">{matched.tagline}</p>
         </div>

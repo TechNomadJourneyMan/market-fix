@@ -10,6 +10,8 @@ import {
   getDistricts,
 } from '@/server/repositories/taxonomy';
 import { DEMO_USER_LOCATION } from '@/data/seed/users';
+import { getTranslator } from '@/i18n/server';
+import type { Translator } from '@/i18n/translate';
 
 import { SearchBar } from '@/components/search/search-bar';
 import { QuickFilters } from '@/components/catalog/quick-filters';
@@ -20,28 +22,35 @@ import { MapView } from '@/components/catalog/map-view';
 import { VenueCard } from '@/components/venue/venue-card';
 import { EmptyState } from '@/components/ui/empty-state';
 
-export const metadata: Metadata = {
-  title: 'Каталог заведений Алматы',
-  description:
-    'Рестораны, кафе, бары, банкетные залы и лофты Алматы. Фильтры по кухне, цене, району и удобствам, сортировка по рейтингу и расстоянию.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslator('catalog');
+  return {
+    title: t('meta.title'),
+    description: t('meta.description'),
+  };
+}
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 /** Заголовок подстраивается под фильтры — страница всегда объясняет, что показывает. */
-function buildTitle(params: Record<string, string | string[] | undefined>, categoryName?: string) {
+function buildTitle(
+  params: Record<string, string | string[] | undefined>,
+  t: Translator,
+  categoryName?: string,
+) {
   const q = typeof params.q === 'string' ? params.q : undefined;
-  if (q) return `Результаты по запросу «${q}»`;
+  if (q) return t('title.query', { query: q });
   if (categoryName) return categoryName;
-  if (params.promo) return 'Заведения с акциями';
-  if (params.availableNow) return 'Свободно прямо сейчас';
-  if (params.banquet) return 'Банкетные площадки';
-  return 'Каталог заведений';
+  if (params.promo) return t('title.promo');
+  if (params.availableNow) return t('title.availableNow');
+  if (params.banquet) return t('title.banquet');
+  return t('title.default');
 }
 
 export default async function CatalogPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const query = parseVenueQuery(params);
+  const t = await getTranslator('catalog');
 
   const categories = getCategories();
   const cuisines = getCuisines();
@@ -56,7 +65,7 @@ export default async function CatalogPage({ searchParams }: { searchParams: Sear
       ? categories.find((category) => category.id === query.categoryIds![0])
       : undefined;
 
-  const title = buildTitle(params, selectedCategory?.name);
+  const title = buildTitle(params, t, selectedCategory?.name);
 
   return (
     <div className="container py-6 sm:py-8">
@@ -65,15 +74,14 @@ export default async function CatalogPage({ searchParams }: { searchParams: Sear
         <div className="space-y-1.5">
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
           <p className="text-sm text-muted-foreground">
-            {selectedCategory?.description ??
-              'Живые отзывы, честные цены и бронирование без звонков — выбирайте спокойно.'}
+            {selectedCategory?.description ?? t('subtitle')}
           </p>
         </div>
 
         <SearchBar
           variant="compact"
           defaultValue={query.query ?? ''}
-          placeholder="Название, кухня, район или повод"
+          placeholder={t('searchPlaceholder')}
           className="max-w-2xl"
         />
 
@@ -108,10 +116,10 @@ export default async function CatalogPage({ searchParams }: { searchParams: Sear
           {result.total === 0 ? (
             <EmptyState
               icon={<SearchX />}
-              title="По этим условиям ничего не нашлось"
-              description="Попробуйте убрать часть фильтров или расширить бюджет — в городе точно есть подходящее место. Или доверьте выбор AI-подбору."
-              action={{ label: 'Сбросить фильтры', href: '/catalog' }}
-              secondaryAction={{ label: 'Подобрать с AI', href: '/ai' }}
+              title={t('empty.title')}
+              description={t('empty.description')}
+              action={{ label: t('empty.action'), href: '/catalog' }}
+              secondaryAction={{ label: t('empty.secondaryAction'), href: '/ai' }}
             />
           ) : view === 'map' ? (
             <MapView
@@ -136,18 +144,17 @@ export default async function CatalogPage({ searchParams }: { searchParams: Sear
               {!result.hasMore ? (
                 <div className="rounded-2xl border border-dashed bg-muted/30 px-5 py-6 text-center">
                   <p className="flex items-center justify-center gap-2 text-sm font-medium">
-                    <Sparkles className="size-4 text-primary" />
-                    Не то, что искали?
+                    <Sparkles className="size-4 shrink-0 text-primary" />
+                    {t('aiHint.title')}
                   </p>
                   <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
-                    Опишите вечер словами — AI-подбор учтёт бюджет, компанию и повод и
-                    предложит пять точных вариантов с объяснением.
+                    {t('aiHint.description')}
                   </p>
                   <a
                     href="/ai"
                     className="mt-3 inline-flex text-sm font-medium text-primary hover:underline"
                   >
-                    Попробовать AI-подбор →
+                    {t('aiHint.action')}
                   </a>
                 </div>
               ) : null}

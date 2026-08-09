@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 
 import {
   DEFAULT_LOCALE,
@@ -33,12 +32,10 @@ interface I18nProviderProps {
  * Провайдер локали. Словарь приходит с сервера уже сведённым (en/kk поверх ru),
  * поэтому в браузер уезжает только активный язык.
  *
- * Переключение языка ставит куку и обновляет server components через
- * router.refresh(): страница, маршрут, скролл и состояние формы сохраняются,
- * полной перезагрузки нет.
+ * Переключение языка ставит куку и перезагружает страницу: маршрут
+ * сохраняется, а все server components гарантированно получают новую локаль.
  */
 export function I18nProvider({ locale, dictionary, children }: I18nProviderProps) {
-  const router = useRouter();
   const [isSwitching, startTransition] = React.useTransition();
 
   const setLocale = React.useCallback(
@@ -46,11 +43,14 @@ export function I18nProvider({ locale, dictionary, children }: I18nProviderProps
       if (next === locale) return;
       document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${LOCALE_MAX_AGE}; samesite=lax`;
       document.documentElement.lang = next;
+      // Полная перезагрузка гарантирует, что все server components
+      // перечитают куку. router.refresh() в App Router иногда отдаёт
+      // закэшированный RSC-пейлоад со старой локалью.
       startTransition(() => {
-        router.refresh();
+        window.location.reload();
       });
     },
-    [locale, router, startTransition],
+    [locale, startTransition],
   );
 
   const value = React.useMemo<I18nContextValue>(

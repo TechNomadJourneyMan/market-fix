@@ -99,8 +99,12 @@ export function OsmMapCanvas({
   const [areaMoved, setAreaMoved] = React.useState(false);
 
   const tileErrorsRef = React.useRef(0);
-  /** Гасим реакцию на программные перемещения карты (fit, panTo, зум-кнопки). */
-  const suppressMoveUntilRef = React.useRef(0);
+  /**
+   * Кнопка «искать в этой области» должна появляться только после того, как
+   * область сменил сам пользователь. Отмечаем жесты (drag, колесо, пинч,
+   * двойной клик, зум-кнопки), а программные fit/panTo область не «пачкают».
+   */
+  const userMovedRef = React.useRef(false);
 
   const provider = useFallbackTiles ? FALLBACK_TILES : getTileProvider(isDark);
 
@@ -133,9 +137,8 @@ export function OsmMapCanvas({
     [onActiveChange],
   );
 
-  const runProgrammatic = React.useCallback((action: () => void) => {
-    suppressMoveUntilRef.current = Date.now() + 900;
-    action();
+  const markUserMove = React.useCallback(() => {
+    userMovedRef.current = true;
   }, []);
 
   /** Синхронизация состояния вида + определение «карту сдвинули руками». */
@@ -146,21 +149,37 @@ export function OsmMapCanvas({
 
     const onMoveEnd = () => {
       sync();
-      if (Date.now() < suppressMoveUntilRef.current) return;
+      if (!userMovedRef.current) return;
+      userMovedRef.current = false;
       setAreaMoved(true);
+    };
+
+    const container = map.getContainer();
+    const onWheel = () => markUserMove();
+    const onDoubleClick = () => markUserMove();
+    const onTouchStart = (event: TouchEvent) => {
+      if (event.touches.length > 1) markUserMove();
     };
 
     sync();
     map.on('moveend', onMoveEnd);
     map.on('zoomend', sync);
     map.on('resize', sync);
+    map.on('dragstart', markUserMove);
+    container.addEventListener('wheel', onWheel, { passive: true });
+    container.addEventListener('dblclick', onDoubleClick);
+    container.addEventListener('touchstart', onTouchStart, { passive: true });
 
     return () => {
       map.off('moveend', onMoveEnd);
       map.off('zoomend', sync);
       map.off('resize', sync);
+      map.off('dragstart', markUserMove);
+      container.removeEventListener('wheel', onWheel);
+      container.removeEventListener('dblclick', onDoubleClick);
+      container.removeEventListener('touchstart', onTouchStart);
     };
-  }, [map]);
+  }, [map, markUserMove]);
 
   /** Автоподгонка границ при смене набора объектов, но не поверх ручного зума. */
   const fitSignature = React.useMemo(
@@ -170,13 +189,13 @@ export function OsmMapCanvas({
 
   const fitAll = React.useCallback(() => {
     if (!map) return;
-    runProgrammatic(() => fitMapToVenues(map, venues, origin));
+    fitMapToVenues(map, venues, origin);
     setAreaMoved(false);
-  }, [map, venues, origin, runProgrammatic]);
+  }, [map, venues, origin]);
 
   React.useEffect(() => {
     if (!map || !autoFit) return;
-    runProgrammatic(() => fitMapToVenues(map, venues, origin));
+    fitMapToVenues(map, venues, origin);
     setAreaMoved(false);
     // Пересчитываем только когда меняется сам набор точек или центр пользователя.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -190,8 +209,8 @@ export function OsmMapCanvas({
       selected.location.coordinates.lng,
     );
     if (map.getBounds().pad(-0.12).contains(point)) return;
-    runProgrammatic(() => map.panTo(point, { animate: true, duration: 0.4 }));
-  }, [map, selected, runProgrammatic]);
+    map.panTo(point, { animate: true, duration: 0.4 });
+  }, [map, selected]);
 
   /** Подстройка размера при fullscreen, переключении «Карта/Список» и ресайзе. */
   React.useEffect(() => {
@@ -242,11 +261,11 @@ export function OsmMapCanvas({
   const zoomBy = React.useCallback(
     (delta: number) => {
       if (!map) return;
-      runProgrammatic(() =>
-        map.setZoom(Math.min(MAP_MAX_ZOOM, Math.max(MAP_MIN_ZOOM, map.getZoom() + delta))),
-      );
+      // Зум кнопками — тоже осознанная смена области, поэтому помечаем как ручную.
+      markUserMove();
+      map.setZoom(Math.min(MAP_MAX_ZOOM, Math.max(MAP_MIN_ZOOM, map.getZoom() + delta)));
     },
-    [map, runProgrammatic],
+    [map, markUserMove],
   );
 
   const retryTiles = React.useCallback(() => {
@@ -338,7 +357,7 @@ export function OsmMapCanvas({
           labelOf={labelOf}
           onClusterClick={(node) => {
             if (!map) return;
-            runProgrammatic(() => zoomToCluster(map, node));
+            zoomToCluster(map, node);
             setAreaMoved(false);
           }}
         />
@@ -537,14 +556,16 @@ function MarkersLayer({
     <>
       {nodes.map((node) => {
         if (isCluster(node)) {
+          const clusterLabel = `${t('cluster.aria', { count: node.items.length })}. ${t('cluster.hint')}`;
           return (
             <Marker
               key={node.id}
               position={[node.lat, node.lng]}
-              icon={createClusterIcon(
-                node.items.length,
-                `${t('cluster.aria', { count: node.items.length })}. ${t('cluster.hint')}`,
-              )}
+              icon={createClusterIcon(node.items.length, clusterLabel)}
+              // title попадает на фокусируемый элемент маркера — даёт ему имя
+              // для скринридеров и подсказку при наведении.
+              title={clusterLabel}
+              alt={clusterLabel}
               keyboard
               eventHandlers={{
                 click: (event) => {
@@ -560,6 +581,10 @@ function MarkersLayer({
         const active = venue.id === selectedId;
         const kind = kindOf(venue);
         const label = labelOf(venue);
+        const pinLabel =
+          kind === 'venue'
+            ? t('pin.venueAria', { name: venue.name, price: label })
+            : t('pin.serviceAria', { name: venue.name });
 
         return (
           <Marker
@@ -570,11 +595,10 @@ function MarkersLayer({
               label,
               active,
               promo: Boolean(venue.promotion),
-              ariaLabel:
-                kind === 'venue'
-                  ? t('pin.venueAria', { name: venue.name, price: label })
-                  : t('pin.serviceAria', { name: venue.name }),
+              ariaLabel: pinLabel,
             })}
+            title={pinLabel}
+            alt={pinLabel}
             keyboard
             zIndexOffset={active ? 1000 : 0}
             eventHandlers={{

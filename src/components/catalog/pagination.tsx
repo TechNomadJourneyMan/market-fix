@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { VenueQuery } from '@/types';
 import { cn } from '@/lib/utils';
+import { useT } from '@/i18n/client';
 import { useCatalogParams } from '@/hooks/use-catalog-params';
 
 interface PaginationProps {
@@ -13,6 +14,7 @@ interface PaginationProps {
 
 export function Pagination({ query, page, totalPages }: PaginationProps) {
   const { patch } = useCatalogParams(query);
+  const t = useT('catalog');
 
   if (totalPages <= 1) return null;
 
@@ -27,13 +29,16 @@ export function Pagination({ query, page, totalPages }: PaginationProps) {
   );
 
   return (
-    <nav className="flex items-center justify-center gap-1.5 pt-8" aria-label="Страницы">
+    <nav
+      className="flex flex-wrap items-center justify-center gap-1.5 pt-8"
+      aria-label={t('pagination.label')}
+    >
       <button
         type="button"
         onClick={() => goTo(page - 1)}
         disabled={page <= 1}
         className="flex size-9 items-center justify-center rounded-xl border transition-colors hover:bg-secondary disabled:pointer-events-none disabled:opacity-40"
-        aria-label="Предыдущая страница"
+        aria-label={t('pagination.previous')}
       >
         <ChevronLeft className="size-4" />
       </button>
@@ -67,7 +72,7 @@ export function Pagination({ query, page, totalPages }: PaginationProps) {
         onClick={() => goTo(page + 1)}
         disabled={page >= totalPages}
         className="flex size-9 items-center justify-center rounded-xl border transition-colors hover:bg-secondary disabled:pointer-events-none disabled:opacity-40"
-        aria-label="Следующая страница"
+        aria-label={t('pagination.next')}
       >
         <ChevronRight className="size-4" />
       </button>

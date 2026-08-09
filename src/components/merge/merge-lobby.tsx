@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Loader2, Sparkles, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { apiClient, ApiError } from '@/lib/api-client';
+import { useT } from '@/i18n/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +13,7 @@ import { VoiceInputButton } from '@/components/ui/voice-input';
 
 export function MergeLobby() {
   const router = useRouter();
+  const t = useT('merge');
   const [mode, setMode] = React.useState<'create' | 'join'>('create');
   const [name, setName] = React.useState('');
   const [title, setTitle] = React.useState('');
@@ -20,7 +22,7 @@ export function MergeLobby() {
 
   const submit = async () => {
     if (name.trim().length < 2) {
-      toast.error('Укажите имя');
+      toast.error(t('lobby.errors.name'));
       return;
     }
     setLoading(true);
@@ -51,7 +53,7 @@ export function MergeLobby() {
         router.push(`/merge/${data.room.code}`);
       }
     } catch (error) {
-      toast.error(error instanceof ApiError ? error.message : 'Ошибка');
+      toast.error(error instanceof ApiError ? error.message : t('lobby.errors.generic'));
     } finally {
       setLoading(false);
     }
@@ -61,16 +63,13 @@ export function MergeLobby() {
     <div className="mx-auto max-w-lg space-y-6">
       <div className="text-center">
         <span className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1.5 text-xs font-medium">
-          <Users className="size-3.5 text-primary" />
-          Merge Menu
+          <Users className="size-3.5 shrink-0 text-primary" />
+          {t('lobby.badge')}
         </span>
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight">
-          Выберите место вместе с друзьями
+        <h1 className="mt-4 text-balance text-3xl font-semibold tracking-tight">
+          {t('lobby.title')}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Интерактивный чат: каждый пишет вайб и бюджет, AI собирает shortlist, вы голосуете —
-          пока не найдёте матч.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t('lobby.description')}</p>
       </div>
 
       <div className="rounded-3xl border bg-card p-5 shadow-soft sm:p-7">
@@ -80,25 +79,25 @@ export function MergeLobby() {
             onClick={() => setMode('create')}
             className={`rounded-xl px-3 py-2 text-sm font-medium ${mode === 'create' ? 'bg-card shadow-soft' : 'text-muted-foreground'}`}
           >
-            Создать комнату
+            {t('lobby.tabCreate')}
           </button>
           <button
             type="button"
             onClick={() => setMode('join')}
             className={`rounded-xl px-3 py-2 text-sm font-medium ${mode === 'join' ? 'bg-card shadow-soft' : 'text-muted-foreground'}`}
           >
-            Войти по коду
+            {t('lobby.tabJoin')}
           </button>
         </div>
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label>Ваше имя</Label>
+            <Label>{t('lobby.nameLabel')}</Label>
             <div className="flex gap-2">
               <Input
                 value={name}
                 onChange={(event) => setName(event.target.value)}
-                placeholder="Алишер"
+                placeholder={t('lobby.namePlaceholder')}
               />
               <VoiceInputButton onTranscript={setName} />
             </div>
@@ -106,20 +105,20 @@ export function MergeLobby() {
 
           {mode === 'create' ? (
             <div className="space-y-1.5">
-              <Label>Тема встречи</Label>
+              <Label>{t('lobby.topicLabel')}</Label>
               <Input
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
-                placeholder="Пятничный ужин / День рождения"
+                placeholder={t('lobby.topicPlaceholder')}
               />
             </div>
           ) : (
             <div className="space-y-1.5">
-              <Label>Код комнаты</Label>
+              <Label>{t('lobby.codeLabel')}</Label>
               <Input
                 value={code}
                 onChange={(event) => setCode(event.target.value.toUpperCase())}
-                placeholder="ABC123"
+                placeholder={t('lobby.codePlaceholder')}
                 className="tracking-[0.2em]"
               />
             </div>
@@ -127,7 +126,7 @@ export function MergeLobby() {
 
           <Button className="w-full" size="lg" onClick={submit} disabled={loading}>
             {loading ? <Loader2 className="animate-spin" /> : <Sparkles />}
-            {mode === 'create' ? 'Создать и пригласить' : 'Присоединиться'}
+            {mode === 'create' ? t('lobby.submitCreate') : t('lobby.submitJoin')}
           </Button>
         </div>
       </div>

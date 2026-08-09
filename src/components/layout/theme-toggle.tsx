@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useT } from '@/i18n/client';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -17,6 +18,7 @@ function applyTheme(theme: Theme) {
 
 /** Переключатель темы. Начальное значение выставляет инлайн-скрипт в layout — без мигания. */
 export function ThemeToggle({ className }: { className?: string }) {
+  const t = useT('navigation');
   const [theme, setTheme] = React.useState<Theme>('system');
   const [mounted, setMounted] = React.useState(false);
 
@@ -39,7 +41,11 @@ export function ThemeToggle({ className }: { className?: string }) {
 
   const Icon = theme === 'light' ? Sun : theme === 'dark' ? Moon : Monitor;
   const label =
-    theme === 'light' ? 'Светлая тема' : theme === 'dark' ? 'Тёмная тема' : 'Как в системе';
+    theme === 'light'
+      ? t('theme.light')
+      : theme === 'dark'
+        ? t('theme.dark')
+        : t('theme.system');
 
   return (
     <button

@@ -93,6 +93,7 @@ export function CityMapExplorer({ venues, services, className }: CityMapExplorer
   const [activeId, setActiveId] = React.useState<string | null>(null);
   const [pane, setPane] = React.useState<PaneMode>('map');
   const [area, setArea] = React.useState<MapBoundsRect | null>(null);
+  const [geoDenied, setGeoDenied] = React.useState(false);
 
   const listRef = React.useRef<HTMLDivElement>(null);
   const searchInputId = React.useId();
@@ -107,12 +108,14 @@ export function CityMapExplorer({ venues, services, className }: CityMapExplorer
       (position) => {
         setOrigin({ lat: position.coords.latitude, lng: position.coords.longitude });
         setOriginIsUser(true);
+        setGeoDenied(false);
         setQuick('nearby');
         setLocating(false);
         toast.success(t('toast.located'));
       },
       () => {
         setLocating(false);
+        setGeoDenied(true);
         toast.error(t('toast.denied'));
       },
       { enableHighAccuracy: true, timeout: 10_000 },
@@ -381,6 +384,19 @@ export function CityMapExplorer({ venues, services, className }: CityMapExplorer
         <p className="text-xs text-muted-foreground" aria-live="polite">
           {statusLine}
         </p>
+
+        {geoDenied ? (
+          <p className="rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground">
+            <span className="font-medium text-foreground">
+              {t('states.noLocationTitle')}
+            </span>{' '}
+            {t('states.noLocationDescription')}
+          </p>
+        ) : null}
+
+        {pins.length > 40 ? (
+          <p className="text-xs text-muted-foreground">{t('states.manyMarkers')}</p>
+        ) : null}
 
         {/* Переключатель «Карта / Список» — только мобильный сценарий */}
         <div className="flex rounded-xl border p-0.5 lg:hidden" role="group">

@@ -4,23 +4,26 @@ import { Section, SectionHeader } from '@/components/ui/section';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { ServiceCard } from '@/components/services/service-card';
+import { getTranslator } from '@/i18n/server';
 import { cn } from '@/lib/utils';
 import { ArrowRight } from 'lucide-react';
 
-export function ServicesShowcase({
+export async function ServicesShowcase({
   categories,
   listings,
 }: {
   categories: MarketplaceCategory[];
   listings: (MarketplaceListing & { distanceKm?: number })[];
 }) {
+  const t = await getTranslator('home');
+
   return (
     <Section className="pt-0">
       <SectionHeader
-        eyebrow="Сервисы"
-        title="Не только бронь — доставка, аренда, подарки"
-        description="Соберите вечер целиком: стол, трансфер, декор, кейтеринг и подарок — в одном месте."
-        action={{ label: 'Все сервисы', href: '/services' }}
+        eyebrow={t('servicesShowcase.eyebrow')}
+        title={t('servicesShowcase.title')}
+        description={t('servicesShowcase.description')}
+        action={{ label: t('servicesShowcase.action'), href: '/services' }}
       />
 
       <div className="mb-6 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
@@ -29,7 +32,7 @@ export function ServicesShowcase({
             key={category.id}
             href={`/services?category=${category.slug}`}
             className={cn(
-              'inline-flex shrink-0 items-center gap-2 rounded-xl border bg-card px-3 py-2 text-sm font-medium transition-colors',
+              'inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-xl border bg-card px-3 py-2 text-sm font-medium transition-colors',
               'hover:border-primary/30 hover:bg-secondary',
             )}
           >
@@ -56,7 +59,7 @@ export function ServicesShowcase({
       <div className="mt-6 flex justify-center">
         <Button asChild variant="outline" size="lg">
           <Link href="/services">
-            Смотреть все сервисы
+            {t('servicesShowcase.showAll')}
             <ArrowRight />
           </Link>
         </Button>

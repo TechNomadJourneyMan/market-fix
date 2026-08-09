@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { ArrowRight, BadgePercent, Bike, KeyRound, PartyPopper, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { formatNumber } from '@/lib/format';
+import { formatNumberI18n } from '@/i18n/format';
+import { useLocale, useT } from '@/i18n/client';
 import { SearchBar } from '@/components/search/search-bar';
 import { Button } from '@/components/ui/button';
 import { FadeUp } from '@/components/ui/motion';
@@ -16,14 +17,17 @@ interface HeroProps {
 
 /** Один primary job: поиск. Остальное — лёгкие сценарии, не конкурирующие XL-кнопки. */
 const QUICK_LINKS = [
-  { label: 'Свободно сейчас', href: '/catalog?availableNow=1', icon: Zap },
-  { label: 'Банкет и той', href: '/catalog?banquet=1', icon: PartyPopper },
-  { label: 'Доставка', href: '/services?vertical=delivery', icon: Bike },
-  { label: 'Аренда', href: '/services?vertical=rental', icon: KeyRound },
-  { label: 'Со скидкой', href: '/catalog?promo=1', icon: BadgePercent },
+  { key: 'availableNow', href: '/catalog?availableNow=1', icon: Zap },
+  { key: 'banquet', href: '/catalog?banquet=1', icon: PartyPopper },
+  { key: 'delivery', href: '/services?vertical=delivery', icon: Bike },
+  { key: 'rental', href: '/services?vertical=rental', icon: KeyRound },
+  { key: 'promo', href: '/catalog?promo=1', icon: BadgePercent },
 ];
 
 export function Hero({ venueCount, reviewCount, categoryCount }: HeroProps) {
+  const t = useT('home');
+  const locale = useLocale();
+
   return (
     <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -37,30 +41,29 @@ export function Hero({ venueCount, reviewCount, categoryCount }: HeroProps) {
         <div className="mx-auto max-w-3xl text-center">
           <FadeUp>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-              Market Fix · Алматы
+              {t('hero.eyebrow')}
             </p>
           </FadeUp>
 
           <FadeUp delay={0.05}>
             <h1 className="mt-4 text-balance text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
-              Бронь, аренда и доставка —{' '}
-              <span className="text-primary">в одном месте</span>
+              {t('hero.titleLead')}{' '}
+              <span className="text-primary">{t('hero.titleAccent')}</span>
             </h1>
           </FadeUp>
 
           <FadeUp delay={0.1}>
             <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Найдите заведение, закажите доставку или арендуйте зал. Живые отзывы, честные цены,
-              без звонков.
+              {t('hero.subtitle')}
             </p>
           </FadeUp>
 
           <FadeUp delay={0.15} className="mx-auto mt-8 max-w-2xl">
-            <SearchBar placeholder="Ресторан, доставка, аренда зала, подарок…" />
+            <SearchBar placeholder={t('hero.searchPlaceholder')} />
             <p className="mt-2.5 text-xs text-muted-foreground">
-              Начните с поиска — или откройте{' '}
+              {t('hero.searchHint')}{' '}
               <Link href="#city-map" className="font-medium text-foreground underline-offset-2 hover:underline">
-                карту города
+                {t('hero.searchHintLink')}
               </Link>
               .
             </p>
@@ -79,8 +82,8 @@ export function Hero({ venueCount, reviewCount, categoryCount }: HeroProps) {
                     href={link.href}
                     className="inline-flex items-center gap-1.5 rounded-full border bg-card/80 px-3.5 py-2 text-xs font-medium shadow-soft backdrop-blur transition-all hover:border-primary/25 hover:shadow-card"
                   >
-                    <link.icon className="size-3.5 text-primary" />
-                    {link.label}
+                    <link.icon className="size-3.5 shrink-0 text-primary" />
+                    {t(`hero.quick.${link.key}`)}
                   </Link>
                 </motion.div>
               ))}
@@ -91,31 +94,37 @@ export function Hero({ venueCount, reviewCount, categoryCount }: HeroProps) {
             <div className="mt-8 flex justify-center">
               <Button asChild size="xl" className="w-full sm:w-auto">
                 <Link href="/catalog">
-                  Смотреть каталог
+                  {t('hero.cta')}
                   <ArrowRight />
                 </Link>
               </Button>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
-              Нужен сценарий?{' '}
+              {t('hero.scenarioHint')}{' '}
               <Link href="/ai" className="font-medium text-foreground underline-offset-2 hover:underline">
-                AI-подбор
+                {t('hero.scenarioAi')}
               </Link>
               {' · '}
               <Link
                 href="/services"
                 className="font-medium text-foreground underline-offset-2 hover:underline"
               >
-                Все сервисы
+                {t('hero.scenarioServices')}
               </Link>
             </p>
           </FadeUp>
 
           <FadeUp delay={0.3}>
             <dl className="mx-auto mt-10 grid max-w-lg grid-cols-3 gap-3">
-              <Stat value={formatNumber(venueCount)} label="проверенных мест" />
-              <Stat value={formatNumber(reviewCount)} label="живых отзывов" />
-              <Stat value={String(categoryCount)} label="категорий" />
+              <Stat
+                value={formatNumberI18n(venueCount, locale)}
+                label={t('hero.stats.venues')}
+              />
+              <Stat
+                value={formatNumberI18n(reviewCount, locale)}
+                label={t('hero.stats.reviews')}
+              />
+              <Stat value={String(categoryCount)} label={t('hero.stats.categories')} />
             </dl>
           </FadeUp>
         </div>
@@ -128,7 +137,9 @@ function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div className="rounded-2xl border bg-card/60 px-3 py-3.5 text-center backdrop-blur transition-colors hover:bg-card">
       <dt className="text-2xl font-semibold tracking-tight sm:text-3xl">{value}</dt>
-      <dd className="mt-0.5 text-xs text-muted-foreground sm:text-sm">{label}</dd>
+      <dd className="mt-0.5 text-balance text-xs leading-snug text-muted-foreground sm:text-sm">
+        {label}
+      </dd>
     </div>
   );
 }

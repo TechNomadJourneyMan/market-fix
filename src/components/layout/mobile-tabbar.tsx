@@ -4,20 +4,22 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, LayoutGrid, Package, ShoppingBag, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useT } from '@/i18n/client';
 import { selectCartCount, useCartStore } from '@/store/use-cart-store';
 
 /** Ярлыки совпадают с desktop: Каталог / Сервисы — без путаницы «Поиск ≠ Каталог». */
 const TABS = [
-  { href: '/', label: 'Главная', icon: Home },
-  { href: '/catalog', label: 'Каталог', icon: LayoutGrid },
-  { href: '/services', label: 'Сервисы', icon: Package },
-  { href: '/ai', label: 'AI', icon: Sparkles },
-  { href: '/cart', label: 'Корзина', icon: ShoppingBag },
-];
+  { href: '/', key: 'home', icon: Home },
+  { href: '/catalog', key: 'catalog', icon: LayoutGrid },
+  { href: '/services', key: 'services', icon: Package },
+  { href: '/ai', key: 'ai', icon: Sparkles },
+  { href: '/cart', key: 'cart', icon: ShoppingBag },
+] as const;
 
 /** Нижняя навигация — основной способ перемещения на мобильных. */
 export function MobileTabBar() {
   const pathname = usePathname();
+  const t = useT('layout');
   const cartCount = useCartStore(selectCartCount);
 
   // В кабинете бизнеса и на экранах auth своя навигация.
@@ -39,7 +41,9 @@ export function MobileTabBar() {
                 )}
               >
                 <tab.icon className={cn('size-5', isActive && 'fill-primary/15')} />
-                {tab.label}
+                <span className="w-full truncate text-center leading-tight">
+                  {t(`tabbar.${tab.key}`)}
+                </span>
                 {tab.href === '/cart' && cartCount > 0 ? (
                   <span className="absolute right-2 top-1 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-semibold text-primary-foreground">
                     {cartCount}

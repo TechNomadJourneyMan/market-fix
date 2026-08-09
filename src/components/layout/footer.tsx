@@ -1,32 +1,37 @@
 import Link from 'next/link';
 import { Instagram, Mail, MessageCircle, Phone } from 'lucide-react';
 import type { Category } from '@/types';
+import { getTranslator } from '@/i18n/server';
+import { LanguageSwitcher } from './language-switcher';
 import { Logo } from './logo';
 
-const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
+const COLUMNS: { titleKey: string; links: { key: string; href: string }[] }[] = [
   {
-    title: 'Гостям',
+    titleKey: 'footer.guests',
     links: [
-      { label: 'Каталог заведений', href: '/catalog' },
-      { label: 'Сервисы: доставка и аренда', href: '/services' },
-      { label: 'AI-подбор места', href: '/ai' },
-      { label: 'Merge Menu с друзьями', href: '/merge' },
-      { label: 'Свободно сейчас', href: '/catalog?availableNow=1' },
-      { label: 'Мои бронирования', href: '/account/bookings' },
+      { key: 'footer.guests.catalog', href: '/catalog' },
+      { key: 'footer.guests.services', href: '/services' },
+      { key: 'footer.guests.ai', href: '/ai' },
+      { key: 'footer.guests.merge', href: '/merge' },
+      { key: 'footer.guests.availableNow', href: '/catalog?availableNow=1' },
+      { key: 'footer.guests.bookings', href: '/account/bookings' },
     ],
   },
   {
-    title: 'Бизнесу',
+    titleKey: 'footer.business',
     links: [
-      { label: 'Подключить заведение', href: '/business' },
-      { label: 'Дашборд и аналитика', href: '/business/analytics' },
-      { label: 'Управление бронями', href: '/business/bookings' },
-      { label: 'Работа с отзывами', href: '/business/reviews' },
+      { key: 'footer.business.connect', href: '/business' },
+      { key: 'footer.business.analytics', href: '/business/analytics' },
+      { key: 'footer.business.bookings', href: '/business/bookings' },
+      { key: 'footer.business.reviews', href: '/business/reviews' },
     ],
   },
 ];
 
-export function Footer({ categories }: { categories: Category[] }) {
+export async function Footer({ categories }: { categories: Category[] }) {
+  const t = await getTranslator('navigation');
+  const tLayout = await getTranslator('layout');
+
   return (
     <footer className="mt-20 border-t bg-muted/30">
       <div className="container py-14">
@@ -34,8 +39,7 @@ export function Footer({ categories }: { categories: Category[] }) {
           <div className="space-y-4">
             <Logo />
             <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Находим места в Алматы. Бронирование за 30 секунд, честные отзывы
-              и AI-подбор, который понимает повод.
+              {t('footer.tagline')}
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               <a
@@ -51,11 +55,14 @@ export function Footer({ categories }: { categories: Category[] }) {
                 <Mail className="size-3.5" /> hello@market-fix.kz
               </a>
             </div>
+            <div className="pt-2">
+              <LanguageSwitcher variant="inline" />
+            </div>
           </div>
 
           {COLUMNS.map((column) => (
-            <div key={column.title}>
-              <p className="mb-3.5 text-sm font-semibold">{column.title}</p>
+            <div key={column.titleKey} className="min-w-0">
+              <p className="mb-3.5 text-sm font-semibold">{t(column.titleKey)}</p>
               <ul className="space-y-2.5">
                 {column.links.map((link) => (
                   <li key={link.href}>
@@ -63,7 +70,7 @@ export function Footer({ categories }: { categories: Category[] }) {
                       href={link.href}
                       className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                     >
-                      {link.label}
+                      {tLayout(link.key)}
                     </Link>
                   </li>
                 ))}
@@ -71,8 +78,8 @@ export function Footer({ categories }: { categories: Category[] }) {
             </div>
           ))}
 
-          <div>
-            <p className="mb-3.5 text-sm font-semibold">Категории</p>
+          <div className="min-w-0">
+            <p className="mb-3.5 text-sm font-semibold">{t('footer.categories')}</p>
             <ul className="space-y-2.5">
               {categories.slice(0, 6).map((category) => (
                 <li key={category.id}>
@@ -90,7 +97,7 @@ export function Footer({ categories }: { categories: Category[] }) {
 
         <div className="mt-12 flex flex-col gap-4 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Market Fix. Каталог заведений Алматы.
+            {tLayout('footer.copyright', { year: new Date().getFullYear() })}
           </p>
           <div className="flex items-center gap-3">
             <FooterSocial href="https://instagram.com" label="Instagram">

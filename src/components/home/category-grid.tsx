@@ -3,12 +3,14 @@
 import Link from 'next/link';
 import type { Category } from '@/types';
 import { cn } from '@/lib/utils';
-import { formatVenues } from '@/lib/format';
+import { useT } from '@/i18n/client';
 import { Icon } from '@/components/ui/icon';
 import { Stagger, StaggerItem } from '@/components/ui/motion';
 
 /** Плитки категорий — основной способ начать поиск без ввода текста. */
 export function CategoryGrid({ categories }: { categories: Category[] }) {
+  const t = useT('common');
+
   return (
     <Stagger className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {categories.map((category, index) => (
@@ -38,10 +40,12 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
                 <Icon name={category.icon} className="size-5" />
               </span>
 
-              <div className="mt-auto">
-                <p className="text-sm font-semibold tracking-tight">{category.name}</p>
+              <div className="mt-auto min-w-0">
+                <p className="text-sm font-semibold leading-snug tracking-tight">
+                  {category.name}
+                </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  {formatVenues(category.venueCount)}
+                  {t('counts.venues', { count: category.venueCount })}
                 </p>
               </div>
             </div>

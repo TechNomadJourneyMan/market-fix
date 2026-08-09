@@ -41,16 +41,23 @@ import {
 } from '@/components/ui/sheet';
 import { SearchBar } from '@/components/search/search-bar';
 import { SignOutButton, SignOutMenuItem } from '@/components/auth/sign-out-button';
+import { useT } from '@/i18n/client';
 import { selectCartCount, useCartStore } from '@/store/use-cart-store';
 import { ThemeToggle } from './theme-toggle';
+import { LanguageSwitcher } from './language-switcher';
 import { Logo } from './logo';
 
-const NAV_LINKS = [
-  { href: '/catalog', label: 'Каталог', icon: LayoutGrid },
-  { href: '/services', label: 'Сервисы', icon: Package },
-  { href: '/ai', label: 'AI-подбор', icon: Sparkles, highlight: true },
-  { href: '/merge', label: 'Merge Menu', icon: Users },
-  { href: '/business', label: 'Для бизнеса', icon: Building2 },
+const NAV_LINKS: {
+  href: string;
+  key: string;
+  icon: React.ComponentType<{ className?: string }>;
+  highlight?: boolean;
+}[] = [
+  { href: '/catalog', key: 'catalog', icon: LayoutGrid },
+  { href: '/services', key: 'services', icon: Package },
+  { href: '/ai', key: 'ai', icon: Sparkles, highlight: true },
+  { href: '/merge', key: 'merge', icon: Users },
+  { href: '/business', key: 'business', icon: Building2 },
 ];
 
 interface HeaderProps {
@@ -61,6 +68,8 @@ interface HeaderProps {
 
 export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
   const pathname = usePathname();
+  const t = useT('navigation');
+  const tLayout = useT('layout');
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const cartCount = useCartStore(selectCartCount);
@@ -86,13 +95,13 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
       )}
     >
       <div className="container flex h-16 items-center gap-3 sm:h-[72px] sm:gap-5">
-        <Link href="/" className="shrink-0" aria-label="На главную">
+        <Link href="/" className="shrink-0" aria-label={tLayout('header.homeAria')}>
           <Logo />
         </Link>
 
         {showInlineSearch ? (
           <div className="hidden min-w-0 flex-1 lg:block">
-            <SearchBar variant="compact" placeholder="Куда пойдём?" />
+            <SearchBar variant="compact" placeholder={t('searchPlaceholder')} />
           </div>
         ) : (
           <div className="hidden flex-1 lg:block" />
@@ -114,9 +123,9 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
                     link.highlight && !isActive && 'text-primary hover:text-primary',
                   )}
                 >
-                  <span className="flex items-center gap-1.5">
-                    {link.highlight ? <Sparkles className="size-3.5" /> : null}
-                    {link.label}
+                  <span className="flex items-center gap-1.5 whitespace-nowrap">
+                    {link.highlight ? <Sparkles className="size-3.5 shrink-0" /> : null}
+                    {t(`links.${link.key}`)}
                   </span>
                 </Link>
               );
@@ -127,16 +136,18 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
         <div className="ml-auto flex items-center gap-1 lg:ml-0">
           {!showInlineSearch && !isAuthPage ? (
             <Button asChild variant="ghost" size="icon" className="hidden lg:inline-flex">
-              <Link href="/catalog" aria-label="Поиск">
+              <Link href="/catalog" aria-label={t('search')}>
                 <Search />
               </Link>
             </Button>
           ) : null}
 
+          <LanguageSwitcher variant="compact" className="hidden sm:inline-flex" />
+
           <ThemeToggle className="hidden sm:inline-flex" />
 
           <Button asChild variant="ghost" size="icon" className="relative hidden sm:inline-flex">
-            <Link href="/cart" aria-label="Корзина броней">
+            <Link href="/cart" aria-label={tLayout('header.cartAria')}>
               <ShoppingBag />
               {cartCount > 0 ? (
                 <span className="absolute right-1.5 top-1.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
@@ -149,7 +160,7 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
           {isAuthenticated && user ? (
             <>
               <Button asChild variant="ghost" size="icon" className="relative hidden sm:inline-flex">
-                <Link href="/account/notifications" aria-label="Уведомления">
+                <Link href="/account/notifications" aria-label={t('links.notifications')}>
                   <Bell />
                   {unreadCount > 0 ? (
                     <span className="absolute right-1.5 top-1.5 flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] font-semibold text-destructive-foreground">
@@ -163,7 +174,7 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
                 <DropdownMenuTrigger asChild>
                   <button
                     className="ml-1 hidden items-center gap-2 rounded-full border bg-background p-1 pr-3 transition-shadow hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:flex"
-                    aria-label="Меню профиля"
+                    aria-label={tLayout('header.profileMenuAria')}
                   >
                     <Avatar className="size-8">
                       <AvatarImage src={user.avatar} alt={user.name} />
@@ -190,28 +201,28 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href="/account">
-                      <UserIcon /> Профиль
+                      <UserIcon /> {t('links.account')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/account/bookings">
-                      <CalendarCheck /> Мои бронирования
+                      <CalendarCheck /> {tLayout('header.myBookings')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/account/favorites">
-                      <Heart /> Избранное
+                      <Heart /> {t('links.favorites')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/account/settings">
-                      <Settings /> Настройки
+                      <Settings /> {tLayout('header.settings')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href="/business">
-                      <Building2 /> Кабинет бизнеса
+                      <Building2 /> {t('auth.businessCabinet')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -222,17 +233,21 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
           ) : (
             <div className="hidden items-center gap-2 sm:flex">
               <Button asChild variant="ghost" size="sm">
-                <Link href="/auth/login">Войти</Link>
+                <Link href="/auth/login" className="whitespace-nowrap">
+                  {t('auth.login')}
+                </Link>
               </Button>
               <Button asChild size="sm">
-                <Link href="/auth/register">Регистрация</Link>
+                <Link href="/auth/register" className="whitespace-nowrap">
+                  {t('auth.register')}
+                </Link>
               </Button>
             </div>
           )}
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Меню">
+              <Button variant="ghost" size="icon" className="lg:hidden" aria-label={t('menu')}>
                 <Menu />
               </Button>
             </SheetTrigger>
@@ -258,32 +273,32 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
                 </SheetTitle>
               </SheetHeader>
               <SheetBody className="space-y-1">
-                <MobileLink href="/catalog" icon={LayoutGrid} label="Каталог" onNavigate={() => setMobileOpen(false)} />
-                <MobileLink href="/services" icon={Package} label="Сервисы" onNavigate={() => setMobileOpen(false)} />
-                <MobileLink href="/ai" icon={Sparkles} label="AI-подбор" onNavigate={() => setMobileOpen(false)} highlight />
-                <MobileLink href="/merge" icon={Users} label="Merge Menu" onNavigate={() => setMobileOpen(false)} />
+                <MobileLink href="/catalog" icon={LayoutGrid} label={t('links.catalog')} onNavigate={() => setMobileOpen(false)} />
+                <MobileLink href="/services" icon={Package} label={t('links.services')} onNavigate={() => setMobileOpen(false)} />
+                <MobileLink href="/ai" icon={Sparkles} label={t('links.ai')} onNavigate={() => setMobileOpen(false)} highlight />
+                <MobileLink href="/merge" icon={Users} label={t('links.merge')} onNavigate={() => setMobileOpen(false)} />
                 <MobileLink
                   href="/cart"
                   icon={ShoppingBag}
-                  label="Корзина"
+                  label={t('links.cart')}
                   badge={cartCount || undefined}
                   onNavigate={() => setMobileOpen(false)}
                 />
 
                 {isAuthenticated ? (
                   <>
-                    <MobileLink href="/account" icon={UserIcon} label="Профиль" onNavigate={() => setMobileOpen(false)} />
-                    <MobileLink href="/account/bookings" icon={CalendarCheck} label="Бронирования" onNavigate={() => setMobileOpen(false)} />
-                    <MobileLink href="/account/favorites" icon={Heart} label="Избранное" onNavigate={() => setMobileOpen(false)} />
+                    <MobileLink href="/account" icon={UserIcon} label={t('links.account')} onNavigate={() => setMobileOpen(false)} />
+                    <MobileLink href="/account/bookings" icon={CalendarCheck} label={t('links.bookings')} onNavigate={() => setMobileOpen(false)} />
+                    <MobileLink href="/account/favorites" icon={Heart} label={t('links.favorites')} onNavigate={() => setMobileOpen(false)} />
                     <MobileLink
                       href="/account/notifications"
                       icon={Bell}
-                      label="Уведомления"
+                      label={t('links.notifications')}
                       badge={unreadCount || undefined}
                       onNavigate={() => setMobileOpen(false)}
                     />
                     <div className="!mt-4 border-t pt-4">
-                      <MobileLink href="/business" icon={Building2} label="Кабинет бизнеса" onNavigate={() => setMobileOpen(false)} />
+                      <MobileLink href="/business" icon={Building2} label={t('auth.businessCabinet')} onNavigate={() => setMobileOpen(false)} />
                     </div>
                     <div className="!mt-4">
                       <SignOutButton className="w-full justify-start" />
@@ -292,20 +307,28 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
                 ) : (
                   <div className="!mt-4 space-y-2 border-t pt-4">
                     <Button asChild className="w-full" onClick={() => setMobileOpen(false)}>
-                      <Link href="/auth/register">Создать аккаунт</Link>
+                      <Link href="/auth/register">{tLayout('header.createAccount')}</Link>
                     </Button>
                     <Button asChild variant="outline" className="w-full" onClick={() => setMobileOpen(false)}>
-                      <Link href="/auth/login">Войти</Link>
+                      <Link href="/auth/login">{t('auth.login')}</Link>
                     </Button>
                     <Button asChild variant="ghost" className="w-full" onClick={() => setMobileOpen(false)}>
-                      <Link href="/auth/register?role=business">Подключить бизнес</Link>
+                      <Link href="/auth/register?role=business">
+                        {tLayout('header.connectBusiness')}
+                      </Link>
                     </Button>
                   </div>
                 )}
 
-                <div className="!mt-4 flex items-center justify-between rounded-xl border p-3">
-                  <span className="text-sm text-muted-foreground">Тема оформления</span>
+                <div className="!mt-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border p-3">
+                  <span className="min-w-0 text-sm text-muted-foreground">
+                    {tLayout('header.themeLabel')}
+                  </span>
                   <ThemeToggle />
+                </div>
+
+                <div className="!mt-3 rounded-xl border p-3">
+                  <LanguageSwitcher variant="inline" />
                 </div>
               </SheetBody>
             </SheetContent>

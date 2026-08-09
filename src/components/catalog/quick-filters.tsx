@@ -3,6 +3,7 @@
 import type { VenueQuery } from '@/types';
 import { QUICK_FILTERS } from '@/types';
 import { cn } from '@/lib/utils';
+import { useT } from '@/i18n/client';
 import { Icon } from '@/components/ui/icon';
 import { useCatalogParams } from '@/hooks/use-catalog-params';
 
@@ -15,6 +16,7 @@ export function QuickFilters({
   className?: string;
 }) {
   const { patch } = useCatalogParams(query);
+  const t = useT('catalog');
 
   return (
     <div className={cn('no-scrollbar flex gap-2 overflow-x-auto', className)}>
@@ -27,14 +29,14 @@ export function QuickFilters({
             onClick={() => patch({ [filter.key]: isActive ? undefined : true })}
             aria-pressed={isActive}
             className={cn(
-              'inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm font-medium transition-all',
+              'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3.5 py-2 text-sm font-medium transition-all',
               isActive
                 ? 'border-primary bg-primary/10 text-primary shadow-soft'
                 : 'bg-background text-muted-foreground hover:border-foreground/20 hover:text-foreground',
             )}
           >
-            <Icon name={filter.icon} className="size-3.5" />
-            {filter.label}
+            <Icon name={filter.icon} className="size-3.5 shrink-0" />
+            {t(`quickFilters.${filter.key}`)}
           </button>
         );
       })}

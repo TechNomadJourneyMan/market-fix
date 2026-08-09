@@ -8,6 +8,7 @@ import { Loader2, Search, X } from 'lucide-react';
 import type { SearchSuggestion } from '@/types';
 import { apiClient, queryKeys } from '@/lib/api-client';
 import { cn } from '@/lib/utils';
+import { useT } from '@/i18n/client';
 import { useDebounce, useDismiss } from '@/hooks/use-debounce';
 import { Icon } from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
@@ -23,23 +24,16 @@ interface SearchBarProps {
   onSubmitted?: () => void;
 }
 
-const KIND_LABELS: Record<SearchSuggestion['kind'], string> = {
-  venue: 'Заведение',
-  category: 'Категория',
-  cuisine: 'Кухня',
-  district: 'Район',
-  query: 'Поиск',
-};
-
 export function SearchBar({
   variant = 'hero',
   defaultValue = '',
-  placeholder = 'Ресторан, кухня, район или повод…',
+  placeholder,
   className,
   autoFocus,
   onSubmitted,
 }: SearchBarProps) {
   const router = useRouter();
+  const t = useT('catalog');
   const [value, setValue] = React.useState(defaultValue);
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(-1);
@@ -111,8 +105,8 @@ export function SearchBar({
           }}
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          aria-label="Поиск заведений"
+          placeholder={placeholder ?? t('searchPlaceholder')}
+          aria-label={t('search.ariaLabel')}
           className={cn(
             'w-full bg-transparent outline-none placeholder:text-muted-foreground/70',
             isHero ? 'text-base' : 'text-sm',
@@ -127,7 +121,7 @@ export function SearchBar({
               setActiveIndex(-1);
             }}
             className="shrink-0 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-            aria-label="Очистить"
+            aria-label={t('search.clear')}
           >
             <X className="size-4" />
           </button>
@@ -147,7 +141,11 @@ export function SearchBar({
           size={isHero ? 'lg' : 'sm'}
           className={cn('shrink-0', isHero ? 'px-6' : 'px-3')}
         >
-          {isHero ? 'Найти' : <Search className="size-4" />}
+          {isHero ? (
+            <span className="whitespace-nowrap">{t('search.submit')}</span>
+          ) : (
+            <Search className="size-4" />
+          )}
         </Button>
       </div>
 
@@ -161,7 +159,7 @@ export function SearchBar({
             className="absolute inset-x-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border bg-popover shadow-lift"
           >
             <div className="flex items-center justify-between px-4 py-2.5 text-xs font-medium text-muted-foreground">
-              <span>{value.trim() ? 'Совпадения' : 'Популярные запросы'}</span>
+              <span>{value.trim() ? t('search.matches') : t('search.popular')}</span>
               {isFetching ? <Loader2 className="size-3.5 animate-spin" /> : null}
             </div>
 
@@ -191,7 +189,7 @@ export function SearchBar({
                       ) : null}
                     </span>
                     <span className="shrink-0 text-[11px] text-muted-foreground/70">
-                      {KIND_LABELS[suggestion.kind]}
+                      {t(`search.kinds.${suggestion.kind}`)}
                     </span>
                   </button>
                 </li>
@@ -199,7 +197,7 @@ export function SearchBar({
 
               {suggestions.length === 0 && !isFetching ? (
                 <li className="px-4 py-6 text-center text-sm text-muted-foreground">
-                  Ничего не нашли. Попробуйте «ужин», «банкет» или название района.
+                  {t('search.empty')}
                 </li>
               ) : null}
             </ul>

@@ -6,12 +6,13 @@ import { BadgeCheck, MapPin, Navigation, Star, Users } from 'lucide-react';
 import type { VenueListItem } from '@/types';
 import { cn } from '@/lib/utils';
 import {
-  formatDistance,
-  formatPrice,
-  formatRating,
-  formatReviews,
-} from '@/lib/format';
+  formatDistanceI18n,
+  formatPriceI18n,
+  formatRatingI18n,
+} from '@/i18n/format';
+import { useLocale, useT } from '@/i18n/client';
 import { getOpenStatus } from '@/lib/hours';
+import { getOpenStatusLabel } from '@/lib/open-status-label';
 import { getDirectionsUrl } from '@/lib/geo';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -41,6 +42,9 @@ export function VenueCard({
   priority,
 }: VenueCardProps) {
   const openBooking = useBookingStore((state) => state.open);
+  const t = useT('catalog');
+  const tCommon = useT('common');
+  const locale = useLocale();
   const [photoIndex, setPhotoIndex] = React.useState(0);
 
   // Статус работы считаем на клиенте: на сервере «сейчас» отличалось бы от времени гостя.
@@ -73,7 +77,7 @@ export function VenueCard({
       <Link
         href={href}
         className="relative block overflow-hidden"
-        aria-label={`Открыть страницу ${venue.name}`}
+        aria-label={t('card.openPage', { name: venue.name })}
       >
         <div className={cn('relative', isCompact ? 'aspect-[16/10]' : 'aspect-[4/3]')}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -116,12 +120,13 @@ export function VenueCard({
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5 pr-14">
           {venue.promotion ? (
             <Badge variant="promo" className="shadow-soft">
-              −{venue.promotion.discountPercent}% · Акция
+              {t('card.promo', { percent: venue.promotion.discountPercent })}
             </Badge>
           ) : null}
           {venue.isFeatured ? (
             <Badge variant="overlay" className="gap-1">
-              <Star className="size-3 fill-amber-400 text-amber-400" /> Выбор редакции
+              <Star className="size-3 shrink-0 fill-amber-400 text-amber-400" />
+              {t('card.editorsChoice')}
             </Badge>
           ) : null}
         </div>
@@ -134,7 +139,7 @@ export function VenueCard({
         <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
           <span className="inline-flex items-center gap-1 rounded-lg border border-white/25 bg-black/45 px-2 py-1 text-xs font-semibold text-white backdrop-blur-md">
             <Star className="size-3 fill-amber-400 text-amber-400" strokeWidth={0} />
-            {formatRating(venue.rating.score)}
+            {formatRatingI18n(venue.rating.score, locale)}
             <span className="font-normal text-white/70">· {venue.rating.count}</span>
           </span>
 
@@ -146,7 +151,7 @@ export function VenueCard({
             >
               <span
                 className={cn(
-                  'size-1.5 rounded-full',
+                  'size-1.5 shrink-0 rounded-full',
                   status.isOpen
                     ? status.closingSoon
                       ? 'bg-amber-400'
@@ -154,7 +159,7 @@ export function VenueCard({
                     : 'bg-rose-400',
                 )}
               />
-              {status.label}
+              {getOpenStatusLabel(status, t)}
             </span>
           ) : null}
         </div>
@@ -189,7 +194,13 @@ export function VenueCard({
           <span className="min-w-0 flex-1">
             <span className="line-clamp-1">{venue.location.address}</span>
             {venue.distanceKm !== undefined ? (
-              <span className="text-foreground/60"> · {formatDistance(venue.distanceKm)}</span>
+              <span className="text-foreground/60">
+                {' · '}
+                {formatDistanceI18n(venue.distanceKm, locale, {
+                  m: tCommon('units.m'),
+                  km: tCommon('units.km'),
+                })}
+              </span>
             ) : null}
           </span>
           <a
@@ -199,30 +210,34 @@ export function VenueCard({
             onClick={(event) => event.stopPropagation()}
             className="inline-flex shrink-0 items-center gap-1 font-medium text-primary transition-colors hover:text-primary/80"
           >
-            <Navigation className="size-3" /> Доехать
+            <Navigation className="size-3 shrink-0" /> {t('card.directions')}
           </a>
         </div>
 
         {/* Цена и вместимость */}
-        <div className="mt-auto flex items-center justify-between gap-2 border-t pt-3">
-          <div>
-            <p className="text-[11px] text-muted-foreground">Средний чек</p>
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t pt-3">
+          <div className="min-w-0">
+            <p className="text-[11px] text-muted-foreground">{t('card.averageCheck')}</p>
             <p className="text-sm font-semibold">
-              {formatPrice(venue.averagePrice)}
-              <span className="text-xs font-normal text-muted-foreground"> / чел.</span>
+              {formatPriceI18n(venue.averagePrice, locale)}
+              <span className="text-xs font-normal text-muted-foreground">
+                {' '}
+                {t('card.perPerson')}
+              </span>
             </p>
           </div>
-          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-            <Users className="size-3.5" /> до {venue.capacity}
+          <span className="inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
+            <Users className="size-3.5 shrink-0" />
+            {t('card.capacityUpTo', { count: venue.capacity })}
           </span>
         </div>
 
-        <div className="flex gap-2">
-          <Button asChild variant="outline" size="sm" className="flex-1">
-            <Link href={href}>Подробнее</Link>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild variant="outline" size="sm" className="min-w-[7rem] flex-1">
+            <Link href={href}>{t('card.details')}</Link>
           </Button>
-          <Button size="sm" className="flex-1" onClick={handleBook}>
-            Забронировать
+          <Button size="sm" className="min-w-[7rem] flex-1" onClick={handleBook}>
+            {t('card.book')}
           </Button>
         </div>
       </div>
@@ -233,6 +248,8 @@ export function VenueCard({
 /** Горизонтальная карточка — для списков в кабинете и рядом с картой. */
 export function VenueCardRow({ venue }: { venue: VenueListItem }) {
   const openBooking = useBookingStore((state) => state.open);
+  const t = useT('catalog');
+  const locale = useLocale();
 
   return (
     <article className="group flex gap-3 rounded-2xl border bg-card p-3 transition-all hover:border-foreground/10 hover:shadow-card">
@@ -260,16 +277,19 @@ export function VenueCardRow({ venue }: { venue: VenueListItem }) {
           </div>
           <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold">
             <Star className="size-3 fill-amber-400 text-amber-400" strokeWidth={0} />
-            {formatRating(venue.rating.score)}
+            {formatRatingI18n(venue.rating.score, locale)}
           </span>
         </div>
 
         <p className="line-clamp-1 text-xs text-muted-foreground">{venue.tagline}</p>
 
-        <div className="mt-auto flex items-center justify-between gap-2 pt-1">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-1">
           <span className="text-sm font-semibold">
-            {formatPrice(venue.averagePrice)}
-            <span className="text-xs font-normal text-muted-foreground"> / чел.</span>
+            {formatPriceI18n(venue.averagePrice, locale)}
+            <span className="text-xs font-normal text-muted-foreground">
+              {' '}
+              {t('card.perPerson')}
+            </span>
           </span>
           <div className="flex items-center gap-1.5">
             <FavoriteButton
@@ -279,7 +299,7 @@ export function VenueCardRow({ venue }: { venue: VenueListItem }) {
               size="sm"
             />
             <Button size="sm" onClick={() => openBooking(venueToBookingTarget(venue))}>
-              Забронировать
+              {t('card.book')}
             </Button>
           </div>
         </div>
@@ -290,6 +310,9 @@ export function VenueCardRow({ venue }: { venue: VenueListItem }) {
 
 /** Мини-карточка для лент «Похожие» и «Рекомендации». */
 export function VenueCardMini({ venue }: { venue: VenueListItem }) {
+  const tCommon = useT('common');
+  const locale = useLocale();
+
   return (
     <Link
       href={`/venue/${venue.slug}`}
@@ -305,16 +328,16 @@ export function VenueCardMini({ venue }: { venue: VenueListItem }) {
         />
         <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-lg border border-white/25 bg-black/45 px-2 py-0.5 text-xs font-semibold text-white backdrop-blur-md">
           <Star className="size-3 fill-amber-400 text-amber-400" strokeWidth={0} />
-          {formatRating(venue.rating.score)}
+          {formatRatingI18n(venue.rating.score, locale)}
         </span>
       </div>
       <div className="space-y-1 p-3">
         <p className="truncate text-sm font-semibold">{venue.name}</p>
         <p className="truncate text-xs text-muted-foreground">
-          {venue.categoryName} · {formatPrice(venue.averagePrice)}
+          {venue.categoryName} · {formatPriceI18n(venue.averagePrice, locale)}
         </p>
         <p className="truncate text-xs text-muted-foreground">
-          {formatReviews(venue.rating.count)}
+          {tCommon('counts.reviews', { count: venue.rating.count })}
         </p>
       </div>
     </Link>

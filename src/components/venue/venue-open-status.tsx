@@ -4,7 +4,9 @@ import * as React from 'react';
 import { Clock } from 'lucide-react';
 import type { WorkingHours } from '@/types';
 import { cn } from '@/lib/utils';
+import { useT } from '@/i18n/client';
 import { getOpenStatus } from '@/lib/hours';
+import { getOpenStatusLabel } from '@/lib/open-status-label';
 
 /**
  * Статус работы считается на клиенте: серверное «сейчас» может не совпасть
@@ -17,6 +19,7 @@ export function VenueOpenStatus({
   workingHours: WorkingHours;
   className?: string;
 }) {
+  const t = useT('venue');
   const [status, setStatus] = React.useState<ReturnType<typeof getOpenStatus> | null>(null);
 
   React.useEffect(() => {
@@ -28,8 +31,8 @@ export function VenueOpenStatus({
   if (!status) {
     return (
       <span className={cn('inline-flex items-center gap-1.5 text-muted-foreground', className)}>
-        <Clock className="size-4" />
-        Часы работы
+        <Clock className="size-4 shrink-0" />
+        {t('status.hours')}
       </span>
     );
   }
@@ -48,7 +51,7 @@ export function VenueOpenStatus({
     >
       <span
         className={cn(
-          'size-2 rounded-full',
+          'size-2 shrink-0 rounded-full',
           status.isOpen
             ? status.closingSoon
               ? 'bg-warning'
@@ -56,7 +59,7 @@ export function VenueOpenStatus({
             : 'bg-muted-foreground/50',
         )}
       />
-      {status.label}
+      {getOpenStatusLabel(status, t)}
     </span>
   );
 }

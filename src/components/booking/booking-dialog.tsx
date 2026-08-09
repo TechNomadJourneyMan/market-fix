@@ -25,15 +25,9 @@ import type { AvailabilityDay } from '@/types';
 import { apiClient, ApiError, queryKeys } from '@/lib/api-client';
 import { bookingFormSchema, type BookingFormValues } from '@/lib/validation';
 import { cn } from '@/lib/utils';
-import {
-  formatDateChip,
-  formatDateWithWeekday,
-  formatGuests,
-  formatPrice,
-  formatRating,
-  parseDate,
-  plural,
-} from '@/lib/format';
+import { parseDate } from '@/lib/format';
+import { formatDateI18n, formatPriceI18n, formatRatingI18n } from '@/i18n/format';
+import { useLocale, useT } from '@/i18n/client';
 import { useBookingStore } from '@/store/use-booking-store';
 import { useCartStore } from '@/store/use-cart-store';
 import {
@@ -68,6 +62,9 @@ const DEFAULT_USER = {
  */
 export function BookingDialog() {
   const router = useRouter();
+  const t = useT('booking');
+  const tCommon = useT('common');
+  const locale = useLocale();
   const { target, isOpen, prefill, close } = useBookingStore();
   const addToCart = useCartStore((state) => state.addItem);
 
@@ -159,13 +156,13 @@ export function BookingDialog() {
       close();
       toast.success(
         result.requiresPayment
-          ? 'Бронь создана — осталось оплатить депозит'
-          : `Стол забронирован! Номер брони ${result.booking.reference}`,
+          ? t('toast.createdNeedsPayment')
+          : t('toast.created', { reference: result.booking.reference }),
       );
       router.push(result.nextHref);
     } catch (error) {
       const message =
-        error instanceof ApiError ? error.message : 'Не удалось создать бронь';
+        error instanceof ApiError ? error.message : t('toast.createError');
       toast.error(message);
     }
   });
@@ -176,7 +173,7 @@ export function BookingDialog() {
     if (!target) return;
     const values = form.getValues();
     if (!values.date || !values.time) {
-      toast.error('Выберите дату и время');
+      toast.error(t('toast.pickDateTime'));
       return;
     }
     addToCart({
@@ -192,9 +189,9 @@ export function BookingDialog() {
       estimatedTotal: estimate,
       extras: [],
     });
-    toast.success('Добавлено в корзину броней', {
+    toast.success(t('toast.addedToCart'), {
       action: {
-        label: 'Открыть',
+        label: t('toast.openCart'),
         onClick: () => router.push('/cart'),
       },
     });
@@ -222,7 +219,7 @@ export function BookingDialog() {
               <DialogDescription className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
                 <span className="inline-flex items-center gap-1 font-medium text-foreground">
                   <Star className="size-3 fill-amber-400 text-amber-400" />
-                  {formatRating(target.rating)}
+                  {formatRatingI18n(target.rating, locale)}
                 </span>
                 <span>·</span>
                 <span>{target.categoryName}</span>
@@ -237,7 +234,8 @@ export function BookingDialog() {
           {/* ——— Дата ——— */}
           <section className="space-y-2.5">
             <p className="flex items-center gap-2 text-sm font-medium">
-              <CalendarDays className="size-4 text-muted-foreground" /> Дата
+              <CalendarDays className="size-4 shrink-0 text-muted-foreground" />
+              {t('dialog.date')}
             </p>
 
             {isRangeLoading ? (
@@ -248,10 +246,19 @@ export function BookingDialog() {
               </div>
             ) : (
               <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
-                {range?.days.map((day) => {
+                {range?.days.map((day, dayIndex) => {
                   const date = parseDate(day.date);
                   const isSelected = selectedDate === day.date;
                   const isDisabled = !day.isWorkingDay || day.freeSlots === 0;
+                  const dateLabel =
+                    dayIndex === 0
+                      ? t('dialog.today')
+                      : dayIndex === 1
+                        ? t('dialog.tomorrow')
+                        : formatDateI18n(date, locale, {
+                            day: 'numeric',
+                            month: 'short',
+                          });
 
                   return (
                     <button
@@ -273,14 +280,14 @@ export function BookingDialog() {
                           isSelected ? 'text-primary' : 'text-foreground',
                         )}
                       >
-                        {formatDateChip(date, parseDate(range.days[0].date))}
+                        {dateLabel}
                       </span>
-                      <span className="text-[10px] text-muted-foreground">
+                      <span className="text-[10px] leading-tight text-muted-foreground">
                         {day.isWorkingDay
                           ? day.freeSlots > 0
-                            ? `${day.freeSlots} ${plural(day.freeSlots, 'слот', 'слота', 'слотов')}`
-                            : 'нет мест'
-                          : 'выходной'}
+                            ? t('dialog.slots', { count: day.freeSlots })
+                            : t('dialog.noSeats')
+                          : t('dialog.dayOff')}
                       </span>
                     </button>
                   );
@@ -293,7 +300,7 @@ export function BookingDialog() {
           <section className="space-y-2.5">
             <div className="flex items-center justify-between">
               <p className="flex items-center gap-2 text-sm font-medium">
-                <Clock className="size-4 text-muted-foreground" /> Время
+                <Clock className="size-4 shrink-0 text-muted-foreground" /> {t('dialog.time')}
               </p>
               {isSlotsFetching ? (
                 <Loader2 className="size-3.5 animate-spin text-muted-foreground" />
@@ -302,8 +309,7 @@ export function BookingDialog() {
 
             {availableSlots.length === 0 && !isSlotsFetching ? (
               <p className="rounded-xl border border-dashed bg-muted/40 px-4 py-5 text-center text-sm text-muted-foreground">
-                На этот день свободных слотов не осталось. Выберите другую дату — рядом почти
-                всегда есть места.
+                {t('dialog.noSlots')}
               </p>
             ) : (
               <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
@@ -336,9 +342,8 @@ export function BookingDialog() {
 
             {selectedSlot && selectedSlot.seatsLeft <= 6 ? (
               <p className="flex items-center gap-1.5 text-xs font-medium text-warning">
-                <Flame className="size-3.5" />
-                Осталось {selectedSlot.seatsLeft}{' '}
-                {plural(selectedSlot.seatsLeft, 'место', 'места', 'мест')} на это время
+                <Flame className="size-3.5 shrink-0" />
+                {t('dialog.seatsLeft', { count: selectedSlot.seatsLeft })}
               </p>
             ) : null}
             {form.formState.errors.time ? (
@@ -351,7 +356,7 @@ export function BookingDialog() {
           {/* ——— Гости ——— */}
           <section className="space-y-2.5">
             <p className="flex items-center gap-2 text-sm font-medium">
-              <Users className="size-4 text-muted-foreground" /> Количество гостей
+              <Users className="size-4 shrink-0 text-muted-foreground" /> {t('dialog.guests')}
             </p>
             <div className="flex items-center justify-between rounded-xl border p-2">
               <Button
@@ -360,40 +365,41 @@ export function BookingDialog() {
                 size="icon"
                 disabled={guests <= 1}
                 onClick={() => form.setValue('guests', Math.max(1, guests - 1))}
-                aria-label="Меньше гостей"
+                aria-label={t('dialog.guestsLess')}
               >
                 <Minus />
               </Button>
-              <span className="text-sm font-semibold">{formatGuests(guests)}</span>
+              <span className="text-sm font-semibold">
+                {tCommon('counts.guests', { count: guests })}
+              </span>
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
                 disabled={guests >= Math.min(target.capacity, 60)}
                 onClick={() => form.setValue('guests', guests + 1)}
-                aria-label="Больше гостей"
+                aria-label={t('dialog.guestsMore')}
               >
                 <Plus />
               </Button>
             </div>
             {guests >= 8 ? (
               <p className="text-xs text-muted-foreground">
-                Для компании от 8 человек заведение подтвердит бронь по телефону и предложит
-                банкетное меню.
+                {t('dialog.largePartyNote')}
               </p>
             ) : null}
           </section>
 
           {/* ——— Комментарий ——— */}
           <Field
-            label="Комментарий к брони"
+            label={t('dialog.commentLabel')}
             htmlFor="booking-comment"
-            hint="Стол у окна, детский стульчик, аллергии — всё, что важно знать заранее"
+            hint={t('dialog.commentHint')}
             error={form.formState.errors.comment?.message}
           >
             <Textarea
               id="booking-comment"
-              placeholder="Например: отмечаем день рождения, нужен торт со свечами"
+              placeholder={t('dialog.commentPlaceholder')}
               {...form.register('comment')}
             />
           </Field>
@@ -401,20 +407,20 @@ export function BookingDialog() {
           {/* ——— Контакты ——— */}
           <section className="space-y-4 rounded-2xl border bg-muted/30 p-4">
             <p className="flex items-center gap-2 text-sm font-medium">
-              <MessageSquare className="size-4 text-muted-foreground" /> Контакты для
-              подтверждения
+              <MessageSquare className="size-4 shrink-0 text-muted-foreground" />
+              {t('dialog.contactsTitle')}
             </p>
 
-            <Field label="Имя" htmlFor="booking-name" required error={form.formState.errors.name?.message}>
-              <Input id="booking-name" placeholder="Как к вам обращаться" {...form.register('name')} error={Boolean(form.formState.errors.name)} />
+            <Field label={t('dialog.nameLabel')} htmlFor="booking-name" required error={form.formState.errors.name?.message}>
+              <Input id="booking-name" placeholder={t('dialog.namePlaceholder')} {...form.register('name')} error={Boolean(form.formState.errors.name)} />
             </Field>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Телефон" htmlFor="booking-phone" required error={form.formState.errors.phone?.message}>
-                <Input id="booking-phone" type="tel" placeholder="+7 700 000 00 00" {...form.register('phone')} error={Boolean(form.formState.errors.phone)} />
+              <Field label={t('dialog.phoneLabel')} htmlFor="booking-phone" required error={form.formState.errors.phone?.message}>
+                <Input id="booking-phone" type="tel" placeholder={t('dialog.phonePlaceholder')} {...form.register('phone')} error={Boolean(form.formState.errors.phone)} />
               </Field>
-              <Field label="Email" htmlFor="booking-email" required error={form.formState.errors.email?.message}>
-                <Input id="booking-email" type="email" placeholder="you@example.kz" {...form.register('email')} error={Boolean(form.formState.errors.email)} />
+              <Field label={t('dialog.emailLabel')} htmlFor="booking-email" required error={form.formState.errors.email?.message}>
+                <Input id="booking-email" type="email" placeholder={t('dialog.emailPlaceholder')} {...form.register('email')} error={Boolean(form.formState.errors.email)} />
               </Field>
             </div>
 
@@ -427,8 +433,7 @@ export function BookingDialog() {
                 className="mt-0.5"
               />
               <span className="text-xs leading-relaxed text-muted-foreground">
-                Согласен с правилами бронирования: стол держат 20 минут после указанного
-                времени, отмена — не позже чем за 2 часа.
+                {t('dialog.agree')}
               </span>
             </label>
             {form.formState.errors.agree ? (
@@ -440,13 +445,15 @@ export function BookingDialog() {
         </DialogBody>
 
         <DialogFooter className="flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center justify-between gap-3 sm:justify-start">
-            <div>
-              <p className="text-xs text-muted-foreground">Ориентировочно</p>
-              <p className="text-base font-semibold">{formatPrice(estimate)}</p>
+          <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-start">
+            <div className="min-w-0">
+              <p className="text-xs text-muted-foreground">{t('dialog.estimate')}</p>
+              <p className="text-base font-semibold">
+                {formatPriceI18n(estimate, locale)}
+              </p>
             </div>
             <Badge variant="success" className="gap-1">
-              <ShieldCheck className="size-3" /> Бронь бесплатна
+              <ShieldCheck className="size-3 shrink-0" /> {t('dialog.freeBadge')}
             </Badge>
           </div>
 
@@ -457,7 +464,8 @@ export function BookingDialog() {
               onClick={onAddToCart}
               className="w-full sm:w-auto"
             >
-              <ShoppingBag />В корзину
+              <ShoppingBag />
+              {t('dialog.addToCart')}
             </Button>
             <Button
               size="lg"
@@ -465,7 +473,7 @@ export function BookingDialog() {
               isLoading={form.formState.isSubmitting}
               className="w-full sm:w-auto"
             >
-              {form.formState.isSubmitting ? 'Отправляем…' : 'Забронировать сейчас'}
+              {form.formState.isSubmitting ? t('dialog.submitting') : t('dialog.submit')}
             </Button>
           </div>
         </DialogFooter>
@@ -477,7 +485,15 @@ export function BookingDialog() {
             className="border-t px-5 py-2.5 text-center text-xs text-muted-foreground"
           >
             <Check className="mr-1 inline size-3 text-success" />
-            {formatDateWithWeekday(selectedDate)}, {selectedTime} · {formatGuests(guests)}
+            {t('dialog.summary', {
+              date: formatDateI18n(parseDate(selectedDate), locale, {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+              }),
+              time: selectedTime,
+              guests: tCommon('counts.guests', { count: guests }),
+            })}
           </motion.p>
         ) : null}
       </DialogContent>
