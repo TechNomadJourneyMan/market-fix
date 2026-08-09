@@ -180,9 +180,9 @@ export function MergeRoomView({
       <div className="grid gap-6 lg:grid-cols-[1fr_1.1fr_0.9fr]">
         {/* Preferences */}
         <section className="space-y-4 rounded-3xl border bg-card p-4 sm:p-5">
-          <h2 className="text-sm font-semibold">Ваши предпочтения</h2>
+          <h2 className="text-sm font-semibold">{t('room.preferencesTitle')}</h2>
           <div>
-            <p className="mb-2 text-xs text-muted-foreground">Кухня</p>
+            <p className="mb-2 text-xs text-muted-foreground">{t('room.cuisine')}</p>
             <div className="flex flex-wrap gap-1.5">
               {cuisines.slice(0, 10).map((cuisine) => {
                 const active = prefs.cuisineIds.includes(cuisine.id);
@@ -210,20 +210,20 @@ export function MergeRoomView({
             </div>
           </div>
           <div>
-            <p className="mb-2 text-xs text-muted-foreground">Вайб</p>
+            <p className="mb-2 text-xs text-muted-foreground">{t('room.vibe')}</p>
             <div className="flex flex-wrap gap-1.5">
               {VIBES.map((vibe) => {
-                const active = prefs.vibes.includes(vibe.value);
+                const active = prefs.vibes.includes(vibe);
                 return (
                   <button
-                    key={vibe.value}
+                    key={vibe}
                     type="button"
                     onClick={() =>
                       setPrefs((current) => ({
                         ...current,
                         vibes: active
-                          ? current.vibes.filter((item) => item !== vibe.value)
-                          : [...current.vibes, vibe.value],
+                          ? current.vibes.filter((item) => item !== vibe)
+                          : [...current.vibes, vibe],
                       }))
                     }
                     className={cn(
@@ -231,14 +231,14 @@ export function MergeRoomView({
                       active ? 'border-primary bg-primary/10 text-primary' : '',
                     )}
                   >
-                    {vibe.label}
+                    {t(`vibes.${vibe}`)}
                   </button>
                 );
               })}
             </div>
           </div>
           <div>
-            <p className="mb-2 text-xs text-muted-foreground">Бюджет на человека</p>
+            <p className="mb-2 text-xs text-muted-foreground">{t('room.budget')}</p>
             <div className="flex flex-wrap gap-1.5">
               {BUDGETS.map((budget) => (
                 <button
@@ -252,20 +252,20 @@ export function MergeRoomView({
                       : '',
                   )}
                 >
-                  до {formatPrice(budget)}
+                  {t('room.budgetUpTo', { price: formatPriceI18n(budget, locale) })}
                 </button>
               ))}
             </div>
           </div>
           <div className="space-y-1.5">
-            <p className="text-xs text-muted-foreground">Своими словами</p>
+            <p className="text-xs text-muted-foreground">{t('room.freeText')}</p>
             <div className="flex gap-2">
               <Input
                 value={prefs.freeText ?? ''}
                 onChange={(event) =>
                   setPrefs((current) => ({ ...current, freeText: event.target.value }))
                 }
-                placeholder="Тихо, с террасой, без громкой музыки…"
+                placeholder={t('room.freeTextPlaceholder')}
               />
               <VoiceInputButton
                 onTranscript={(text) =>
@@ -377,7 +377,8 @@ export function MergeRoomView({
                       {isMatch ? <Check className="size-4 text-success" /> : null}
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {formatRating(venue.rating.score)} · от {formatPrice(venue.averagePrice)}
+                      {formatRatingI18n(venue.rating.score, locale)} ·{' '}
+                      {t('common:labels.from')} {formatPriceI18n(venue.averagePrice, locale)}
                     </p>
                     <div className="flex gap-2">
                       <Button
