@@ -25,8 +25,8 @@ export const bookingFormSchema = z.object({
     .min(1, 'Телефон нужен для подтверждения брони')
     .regex(phoneRegex, 'Похоже, в номере опечатка'),
   email: z.string().min(1, 'Укажите email').email('Проверьте адрес почты'),
-  agree: z.literal(true, {
-    errorMap: () => ({ message: 'Нужно согласие с правилами бронирования' }),
+  agree: z.boolean().refine((value) => value === true, {
+    message: 'Нужно согласие с правилами бронирования',
   }),
 });
 

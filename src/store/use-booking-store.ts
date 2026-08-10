@@ -36,7 +36,7 @@ export const useBookingStore = create<BookingState>((set) => ({
   prefill: {},
 
   open: (target, prefill = {}) => set({ target, prefill, isOpen: true }),
-  close: () => set({ isOpen: false }),
+  close: () => set({ isOpen: false, prefill: {} }),
 }));
 
 export function venueToBookingTarget(venue: VenueListItem): BookingTarget {

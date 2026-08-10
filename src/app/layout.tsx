@@ -9,6 +9,7 @@ import { MobileTabBar } from '@/components/layout/mobile-tabbar';
 import { AppChrome } from '@/components/layout/app-chrome';
 import { themeScript } from '@/components/layout/theme-toggle';
 import { BookingDialog } from '@/components/booking/booking-dialog';
+import { CompareBar } from '@/components/compare/compare-bar';
 import { getCategories } from '@/server/repositories/taxonomy';
 import { getSessionUser } from '@/lib/auth';
 import {
@@ -96,6 +97,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </AppChrome>
 
           <MobileTabBar />
+          <CompareBar />
           <BookingDialog />
         </Providers>
       </body>

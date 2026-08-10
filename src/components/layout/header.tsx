@@ -15,6 +15,7 @@ import {
   Shield,
   ShoppingBag,
   Sparkles,
+  Star,
   Users,
   User as UserIcon,
 } from 'lucide-react';
@@ -54,6 +55,7 @@ const NAV_LINKS: {
   highlight?: boolean;
 }[] = [
   { href: '/catalog', key: 'catalog', icon: LayoutGrid },
+  { href: '/ratings', key: 'ratings', icon: Star },
   { href: '/ai', key: 'ai', icon: Sparkles },
   { href: '/merge', key: 'merge', icon: Users },
   { href: '/monetization', key: 'business', icon: Building2 },
@@ -287,6 +289,7 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
               </SheetHeader>
               <SheetBody className="space-y-1">
                 <MobileLink href="/catalog" icon={LayoutGrid} label={t('links.catalog')} onNavigate={() => setMobileOpen(false)} />
+                <MobileLink href="/ratings" icon={Star} label={t('links.ratings')} onNavigate={() => setMobileOpen(false)} />
                 <MobileLink href="/ai" icon={Sparkles} label={t('links.ai')} onNavigate={() => setMobileOpen(false)} highlight />
                 <MobileLink href="/merge" icon={Users} label={t('links.merge')} onNavigate={() => setMobileOpen(false)} />
                 <MobileLink

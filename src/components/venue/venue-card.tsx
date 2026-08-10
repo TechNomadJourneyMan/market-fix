@@ -17,6 +17,7 @@ import { getDirectionsUrl } from '@/lib/geo';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useBookingStore, venueToBookingTarget } from '@/store/use-booking-store';
+import { CompareToggle } from '@/components/compare/compare-toggle';
 import { FavoriteButton } from './favorite-button';
 
 interface VenueCardProps {
@@ -236,6 +237,7 @@ export function VenueCard({
           <Button asChild variant="outline" size="sm" className="min-w-[7rem] flex-1">
             <Link href={href}>{t('card.details')}</Link>
           </Button>
+          <CompareToggle venueId={venue.id} venueName={venue.name} className="min-w-[7rem] flex-1" />
           <Button size="sm" className="min-w-[7rem] flex-1" onClick={handleBook}>
             {t('card.book')}
           </Button>
