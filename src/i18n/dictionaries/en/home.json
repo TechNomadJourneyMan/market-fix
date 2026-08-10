@@ -1,26 +1,36 @@
 {
   "hero": {
     "eyebrow": "Market Fix · Almaty",
-    "titleLead": "Tables, rentals and delivery —",
-    "titleAccent": "all in one place",
-    "subtitle": "Find a venue, order delivery or rent a hall. Real reviews, honest prices, no phone calls.",
-    "searchPlaceholder": "Restaurant, delivery, hall rental, gift…",
-    "searchHint": "Start with a search — or open the",
-    "searchHintLink": "city map",
+    "titleLead": "Find a place",
+    "titleAccent": "for your evening",
+    "subtitle": "Objective ratings, quality reviews and open tables — pick a time and book a venue.",
+    "searchPlaceholder": "Restaurant, cuisine, district…",
+    "searchHint": "Or open the",
+    "searchHintLink": "catalog map",
     "cta": "Browse venues",
-    "scenarioHint": "Got an occasion in mind?",
+    "scenarioHint": "Not sure where?",
     "scenarioAi": "AI picks",
-    "scenarioServices": "All services",
+    "scenarioServices": "Services",
     "quick": {
       "availableNow": "Free right now",
       "banquet": "Banquets & weddings",
+      "cuisine": "Top rated",
+      "promo": "On sale",
       "delivery": "Delivery",
-      "rental": "Rentals",
-      "promo": "On sale"
+      "rental": "Rentals"
+    },
+    "quickBook": {
+      "date": "Date",
+      "time": "Time",
+      "guests": "Guests",
+      "district": "District",
+      "cuisine": "Cuisine",
+      "any": "Any",
+      "cta": "Find an open table"
     },
     "stats": {
       "venues": "verified places",
-      "reviews": "real reviews",
+      "reviews": "reviews in base",
       "categories": "categories"
     }
   },

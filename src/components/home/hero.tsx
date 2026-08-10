@@ -1,30 +1,30 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, BadgePercent, Bike, KeyRound, PartyPopper, Zap } from 'lucide-react';
+import { ArrowRight, BadgePercent, PartyPopper, UtensilsCrossed, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { formatNumberI18n } from '@/i18n/format';
 import { useLocale, useT } from '@/i18n/client';
-import { SearchBar } from '@/components/search/search-bar';
 import { Button } from '@/components/ui/button';
 import { FadeUp } from '@/components/ui/motion';
+import { QuickBook } from '@/components/home/quick-book';
 
 interface HeroProps {
   venueCount: number;
   reviewCount: number;
   categoryCount: number;
+  districts: { id: string; slug: string; name: string }[];
+  cuisines: { id: string; slug: string; name: string }[];
 }
 
-/** Один primary job: поиск. Остальное — лёгкие сценарии, не конкурирующие XL-кнопки. */
 const QUICK_LINKS = [
   { key: 'availableNow', href: '/catalog?availableNow=1', icon: Zap },
   { key: 'banquet', href: '/catalog?banquet=1', icon: PartyPopper },
-  { key: 'delivery', href: '/services?vertical=delivery', icon: Bike },
-  { key: 'rental', href: '/services?vertical=rental', icon: KeyRound },
+  { key: 'cuisine', href: '/catalog?sort=rating', icon: UtensilsCrossed },
   { key: 'promo', href: '/catalog?promo=1', icon: BadgePercent },
 ];
 
-export function Hero({ venueCount, reviewCount, categoryCount }: HeroProps) {
+export function Hero({ venueCount, reviewCount, categoryCount, districts, cuisines }: HeroProps) {
   const t = useT('home');
   const locale = useLocale();
 
@@ -58,15 +58,8 @@ export function Hero({ venueCount, reviewCount, categoryCount }: HeroProps) {
             </p>
           </FadeUp>
 
-          <FadeUp delay={0.15} className="mx-auto mt-8 max-w-2xl">
-            <SearchBar placeholder={t('hero.searchPlaceholder')} />
-            <p className="mt-2.5 text-xs text-muted-foreground">
-              {t('hero.searchHint')}{' '}
-              <Link href="#city-map" className="font-medium text-foreground underline-offset-2 hover:underline">
-                {t('hero.searchHintLink')}
-              </Link>
-              .
-            </p>
+          <FadeUp delay={0.15}>
+            <QuickBook districts={districts} cuisines={cuisines} />
           </FadeUp>
 
           <FadeUp delay={0.2}>
@@ -104,26 +97,13 @@ export function Hero({ venueCount, reviewCount, categoryCount }: HeroProps) {
               <Link href="/ai" className="font-medium text-foreground underline-offset-2 hover:underline">
                 {t('hero.scenarioAi')}
               </Link>
-              {' · '}
-              <Link
-                href="/services"
-                className="font-medium text-foreground underline-offset-2 hover:underline"
-              >
-                {t('hero.scenarioServices')}
-              </Link>
             </p>
           </FadeUp>
 
           <FadeUp delay={0.3}>
             <dl className="mx-auto mt-10 grid max-w-lg grid-cols-3 gap-3">
-              <Stat
-                value={formatNumberI18n(venueCount, locale)}
-                label={t('hero.stats.venues')}
-              />
-              <Stat
-                value={formatNumberI18n(reviewCount, locale)}
-                label={t('hero.stats.reviews')}
-              />
+              <Stat value={formatNumberI18n(venueCount, locale)} label={t('hero.stats.venues')} />
+              <Stat value={formatNumberI18n(reviewCount, locale)} label={t('hero.stats.reviews')} />
               <Stat value={String(categoryCount)} label={t('hero.stats.categories')} />
             </dl>
           </FadeUp>

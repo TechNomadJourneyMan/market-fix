@@ -10,10 +10,11 @@ import { Stagger, StaggerItem } from '@/components/ui/motion';
 /** Плитки категорий — основной способ начать поиск без ввода текста. */
 export function CategoryGrid({ categories }: { categories: Category[] }) {
   const t = useT('common');
+  const visible = categories.filter((category) => category.venueCount > 0);
 
   return (
     <Stagger className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-      {categories.map((category, index) => (
+      {visible.map((category, index) => (
         <StaggerItem key={category.id}>
           <Link
             href={`/catalog?category=${category.slug}`}

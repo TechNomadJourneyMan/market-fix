@@ -10,9 +10,9 @@ import {
   Heart,
   LayoutGrid,
   Menu,
-  Package,
   Search,
   Settings,
+  Shield,
   ShoppingBag,
   Sparkles,
   Users,
@@ -54,8 +54,7 @@ const NAV_LINKS: {
   highlight?: boolean;
 }[] = [
   { href: '/catalog', key: 'catalog', icon: LayoutGrid },
-  { href: '/services', key: 'services', icon: Package },
-  { href: '/ai', key: 'ai', icon: Sparkles, highlight: true },
+  { href: '/ai', key: 'ai', icon: Sparkles },
   { href: '/merge', key: 'merge', icon: Users },
   { href: '/monetization', key: 'business', icon: Building2 },
 ];
@@ -229,6 +228,16 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
                       </DropdownMenuItem>
                     </>
                   ) : null}
+                  {user.role === 'admin' ? (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin">
+                          <Shield /> Admin Panel
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  ) : null}
                   <DropdownMenuSeparator />
                   <SignOutMenuItem />
                 </DropdownMenuContent>
@@ -278,7 +287,6 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
               </SheetHeader>
               <SheetBody className="space-y-1">
                 <MobileLink href="/catalog" icon={LayoutGrid} label={t('links.catalog')} onNavigate={() => setMobileOpen(false)} />
-                <MobileLink href="/services" icon={Package} label={t('links.services')} onNavigate={() => setMobileOpen(false)} />
                 <MobileLink href="/ai" icon={Sparkles} label={t('links.ai')} onNavigate={() => setMobileOpen(false)} highlight />
                 <MobileLink href="/merge" icon={Users} label={t('links.merge')} onNavigate={() => setMobileOpen(false)} />
                 <MobileLink
@@ -302,7 +310,12 @@ export function Header({ user, isAuthenticated, unreadCount }: HeaderProps) {
                       onNavigate={() => setMobileOpen(false)}
                     />
                     <div className="!mt-4 border-t pt-4">
-                      <MobileLink href="/business" icon={Building2} label={t('auth.businessCabinet')} onNavigate={() => setMobileOpen(false)} />
+                      {user?.role === 'business' ? (
+                        <MobileLink href="/business" icon={Building2} label={t('auth.businessCabinet')} onNavigate={() => setMobileOpen(false)} />
+                      ) : null}
+                      {user?.role === 'admin' ? (
+                        <MobileLink href="/admin" icon={Shield} label="Admin Panel" onNavigate={() => setMobileOpen(false)} />
+                      ) : null}
                     </div>
                     <div className="!mt-4">
                       <SignOutButton className="w-full justify-start" />

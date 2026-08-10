@@ -12,7 +12,9 @@ export interface ReviewQuery {
 }
 
 export function getVenueReviews(query: ReviewQuery) {
-  let items = db.reviews.filter((review) => review.venueId === query.venueId);
+  let items = db.reviews.filter(
+    (review) => review.venueId === query.venueId && review.isPublished !== false,
+  );
 
   if (query.rating) items = items.filter((review) => review.rating === query.rating);
   if (query.withPhotos) items = items.filter((review) => review.photos.length > 0);

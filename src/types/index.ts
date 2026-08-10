@@ -18,3 +18,7 @@ export * from './favorite';
 export * from './ai';
 export * from './merge';
 export * from './marketplace';
+export * from './rbac';
+export * from './moderation';
+export * from './rating-engine';
+export * from './audit';

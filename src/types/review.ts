@@ -1,4 +1,10 @@
 import type { Entity, ID } from './common';
+import type {
+  ModerationLevel,
+  ReviewAnalysis,
+  ReviewProvenance,
+  ReviewSource,
+} from './moderation';
 
 export interface ReviewAuthor {
   id: ID;
@@ -41,6 +47,29 @@ export interface Review extends Entity {
   reply?: ReviewReply;
   /** Бронь, к которой привязан отзыв (если был через платформу). */
   bookingId?: ID;
+  /** Unified review engine fields */
+  source?: ReviewSource;
+  language?: string;
+  provenance?: ReviewProvenance;
+  moderationStatus?: ModerationLevel;
+  analysis?: ReviewAnalysis;
+  isPublished?: boolean;
 }
 
 export type ReviewSort = 'recent' | 'helpful' | 'rating_desc' | 'rating_asc';
+
+export interface CreateReviewInput {
+  venueId: ID;
+  bookingId?: ID;
+  rating: number;
+  ratings?: {
+    food?: number;
+    service?: number;
+    atmosphere?: number;
+    price?: number;
+  };
+  title: string;
+  text: string;
+  photos?: string[];
+  occasion?: Review['occasion'];
+}

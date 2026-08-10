@@ -26,6 +26,7 @@ import { VenueGallery } from '@/components/venue/venue-gallery';
 import { VenueServices, VenueProducts } from '@/components/venue/venue-services';
 import { VenueMenu } from '@/components/venue/venue-menu';
 import { VenueReviews } from '@/components/venue/venue-reviews';
+import { ReviewForm } from '@/components/venue/review-form';
 import {
   VenueContacts,
   VenueLocation,
@@ -306,6 +307,7 @@ export default async function VenuePage({ params }: { params: Promise<{ slug: st
                 Только от тех, кто действительно был. Заведение отвечает на отзывы.
               </p>
             </div>
+            <ReviewForm venueId={venue.id} />
             <VenueReviews rating={venue.rating} reviews={reviews.items} />
           </section>
 

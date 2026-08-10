@@ -105,9 +105,22 @@ export const createVenueSchema = venueEditSchema.extend({
 export type CreateVenueValues = z.infer<typeof createVenueSchema>;
 
 export const reviewSchema = z.object({
+  venueId: z.string().min(1),
+  bookingId: z.string().optional(),
   rating: z.number().int().min(1).max(5),
   title: z.string().min(3, 'Добавьте заголовок').max(100),
   text: z.string().min(20, 'Расскажите подробнее — минимум 20 символов').max(2000),
+  ratings: z
+    .object({
+      food: z.number().int().min(1).max(5).optional(),
+      service: z.number().int().min(1).max(5).optional(),
+      atmosphere: z.number().int().min(1).max(5).optional(),
+      price: z.number().int().min(1).max(5).optional(),
+    })
+    .optional(),
+  occasion: z
+    .enum(['date', 'family', 'business', 'friends', 'celebration', 'solo'])
+    .optional(),
 });
 
 export const mergeCreateSchema = z.object({

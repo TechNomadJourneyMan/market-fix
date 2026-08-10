@@ -1,9 +1,9 @@
 import { failFromZod, fail, ok } from '@/server/api-helpers';
 import { createBookingSchema } from '@/lib/validation';
 import { createBooking } from '@/server/repositories/bookings';
-import { DEMO_USER_ID } from '@/data/db';
+import { getSessionUser } from '@/lib/auth';
 
-/** POST /api/bookings — создание брони. */
+/** POST /api/bookings — создание брони для текущего пользователя сессии. */
 export async function POST(request: Request) {
   let payload: unknown;
   try {
@@ -15,13 +15,14 @@ export async function POST(request: Request) {
   const parsed = createBookingSchema.safeParse(payload);
   if (!parsed.success) return failFromZod(parsed.error);
 
+  const sessionUser = await getSessionUser();
+
   try {
-    const result = createBooking(parsed.data, DEMO_USER_ID);
+    const result = createBooking(parsed.data, sessionUser?.id ?? null);
     return ok(
       {
         booking: result.booking,
         requiresPayment: result.requiresPayment,
-        // Куда вести пользователя дальше — решает сервер, клиент просто переходит.
         nextHref: result.requiresPayment
           ? `/checkout/${result.booking.id}`
           : `/booking/${result.booking.id}/success`,

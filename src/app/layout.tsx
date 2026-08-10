@@ -6,6 +6,7 @@ import { Providers } from '@/components/providers';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { MobileTabBar } from '@/components/layout/mobile-tabbar';
+import { AppChrome } from '@/components/layout/app-chrome';
 import { themeScript } from '@/components/layout/theme-toggle';
 import { BookingDialog } from '@/components/booking/booking-dialog';
 import { getCategories } from '@/server/repositories/taxonomy';
@@ -31,12 +32,12 @@ export const metadata: Metadata = {
     template: '%s · Market Fix',
   },
   description:
-    'Каталог ресторанов, кафе, баров Алматы. 50 реальных заведений, живые отзывы, честные цены, мгновенное бронирование и AI-подбор места под ваш повод.',
-  keywords: ['рестораны Алматы', 'бронирование стола', 'банкетный зал', 'кафе', 'AI-подбор', 'Market Fix'],
+    'Платформа поиска, объективной оценки и бронирования заведений Алматы. Объяснимый рейтинг, AI-модерация отзывов и свободные столы.',
+  keywords: ['рестораны Алматы', 'бронирование стола', 'рейтинг заведений', 'AI-подбор', 'Market Fix'],
   openGraph: {
-    title: 'Market Fix — найти и забронировать место за 30 секунд',
+    title: 'Market Fix — найти и забронировать место',
     description:
-      'Более 50 реальных заведений Алматы, живые отзывы и бронирование в один клик.',
+      'Объективный рейтинг, качественные отзывы и бронирование стола в Алматы.',
     type: 'website',
     locale: 'ru_RU',
   },
@@ -81,17 +82,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             {t('skipToContent')}
           </a>
 
-          <div className="flex min-h-dvh flex-col">
-            <Header
-              user={sessionUser}
-              isAuthenticated={Boolean(sessionUser)}
-              unreadCount={unreadCount}
-            />
-            <main id="main" className="flex-1 pb-20 lg:pb-0">
-              {children}
-            </main>
-            <Footer categories={categories} />
-          </div>
+          <AppChrome
+            header={
+              <Header
+                user={sessionUser}
+                isAuthenticated={Boolean(sessionUser)}
+                unreadCount={unreadCount}
+              />
+            }
+            footer={<Footer categories={categories.filter((item) => item.venueCount > 0)} />}
+          >
+            {children}
+          </AppChrome>
 
           <MobileTabBar />
           <BookingDialog />

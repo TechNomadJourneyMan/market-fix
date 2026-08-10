@@ -64,17 +64,18 @@ interface ExplorerItem {
   pin: VenueListItem;
 }
 
-const QUICK_FILTERS: { id: QuickFilter; icon: React.ElementType }[] = [
+const VENUE_QUICK_FILTERS: { id: QuickFilter; icon: React.ElementType }[] = [
   { id: 'all', icon: LayoutGrid },
   { id: 'nearby', icon: MapPin },
   { id: 'open', icon: UtensilsCrossed },
   { id: 'promo', icon: Percent },
+];
+
+const SERVICE_QUICK_FILTERS: { id: QuickFilter; icon: React.ElementType }[] = [
   { id: 'delivery', icon: Truck },
   { id: 'rental', icon: KeyRound },
   { id: 'gifts', icon: Gift },
 ];
-
-const LAYERS: LayerMode[] = ['all', 'venues', 'services'];
 
 /**
  * Карта города: поиск, слои, быстрые фильтры, геолокация и список результатов.
@@ -83,9 +84,14 @@ const LAYERS: LayerMode[] = ['all', 'venues', 'services'];
 export function CityMapExplorer({ venues, services, className }: CityMapExplorerProps) {
   const t = useT('map');
   const locale = useLocale();
+  const hasServices = services.length > 0;
+  const quickFilters = hasServices
+    ? [...VENUE_QUICK_FILTERS, ...SERVICE_QUICK_FILTERS]
+    : VENUE_QUICK_FILTERS;
+  const layers: LayerMode[] = hasServices ? ['all', 'venues', 'services'] : ['venues'];
 
   const [query, setQuery] = React.useState('');
-  const [layer, setLayer] = React.useState<LayerMode>('all');
+  const [layer, setLayer] = React.useState<LayerMode>(hasServices ? 'all' : 'venues');
   const [quick, setQuick] = React.useState<QuickFilter>('all');
   const [origin, setOrigin] = React.useState<Coordinates>(DEMO_USER_LOCATION);
   const [originIsUser, setOriginIsUser] = React.useState(false);
@@ -329,7 +335,7 @@ export function CityMapExplorer({ venues, services, className }: CityMapExplorer
             role="group"
             aria-label={t('layers.label')}
           >
-            {LAYERS.map((id) => (
+            {layers.map((id) => (
               <button
                 key={id}
                 type="button"
@@ -352,7 +358,7 @@ export function CityMapExplorer({ venues, services, className }: CityMapExplorer
             role="group"
             aria-label={t('filters.label')}
           >
-            {QUICK_FILTERS.map(({ id, icon: Icon }) => (
+            {quickFilters.map(({ id, icon: Icon }) => (
               <button
                 key={id}
                 type="button"

@@ -11,11 +11,10 @@ import { AiTeaser } from '@/components/home/ai-teaser';
 import { Testimonials } from '@/components/home/testimonials';
 import { BusinessCta } from '@/components/home/business-cta';
 import { RecentVenues } from '@/components/home/recent-venues';
-import { ServicesShowcase } from '@/components/home/services-showcase';
 import { CityMapExplorer } from '@/components/map/city-map-explorer';
 import { getTranslator } from '@/i18n/server';
 
-import { getCategories } from '@/server/repositories/taxonomy';
+import { getCategories, getCuisines, getDistricts } from '@/server/repositories/taxonomy';
 import {
   getFeaturedVenues,
   getNewVenues,
@@ -25,25 +24,31 @@ import {
   searchVenues,
 } from '@/server/repositories/venues';
 import { getShowcaseReviews, getTotalReviewCount } from '@/server/repositories/reviews';
-import {
-  getMarketplaceCategories,
-  getPopularMarketplaceListings,
-} from '@/server/repositories/marketplace';
+import { bootstrapAdminEngine } from '@/server/repositories/admin';
 
 export default async function HomePage() {
+  bootstrapAdminEngine();
   const [tMap, tHome] = await Promise.all([
     getTranslator('map'),
     getTranslator('home'),
   ]);
-  const categories = getCategories();
+  const categories = getCategories().filter((category) => category.venueCount > 0);
+  const districts = getDistricts().map((item) => ({
+    id: item.id,
+    slug: item.slug,
+    name: item.name,
+  }));
+  const cuisines = getCuisines().map((item) => ({
+    id: item.id,
+    slug: item.slug,
+    name: item.name,
+  }));
   const featured = getFeaturedVenues(6);
   const topRated = getTopRatedVenues(8);
   const promotions = getVenuesWithPromotions(6);
   const fresh = getNewVenues(8);
   const reviews = getShowcaseReviews(3);
   const mapVenues = searchVenues({ sort: 'popularity', perPage: 40 }).allMatches;
-  const marketplaceCategories = getMarketplaceCategories();
-  const marketplaceListings = getPopularMarketplaceListings(8);
 
   return (
     <>
@@ -51,17 +56,9 @@ export default async function HomePage() {
         venueCount={getVenueCount()}
         reviewCount={getTotalReviewCount()}
         categoryCount={categories.length}
+        districts={districts}
+        cuisines={cuisines}
       />
-
-      <Section id="city-map" className="scroll-mt-24 pt-4 sm:pt-6">
-        <SectionHeader
-          eyebrow={tMap('section.eyebrow')}
-          title={tMap('section.title')}
-          description={tMap('section.description')}
-          action={{ label: tMap('section.action'), href: '/catalog?view=map' }}
-        />
-        <CityMapExplorer venues={mapVenues} services={marketplaceListings} />
-      </Section>
 
       <Section className="pt-0">
         <SectionHeader
@@ -72,11 +69,6 @@ export default async function HomePage() {
         />
         <CategoryGrid categories={categories} />
       </Section>
-
-      <ServicesShowcase
-        categories={marketplaceCategories}
-        listings={marketplaceListings}
-      />
 
       <RecentVenues />
 
@@ -117,6 +109,16 @@ export default async function HomePage() {
             </Link>
           </Button>
         </div>
+      </Section>
+
+      <Section id="city-map" className="scroll-mt-24 pt-0">
+        <SectionHeader
+          eyebrow={tMap('section.eyebrow')}
+          title={tMap('section.title')}
+          description={tMap('section.description')}
+          action={{ label: tMap('section.action'), href: '/catalog?view=map' }}
+        />
+        <CityMapExplorer venues={mapVenues} services={[]} />
       </Section>
 
       <Section className="pt-0">
@@ -195,7 +197,7 @@ export default async function HomePage() {
             </p>
             <div className="flex flex-col items-center justify-center gap-3 pt-2 sm:flex-row">
               <Button asChild size="xl" variant="glass" className="w-full sm:w-auto">
-                <Link href="/catalog">
+                <Link href="/catalog?availableNow=1">
                   <Calendar />
                   {tHome('sections.finalCta.catalog')}
                   <ArrowRight />

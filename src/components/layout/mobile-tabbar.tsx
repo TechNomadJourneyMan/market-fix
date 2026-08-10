@@ -2,16 +2,16 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, LayoutGrid, Package, ShoppingBag, Sparkles } from 'lucide-react';
+import { CalendarCheck, Home, LayoutGrid, ShoppingBag, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useT } from '@/i18n/client';
 import { selectCartCount, useCartStore } from '@/store/use-cart-store';
 
-/** Ярлыки совпадают с desktop: Каталог / Сервисы — без путаницы «Поиск ≠ Каталог». */
+/** Booking-first mobile nav: home / catalog / AI / cart. */
 const TABS = [
   { href: '/', key: 'home', icon: Home },
   { href: '/catalog', key: 'catalog', icon: LayoutGrid },
-  { href: '/services', key: 'services', icon: Package },
+  { href: '/catalog?availableNow=1', key: 'book', icon: CalendarCheck },
   { href: '/ai', key: 'ai', icon: Sparkles },
   { href: '/cart', key: 'cart', icon: ShoppingBag },
 ] as const;
@@ -22,8 +22,14 @@ export function MobileTabBar() {
   const t = useT('layout');
   const cartCount = useCartStore(selectCartCount);
 
-  // В кабинете бизнеса и на экранах auth своя навигация.
-  if (pathname.startsWith('/business') || pathname.startsWith('/auth')) return null;
+  // В кабинете бизнеса, админке и на экранах auth своя навигация.
+  if (
+    pathname.startsWith('/business') ||
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/auth')
+  ) {
+    return null;
+  }
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t glass-strong pb-[env(safe-area-inset-bottom)] lg:hidden">

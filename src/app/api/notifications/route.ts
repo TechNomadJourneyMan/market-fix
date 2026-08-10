@@ -1,5 +1,6 @@
 import { fail, ok } from '@/server/api-helpers';
 import { DEMO_USER_ID } from '@/data/db';
+import { getSessionUser } from '@/lib/auth';
 import {
   getNotifications,
   getUnreadNotificationCount,
@@ -7,11 +8,17 @@ import {
   markNotificationRead,
 } from '@/server/repositories/users';
 
+async function resolveUserId() {
+  const sessionUser = await getSessionUser();
+  return sessionUser?.id ?? DEMO_USER_ID;
+}
+
 /** GET /api/notifications */
 export async function GET() {
+  const userId = await resolveUserId();
   return ok({
-    items: getNotifications(DEMO_USER_ID),
-    unread: getUnreadNotificationCount(DEMO_USER_ID),
+    items: getNotifications(userId),
+    unread: getUnreadNotificationCount(userId),
   });
 }
 
@@ -21,13 +28,15 @@ export async function POST(request: Request) {
     | { id?: string; all?: boolean }
     | null;
 
+  const userId = await resolveUserId();
+
   if (body?.all) {
-    markAllNotificationsRead(DEMO_USER_ID);
+    markAllNotificationsRead(userId);
     return ok({ unread: 0 });
   }
 
   if (!body?.id) return fail('MISSING_ID', 'Не указано уведомление');
 
   markNotificationRead(body.id);
-  return ok({ unread: getUnreadNotificationCount(DEMO_USER_ID) });
+  return ok({ unread: getUnreadNotificationCount(userId) });
 }

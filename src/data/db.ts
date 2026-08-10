@@ -20,7 +20,7 @@ import { CATEGORIES, CUISINES } from './seed/categories';
 import { CITIES, DISTRICTS } from './seed/geo';
 import { VENUE_SEEDS } from './seed/venue-seeds';
 import { BUSINESS_SEEDS, DEMO_BUSINESS_KEY, buildBusinesses } from './seed/businesses';
-import { DEMO_USER } from './seed/users';
+import { DEMO_ADMIN_USER, DEMO_USER } from './seed/users';
 import { buildVenue } from './builders/venue';
 import { buildServices } from './builders/services';
 import { buildMenu } from './builders/menu';
@@ -142,7 +142,7 @@ function createDatabase(): Database {
     products,
     reviews,
     bookings,
-    users: [DEMO_USER, ...owners],
+    users: [DEMO_USER, DEMO_ADMIN_USER, ...owners],
     favorites,
     searchHistory,
     notifications,

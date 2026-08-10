@@ -1,6 +1,6 @@
 import { fail, ok } from '@/server/api-helpers';
-import { DEMO_USER_ID } from '@/data/db';
 import { createBooking } from '@/server/repositories/bookings';
+import { getSessionUser } from '@/lib/auth';
 import type { CreateBookingInput } from '@/types';
 import { z } from 'zod';
 
@@ -46,6 +46,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    const sessionUser = await getSessionUser();
     const results = parsed.data.items.map((item) => {
       const input: CreateBookingInput = {
         venueId: item.venueId,
@@ -58,7 +59,7 @@ export async function POST(request: Request) {
         email: parsed.data.email,
         extras: item.extras,
       };
-      return createBooking(input, DEMO_USER_ID);
+      return createBooking(input, sessionUser?.id ?? null);
     });
 
     const bookings = results.map((result) => result.booking);

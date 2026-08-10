@@ -49,23 +49,34 @@ export async function updateSession(request: NextRequest) {
   // Весь кабинет бизнеса защищён; публичная точка входа — /auth/register?role=business
   const isProtectedBusiness =
     pathname === '/business' || pathname.startsWith('/business/');
+  const isProtectedAdmin = pathname === '/admin' || pathname.startsWith('/admin/');
 
   const isLoggedIn = Boolean(demoUser || supabaseRole);
+  const role = demoUser?.role ?? supabaseRole ?? 'user';
 
-  if (!isLoggedIn && (isProtectedAccount || isProtectedBusiness)) {
+  if (!isLoggedIn && (isProtectedAccount || isProtectedBusiness || isProtectedAdmin)) {
     const url = request.nextUrl.clone();
     url.pathname = '/auth/login';
     url.searchParams.set('next', pathname);
     if (isProtectedBusiness) {
       url.searchParams.set('role', 'business');
     }
+    if (isProtectedAdmin) {
+      url.searchParams.set('role', 'admin');
+    }
+    return NextResponse.redirect(url);
+  }
+
+  if (isLoggedIn && isProtectedAdmin && role !== 'admin') {
+    const url = request.nextUrl.clone();
+    url.pathname = role === 'business' ? '/business' : '/account';
+    url.search = '';
     return NextResponse.redirect(url);
   }
 
   if (isLoggedIn && isAuthPage && !pathname.startsWith('/auth/callback')) {
     const url = request.nextUrl.clone();
-    const role = demoUser?.role ?? supabaseRole ?? 'user';
-    url.pathname = role === 'business' ? '/business' : '/account';
+    url.pathname = role === 'admin' ? '/admin' : role === 'business' ? '/business' : '/account';
     url.search = '';
     return NextResponse.redirect(url);
   }

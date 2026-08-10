@@ -109,8 +109,11 @@ export interface Venue extends Entity {
   /** Заведение подтверждено платформой. */
   isVerified: boolean;
   isFeatured: boolean;
-  /** Публикация: черновик не показывается в каталоге. */
-  status: 'published' | 'draft' | 'archived';
+  /**
+   * Публикация и модерация:
+   * draft → pending_review → verified → published → suspended → archived
+   */
+  status: 'draft' | 'pending_review' | 'verified' | 'published' | 'suspended' | 'archived';
   /** Признак популярности — вес в сортировке «по популярности». */
   popularityScore: number;
   stats: VenueStats;

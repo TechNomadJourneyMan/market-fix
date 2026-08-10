@@ -44,3 +44,39 @@ export const DEMO_USER: User = {
 
 /** Точка отсчёта для сортировки «по расстоянию», пока нет реальной геолокации. */
 export const DEMO_USER_LOCATION = { lat: 43.2451, lng: 76.9302 };
+
+/** Демо-админ платформы — совпадает с admin@demo.kz. */
+export const DEMO_ADMIN_USER: User = {
+  id: 'user-demo-admin',
+  name: 'Админ Market Fix',
+  email: 'admin@demo.kz',
+  phone: '+7 700 000 00 01',
+  avatar: '/api/avatar/admin-market-fix/160',
+  role: 'admin',
+  cityId: DEFAULT_CITY_ID,
+  joinedAt: '2024-01-01T10:00:00.000Z',
+  preferences: {
+    favoriteCategoryIds: [],
+    favoriteCuisineIds: [],
+    budgetPerPerson: 12000,
+    preferredDistrictIds: [],
+    typicalPartySize: 2,
+    dietary: [],
+  },
+  settings: {
+    language: 'ru',
+    theme: 'system',
+    currency: 'KZT',
+    notifications: {
+      bookingUpdates: true,
+      promotions: false,
+      recommendations: false,
+      reviewReplies: true,
+      channels: { email: true, push: true, sms: false },
+    },
+    allowGeolocation: false,
+  },
+  loyaltyPoints: 0,
+  createdAt: '2024-01-01T10:00:00.000Z',
+  updatedAt: NOW,
+};

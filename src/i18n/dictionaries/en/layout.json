@@ -12,6 +12,7 @@
   "tabbar": {
     "home": "Home",
     "catalog": "Catalog",
+    "book": "Book",
     "services": "Services",
     "ai": "AI",
     "cart": "Cart"

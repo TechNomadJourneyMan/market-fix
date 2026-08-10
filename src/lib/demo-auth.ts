@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 
 import type { User, UserRole } from '@/types';
-import { DEMO_USER } from '@/data/seed/users';
+import { DEMO_ADMIN_USER, DEMO_USER } from '@/data/seed/users';
 import { DEFAULT_CITY_ID } from '@/data/seed/geo';
 
 /** Совпадает с DEMO_BUSINESS_ID в data/db — без тяжёлого импорта в middleware. */
@@ -87,6 +87,14 @@ export const DEMO_ACCOUNTS: DemoAccountRecord[] = [
       createdAt: '2024-02-01T10:00:00.000Z',
       updatedAt: NOW,
     },
+  },
+  {
+    email: 'admin@demo.kz',
+    password: 'demo1234',
+    role: 'admin',
+    label: 'Админ (Ops)',
+    description: 'Admin Panel: каталог, брони, модерация, рейтинг',
+    user: DEMO_ADMIN_USER,
   },
 ];
 

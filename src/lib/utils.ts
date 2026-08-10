@@ -103,3 +103,8 @@ export function getInitials(name: string) {
     .map((part) => part[0]?.toUpperCase() ?? '')
     .join('');
 }
+
+/** Prefixed id for in-memory / demo entities. */
+export function createId(prefix: string) {
+  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
